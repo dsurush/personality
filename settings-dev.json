@@ -1,0 +1,15 @@
+{
+    "app" : {
+        "serverName": "localhost",
+        "portRun": 8860,
+        "logFile": "server-02.log"
+    },
+
+    "postgresMegafondb" : {
+        "server": "127.0.0.1",
+        "port": 5432,
+        "user": "dsurush",
+        "password": "pass",
+        "database": "personality"
+    }
+}
