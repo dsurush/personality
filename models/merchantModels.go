@@ -2,6 +2,7 @@ package models
 
 import (
 	"encoding/xml"
+	"personalarea/db"
 	"time"
 )
 
@@ -75,24 +76,24 @@ func (merchant *Merchant) TableName() string {
 }
 
 //GetList gets list of merchants
-//func (merchant *Merchant) GetList() []Merchant {
-//	merchants := []Merchant{}
-//	db := db.GetPostgresDb()
-//	db.Find(&merchants)
-//	return merchants
-//}
+func (merchant *Merchant) GetList() []Merchant {
+	merchants := []Merchant{}
+	db := db.GetPostgresDb()
+	db.Find(&merchants)
+	return merchants
+}
 //
-//func (merchant *Merchant) save() {
-//	db := db.GetPostgresDb()
-//	db.Where(Merchant{HumoOnlineID: merchant.HumoOnlineID}).Assign(Merchant{QrCode: merchant.QrCode}).FirstOrCreate(merchant)
-//}
+func (merchant *Merchant) save() {
+	db := db.GetPostgresDb()
+	db.Where(Merchant{HumoOnlineID: merchant.HumoOnlineID}).Assign(Merchant{QrCode: merchant.QrCode}).FirstOrCreate(merchant)
+}
 //
-////Find finds merchant by qr
-//func (merchant *Merchant) Find(qr string) {
-//	db := db.GetPostgresDb()
-//	//db.Where(Merchant{QrCode: qr}).Find(merchant)
-//	db.Where(Merchant{QrCode: qr}).Or(Merchant{QrCodeNew: qr}).Find(merchant)
-//}
+//Find finds merchant by qr
+func (merchant *Merchant) Find(qr string) {
+	db := db.GetPostgresDb()
+	//db.Where(Merchant{QrCode: qr}).Find(merchant)
+	db.Where(Merchant{QrCode: qr}).Or(Merchant{QrCodeNew: qr}).Find(merchant)
+}
 
 // MerchantListResXML ...
 type MerchantListResXML struct {

@@ -1,7 +1,11 @@
 package models
 
 import (
+	db2 "MF/db"
 	"encoding/xml"
+	"github.com/sirupsen/logrus"
+	"regexp"
+	"strings"
 	"time"
 )
 
@@ -43,39 +47,38 @@ type ClientInfoResponse struct {
 	HashSum              string `xml:"hashSum"`
 }
 
-////SaveModel saves ClientInfo model in db
-//func (clientInfo *ClientInfo) SaveMode() string {
-//
-//	db := db.GetPostgresDb()
-//	if err := db.Create(&clientInfo).Error; err != nil {
-//		logrus.Println("ClientInfoSaveModel ", err.Error())
-//
-//		if strings.Contains(err.Error(), "pq: duplicate key value violates unique constraint") {
-//
-//			re := regexp.MustCompile("tb_client_(.*?)_key")
-//			match := re.FindStringSubmatch(err.Error())
-//			if len(match) > 0 {
-//				return "Duplicate param : " + match[1]
-//			}
-//
-//		}
-//
-//		return "Missing required params"
-//	}
-//	return ""
-//}
+//SaveModel saves ClientInfo model in db
+func (clientInfo *ClientInfo) SaveMode() string {
+
+	db := db2.GetPostgresDb()
+	if err := db.Create(&clientInfo).Error; err != nil {
+		logrus.Println("ClientInfoSaveModel ", err.Error())
+
+		if strings.Contains(err.Error(), "pq: duplicate key value violates unique constraint") {
+
+			re := regexp.MustCompile("tb_client_(.*?)_key")
+			match := re.FindStringSubmatch(err.Error())
+			if len(match) > 0 {
+				return "Duplicate param : " + match[1]
+			}
+
+		}
+
+		return "Missing required params"
+	}
+	return ""
+}
 
 //TableName for changing struct name to db name
 func (clientInfo ClientInfo) TableName() string {
 	return "tb_client"
 }
-//
-////Get ClientInfo by phone
-//func GetClientInfo(phone string) (clientInfo ClientInfo) {
-//
-//	if err := db.GetPostgresDb().Where("phone = ?", phone).Last(&clientInfo).Error; err != nil {
-//		logrus.Println("GetClientInfo By Phone ", err)
-//	}
-//
-//	return clientInfo
-//}
+
+//Get ClientInfo by phone
+func GetClientInfo(phone string) (clientInfo ClientInfo) {
+	if err := db2.GetPostgresDb().Where("phone = ?", phone).Last(&clientInfo).Error; err != nil {
+		logrus.Println("GetClientInfo By Phone ", err)
+	}
+	return clientInfo
+}
+

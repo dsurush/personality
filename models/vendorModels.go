@@ -1,6 +1,7 @@
 package models
 
 import (
+	db2 "MF/db"
 	"encoding/xml"
 	"time"
 )
@@ -16,10 +17,10 @@ type VendorListReqRawXML struct {
 }
 //
 ////SaveModel saves VendorListReqRawXML model in db
-//func (vendorListReq *VendorListReqRawXML) SaveModel() {
-//	db := db.GetPostgresDb()
-//	db.Create(vendorListReq)
-//}
+func (vendorListReq *VendorListReqRawXML) SaveModel() {
+	db := db2.GetPostgresDb()
+	db.Create(vendorListReq)
+}
 
 //TableName for changing struct name to db name
 func (vendorListReq VendorListReqRawXML) TableName() string {
@@ -40,7 +41,6 @@ type Vendor struct {
 	LatName      string    `xml:"latName" gorm:"column:name_eng"`
 	Name         string    `xml:"name" gorm:"column:name_rus"`
 	CatID        int       `xml:"catID" gorm:"column:category_id"`
-	Category     string    `xml:"category" gorm:"column:category"`
 	Feept        float64   `xml:"feept" gorm:"column:feept"`
 	Prefix       string    `xml:"prefix" gorm:"column:prefix"`
 	HumoPayID    int       `xml:"-" gorm:"column:humopay_id"`
@@ -59,19 +59,19 @@ type Vendor struct {
 func (vendor *Vendor) TableName() string {
 	return "tb_vendor"
 }
-//
-////Find finds vendor by id
-//func (vendor *Vendor) Find(id int) {
-//	db := db.GetPostgresDb()
-//	db.Find(vendor, "id = ?", id)
-//}
-//
-//// FindAll returns slice of vendors
-//func (vendor *Vendor) FindAll() []Vendor {
-//	vendors := []Vendor{}
-//	db := db.GetPostgresDb()
-//	db.Table("tb_vendor").Select("tb_vendor.*, vc.name_rus as category").
-//		Joins("inner join tb_vendor_category as vc on vc.id = tb_vendor.category_id").Where("tb_vendor.is_active = true").
-//		Order("tb_vendor.category_id").Scan(&vendors)
-//	return vendors
-//}
+
+//Find finds vendor by id
+func (vendor *Vendor) Find(id int) {
+	db := db2.GetPostgresDb()
+	db.Find(vendor, "id = ?", id)
+}
+
+// FindAll returns slice of vendors
+func (vendor *Vendor) FindAll() []Vendor {
+	vendors := []Vendor{}
+	db := db2.GetPostgresDb()
+	db.Table("tb_vendor").Select("tb_vendor.*, vc.name_rus as category").
+		Joins("inner join tb_vendor_category as vc on vc.id = tb_vendor.category_id").Where("tb_vendor.is_active = true").
+		Order("tb_vendor.category_id").Scan(&vendors)
+	return vendors
+}

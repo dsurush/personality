@@ -1,6 +1,7 @@
 package models
 
 import (
+	db2 "MF/db"
 	"encoding/xml"
 	"time"
 )
@@ -20,10 +21,10 @@ type ResponseLog struct {
 }
 //
 ////SaveModel saves ResponseLog model in db
-//func (responseLog *ResponseLog) SaveModel() {
-//	db := db.GetPostgresDb()
-//	db.Create(responseLog)
-//}
+func (responseLog *ResponseLog) SaveModel() {
+	db := db2.GetPostgresDb()
+	db.Create(responseLog)
+}
 
 //TableName for changing struct name to db name
 func (responseLog ResponseLog) TableName() string {
@@ -36,12 +37,12 @@ type ResponseXML struct {
 	Code    int      `xml:"code"`
 	Message string   `xml:"message"`
 }
-//
-////SaveModel saves ResponseXML model in db
-//func (errorResponse *ResponseXML) SaveModel() {
-//	db := db.GetPostgresDb()
-//	db.Create(errorResponse)
-//}
+
+//SaveModel saves ResponseXML model in db
+func (errorResponse *ResponseXML) SaveModel() {
+	db := db2.GetPostgresDb()
+	db.Create(errorResponse)
+}
 
 //TableName for changing struct name to db name
 func (errorResponse ResponseXML) TableName() string {
@@ -58,12 +59,12 @@ type RawXML struct {
 	GateWay      string `xml:"gateWay" gorm:"column:gate_way; default:'MEGAFON'"`
 	IPAddress    string `xml:"-" gorm:"column:ip_address"`
 }
-//
-////SaveModel saves RawXML model in db
-//func (rawXML *RawXML) SaveModel() {
-//	db := db.GetPostgresDb()
-//	db.Create(rawXML)
-//}
+
+//SaveModel saves RawXML model in db
+func (rawXML *RawXML) SaveModel() {
+	db := db2.GetPostgresDb()
+	db.Create(rawXML)
+}
 
 //TableName for changing struct name to db name
 func (rawXML RawXML) TableName() string {
@@ -78,11 +79,11 @@ type RefundedCardTransactions struct {
 	Description    string    `xml:"column:description"`
 	RefundForTrans int       `xml:"column:refund_for_trans"`
 }
-//
-//func (refTrans *RefundedCardTransactions) SaveModel() {
-//	db := db.GetPostgresDb()
-//	db.Create(refTrans)
-//}
+
+func (refTrans *RefundedCardTransactions) SaveModel() {
+	db := db2.GetPostgresDb()
+	db.Create(refTrans)
+}
 
 func (refTrans RefundedCardTransactions) TableName() string {
 	return "tb_refunded_transactions"

@@ -1,5 +1,11 @@
 package models
 
+import (
+	"MF/db"
+	"fmt"
+	"github.com/sirupsen/logrus"
+)
+
 type User struct {
 	Id       int64  `xml:"id" gorm:"column:id"`
 	Name     string `xml:"name" gorm:"column:name"`
@@ -11,9 +17,39 @@ type User struct {
 	Phone    string `xml:"phone" gorm:"column:phone"`
 	Team     string `xml:"team" gorm:"column:team"`
 	Role     string `xml:"role" gorm:"column:role"`
-	Remove   bool   `xml:"remove" gorm:"column:remove"`
+	Remove   bool   `xml:"remove" gorm:"column:remove; default:false"`
 }
 
-func (User) TableName() string {
+
+func (*User) TableName() string {
 	return "tb_users"
 }
+
+func FindUserByLogin(login string) (user User, err error){
+	if err := db.GetPostgresDb().Where("login = ?", login).First(&user).Error; err != nil{
+		logrus.Warn("Find User By Login ", err.Error())
+		return user, err
+	}
+	fmt.Println("I AM = ", user)
+	return user, nil
+}
+
+
+type Usersvc struct {
+}
+
+func NewUsersvc() *Usersvc {
+	return &Usersvc{}
+}
+
+
+func (receiver *Usersvc) GetClientsInfo() (clientsInfo []ClientInfo) {
+	if err := db.GetPostgresDb().Find(&clientsInfo).Error; err != nil{
+		logrus.Warn("GetClientsInfo:", err.Error())
+		return nil
+	}
+	return clientsInfo
+}
+//
+//
+//

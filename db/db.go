@@ -1,21 +1,19 @@
 package db
 
 import (
-	"MF/models"
 	"MF/settings"
 	"fmt"
-
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	log "github.com/sirupsen/logrus"
 )
 
-var (
-	postgresDbCon *gorm.DB
-)
+var postgresDbCon *gorm.DB
 
 // InitDb postgresMegafonDB init
-func InitDb() *gorm.DB {
+func init() {
+	fmt.Println("DB INIT")
+	var err error
 	settings.AppSettings = settings.ReadSettings()
 
 	postgresMegafondbParams := settings.AppSettings.PostgresMegafonDbParams
@@ -26,23 +24,19 @@ func InitDb() *gorm.DB {
 		postgresMegafondbParams.Database)
 
 	// Opening connection
-	db, err := gorm.Open("postgres", connString)
+	postgresDbCon, err = gorm.Open("postgres", connString)
 
-	db.LogMode(true)
+	postgresDbCon.LogMode(true)
 	// Error
 	if err != nil {
 		//fmt.Println("error ошибка - ", err)
 		log.Warn("Database init error", err)
 		panic(err)
 	}
-	db.AutoMigrate(&models.ClientInfo{}, &models.Merchant{}, &models.TablePreeCheck{}, &models.TableTransaction{}, &models.RefundedCardTransactions{}, &models.VendorListReqRawXML{},
-	&models.PaymentReqRawXML{}, models.ResponseLog{} ,&models.User{}, &models.Role{}, &models.Vendor{})
-	return db
-}
-
-// InitPostgresDatabase initializes database
-func InitPostgresDatabase() {
-	postgresDbCon = InitDb()
+	/*postgresDbCon.AutoMigrate(&models.ClientInfo{}, &models.Merchant{}, &models.TablePreeCheck{},
+		&models.TableTransaction{}, &models.RefundedCardTransactions{}, &models.VendorListReqRawXML{},
+		&models.PaymentReqRawXML{}, models.ResponseLog{} , &models.Vendor{}, &models.User{}, &models.Role{})
+*/
 }
 
 // GetPostgresDb is func for create one global connection

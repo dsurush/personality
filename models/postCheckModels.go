@@ -1,6 +1,7 @@
 package models
 
 import (
+	db2 "MF/db"
 	"encoding/xml"
 	"time"
 )
@@ -17,11 +18,11 @@ type PostCheckReqRawXML struct {
 	IPAddress    string    `xml:"-" gorm:"column:ip_address"`
 }
 //
-////SaveModel saves PostCheckReqRawXML model in db
-//func (postCheckReq *PostCheckReqRawXML) SaveModel() {
-//	db := db.GetPostgresDb()
-//	db.Create(postCheckReq)
-//}
+//SaveModel saves PostCheckReqRawXML model in db
+func (postCheckReq *PostCheckReqRawXML) SaveModel() {
+	db := db2.GetPostgresDb()
+	db.Create(postCheckReq)
+}
 
 //TableName for changing struct name to db name
 func (postCheckReq PostCheckReqRawXML) TableName() string {

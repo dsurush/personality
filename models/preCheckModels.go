@@ -1,7 +1,10 @@
 package models
 
 import (
+	db2 "MF/db"
 	"encoding/xml"
+	"fmt"
+	"log"
 	"time"
 )
 
@@ -26,23 +29,23 @@ type PreCheckReqRawXML struct {
 }
 
 //SaveModel saves PreCheckReqRawXML model in db
-//func (preCheckReq *PreCheckReqRawXML) SaveModel() {
-//	db := db.GetPostgresDb()
-//	if err := db.Create(preCheckReq).Error; err != nil {
-//		log.Println("PreCheckReqRawXMLSaveModel: ", err)
-//	}
-//}
-//
-////FindFirst finds first request by id
-//func (preCheckReq *PreCheckReqRawXML) FindFirst(id uint) {
-//	db := db.GetPostgresDb()
-//	db.First(preCheckReq, id)
-//}
-//
-////TableName for changing struct name to db name
-//func (preCheckReq PreCheckReqRawXML) TableName() string {
-//	return "tb_request_log"
-//}
+func (preCheckReq *PreCheckReqRawXML) SaveModel() {
+	db := db2.GetPostgresDb()
+	if err := db.Create(preCheckReq).Error; err != nil {
+		log.Println("PreCheckReqRawXMLSaveModel: ", err)
+	}
+}
+
+//FindFirst finds first request by id
+func (preCheckReq *PreCheckReqRawXML) FindFirst(id uint) {
+	db := db2.GetPostgresDb()
+	db.First(preCheckReq, id)
+}
+
+//TableName for changing struct name to db name
+func (preCheckReq PreCheckReqRawXML) TableName() string {
+	return "tb_request_log"
+}
 
 // PreCheckResXML ...
 type PreCheckResXML struct {
@@ -74,27 +77,27 @@ type TablePreeCheck struct {
 	ClientName    string            `gorm:"column:name"`    // need for barki tojik
 	ClientAddress string            `gorm:"column:address"` // need for barki tojik
 }
-
+//
 //SaveModel saves TablePreeCheck model in db
-//func (tablePreeCheck *TablePreeCheck) SaveModel() {
-//	db := db.GetPostgresDb()
-//	db.Create(tablePreeCheck)
-//}
-//
-//// UpdateModel updates transaction model
-//func (tablePreeCheck *TablePreeCheck) UpdateModel() {
-//	db := db.GetPostgresDb()
-//	db.Save(tablePreeCheck)
-//}
-//
-////FindFirst finds precheck by id and cretae_time last ten minutes
-//func (tablePreeCheck *TablePreeCheck) FindFirst(preCheckQueueID int) {
-//	db := db.GetPostgresDb()
-//	//now := fmt.Sprint(time.Now().Format("2006-01-02 15:04:05"))
-//	now := fmt.Sprint(time.Now().Add(time.Second).Format("2006-01-02 15:04:05"))
-//	nowMinusTenMin := fmt.Sprint(time.Now().Add(time.Minute * -20).Format("2006-01-02 15:04:05"))
-//	db.Where("id = ? AND create_time BETWEEN ? AND ?", preCheckQueueID, nowMinusTenMin, now).Last(tablePreeCheck)
-//}
+func (tablePreeCheck *TablePreeCheck) SaveModel() {
+	db := db2.GetPostgresDb()
+	db.Create(tablePreeCheck)
+}
+
+// UpdateModel updates transaction model
+func (tablePreeCheck *TablePreeCheck) UpdateModel() {
+	db := db2.GetPostgresDb()
+	db.Save(tablePreeCheck)
+}
+
+//FindFirst finds precheck by id and cretae_time last ten minutes
+func (tablePreeCheck *TablePreeCheck) FindFirst(preCheckQueueID int) {
+	db := db2.GetPostgresDb()
+	//now := fmt.Sprint(time.Now().Format("2006-01-02 15:04:05"))
+	now := fmt.Sprint(time.Now().Add(time.Second).Format("2006-01-02 15:04:05"))
+	nowMinusTenMin := fmt.Sprint(time.Now().Add(time.Minute * -20).Format("2006-01-02 15:04:05"))
+	db.Where("id = ? AND create_time BETWEEN ? AND ?", preCheckQueueID, nowMinusTenMin, now).Last(tablePreeCheck)
+}
 
 //TableName for changing struct name to db name
 func (tablePreeCheck TablePreeCheck) TableName() string {
