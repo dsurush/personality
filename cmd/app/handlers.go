@@ -22,7 +22,7 @@ func (server *MainServer) CreateTokenHandler(writer http.ResponseWriter, request
 	}
 	//		log.Printf("login = %s, pass = %s\n", requestBody.Username, requestBody.Password)
 	response, err := server.tokenSvc.Generate(request.Context(), &requestBody)
-	log.Println(response)
+	//log.Println(response)
 	if err != nil {
 		writer.WriteHeader(http.StatusBadRequest)
 		err := json.NewEncoder(writer).Encode([]string{"err.password_mismatch", err.Error()})
@@ -64,6 +64,7 @@ func (server *MainServer) GetClientInfoHandler(writer http.ResponseWriter, reque
 
 func (server *MainServer) GetClientsInfoHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	fmt.Println("I am get all clients")
+	
 	response := server.userSvc.GetClientsInfo()
 	err := json.NewEncoder(writer).Encode(&response)
 	if err != nil {

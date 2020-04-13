@@ -2,23 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="71267d85-1089-4ba6-85c4-348988794b49" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cmd/app/app.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cmd/app/handlers.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cmd/app/routes.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/token/token.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/logfile.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/logger/logger.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/app/handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/app/handlers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/app/routes.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/app/routes.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db/db.go" beforeDir="false" afterPath="$PROJECT_DIR$/db/db.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/clientInfoModels.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/clientInfoModels.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/merchantModels.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/merchantModels.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/models.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/models.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/paymentModels.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/paymentModels.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/postCheckModels.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/postCheckModels.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/preCheckModels.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/preCheckModels.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/users.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/users.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/vendorModels.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/vendorModels.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/settings-dev.json" beforeDir="false" afterPath="$PROJECT_DIR$/settings-dev.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/token/token.go" beforeDir="false" afterPath="$PROJECT_DIR$/token/token.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -59,20 +51,20 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../acuser" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="http.proxy" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\DavlatzodaS\go\src\MF" />
-      <recent name="C:\Users\DavlatzodaS\go\src\MF\cmd\jwt" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\DavlatzodaS\go\src\MF" />
       <recent name="C:\Users\DavlatzodaS\go\src\MF\db" />
       <recent name="C:\Users\DavlatzodaS\go\src\MF\models" />
       <recent name="C:\Users\DavlatzodaS\go\src\MF\cmd" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\DavlatzodaS\go\src\MF" />
+      <recent name="C:\Users\DavlatzodaS\go\src\MF\cmd\jwt" />
     </key>
   </component>
   <component name="RunDashboard">

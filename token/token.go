@@ -38,7 +38,6 @@ var ErrInvalidPasswordOrLogin = errors.New("invalid password")
 
 
 func (receiver *TokenSvc) Generate(context context.Context, request *RequestDTO) (response ResponseDTO, err error) {
-	//login, err := receiver.UserSvc.GetUserByLogin(request.Username)
 	user, err := models.FindUserByLogin(request.Username)
 	if err != nil {
 		err = ErrInvalidPasswordOrLogin

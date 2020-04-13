@@ -17,7 +17,7 @@ func init() {
 	settings.AppSettings = settings.ReadSettings()
 
 	postgresMegafondbParams := settings.AppSettings.PostgresMegafonDbParams
-	fmt.Println(postgresMegafondbParams)
+//	fmt.Println(postgresMegafondbParams)
 	connString := fmt.Sprintf("host=%s port=%d user=%s password=%s database=%s sslmode=disable",
 		postgresMegafondbParams.Server, postgresMegafondbParams.Port,
 		postgresMegafondbParams.User, postgresMegafondbParams.Password,
@@ -30,7 +30,7 @@ func init() {
 	// Error
 	if err != nil {
 		//fmt.Println("error ошибка - ", err)
-		log.Warn("Database init error", err)
+		log.Warn("Database init error", err.Error())
 		panic(err)
 	}
 	/*postgresDbCon.AutoMigrate(&models.ClientInfo{}, &models.Merchant{}, &models.TablePreeCheck{},

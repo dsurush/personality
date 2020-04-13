@@ -2,7 +2,6 @@ package models
 
 import (
 	"MF/db"
-	"fmt"
 	"github.com/sirupsen/logrus"
 )
 
@@ -30,7 +29,7 @@ func FindUserByLogin(login string) (user User, err error){
 		logrus.Warn("Find User By Login ", err.Error())
 		return user, err
 	}
-	fmt.Println("I AM = ", user)
+//	fmt.Println("I AM = ", user)
 	return user, nil
 }
 
