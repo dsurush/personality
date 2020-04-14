@@ -1,16 +1,21 @@
 package app
 
 import (
-	"MF/logger"
+	"MF/middleware/authorized"
+	"MF/middleware/jwt"
+	"MF/middleware/logger"
+	"MF/models"
+	"MF/token"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"reflect"
 )
 
 func (server *MainServer) InitRoutes() {
 	//router := httprouter.New()
-	//bytes, _ := bcrypt.GenerateFromPassword([]byte(`surush`), bcrypt.DefaultCost)
+	//bytes, _ := bcrypt.GenerateFromPassword([]byte(`alisher`), bcrypt.DefaultCost)
 	//fmt.Println(string(bytes))
 		//user, err := models.FindUserByLogin("surush")
 		//if err != nil {
@@ -19,8 +24,9 @@ func (server *MainServer) InitRoutes() {
 		//fmt.Println(user)
 		test()
 	fmt.Println("Init routes")
-	server.router.POST("/api/login", logger.Logger(`Create Token for user: "`)(server.CreateTokenHandler))
-	server.router.GET("/api/client/:phone", logger.Logger(`Get client: `)(server.GetClientInfoHandler))
+	//server.router.GET("/", server.LoginHandler)
+	server.router.POST("/api/login", logger.Logger(`Create Token for user: "`)(server.LoginHandler))
+	server.router.GET("/api/client/:phone", logger.Logger(`Get client: `)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`, `student`}, jwt.FromContext)(server.GetClientInfoHandler)))))
 	server.router.GET("/api/clients", logger.Logger(`Get all clients: `)(server.GetClientsInfoHandler))
 	//TODO: GET ALL TRANSACTION
 	//TODO:
@@ -38,6 +44,11 @@ func test()  {
 //	s := "13.213.321:132"
 //	suffix := strings.Split(s, `:`)
 //	fmt.Println(suffix[0])
+	user, err := models.FindUserByLogin(`alisher`)
+	if err != nil {
+		log.Fatalf("Я не нашел Алишера")
+	}
+	fmt.Println(user)
 	file, err := os.OpenFile(`test`, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
 	if err != nil {
 		log.Panic("Failed to log to file", err)

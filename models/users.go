@@ -26,7 +26,7 @@ func (*User) TableName() string {
 
 func FindUserByLogin(login string) (user User, err error){
 	if err := db.GetPostgresDb().Where("login = ?", login).First(&user).Error; err != nil{
-		logrus.Warn("Find User By Login ", err.Error())
+		logrus.Warn("Find User By LoginHandler ", err.Error())
 		return user, err
 	}
 //	fmt.Println("I AM = ", user)
