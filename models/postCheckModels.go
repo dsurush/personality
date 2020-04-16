@@ -1,7 +1,7 @@
 package models
 
 import (
-	db2 "MF/db"
+	"MF/db"
 	"encoding/xml"
 	"time"
 )
@@ -20,7 +20,7 @@ type PostCheckReqRawXML struct {
 //
 //SaveModel saves PostCheckReqRawXML model in db
 func (postCheckReq *PostCheckReqRawXML) SaveModel() {
-	db := db2.GetPostgresDb()
+	db := db.GetPostgresDb()
 	db.Create(postCheckReq)
 }
 

@@ -32,15 +32,6 @@ func (server *MainServer) LoginHandler(writer http.ResponseWriter, request *http
 		}
 		return
 	}
-	//cookie := http.Cookie{
-	//	//	Name:     "token",
-	//	//	Value:    response.Token,
-	//	//	Expires:  time.Now().Add(time.Hour),
-	//	//	HttpOnly: true,
-	//	//	Path:     "/",
-	//	//	// Domain:   "localhost",
-	//	//}
-	//http.SetCookie(writer, &cookie)
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)
@@ -72,7 +63,7 @@ func (server *MainServer) GetClientsInfoHandler(writer http.ResponseWriter, requ
 		log.Print(err)
 	}
 }
-
+/// UnUse
 func (server *MainServer) LoginHandler1(writer http.ResponseWriter, _*http.Request, _ httprouter.Params) {
 	bytes, err := ioutil.ReadFile("web/templates/index.gohtml")
 	if err != nil {
@@ -83,7 +74,7 @@ func (server *MainServer) LoginHandler1(writer http.ResponseWriter, _*http.Reque
 		log.Fatal("can't send bytes to writer")
 	}
 }
-
+//UnUse
 func (server *MainServer) MainPageHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	fmt.Println("Login\n")
 	var requestBody token.RequestDTO
@@ -115,6 +106,16 @@ func (server *MainServer) MainPageHandler(writer http.ResponseWriter, request *h
 	//	//}
 	//http.SetCookie(writer, &cookie)
 	err = json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Print(err)
+	}
+}
+
+func (server *MainServer) GetVendorCategoryHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	var vendor models.Vendor
+	vendors := vendor.FindAll()
+	//fmt.Println("Hello I am vendors\n", vendors)
+	err := json.NewEncoder(writer).Encode(&vendors)
 	if err != nil {
 		log.Print(err)
 	}

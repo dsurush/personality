@@ -1,7 +1,7 @@
 package models
 
 import (
-	db2 "MF/db"
+	"MF/db"
 	"encoding/xml"
 	"time"
 )
@@ -18,7 +18,7 @@ type VendorListReqRawXML struct {
 //
 ////SaveModel saves VendorListReqRawXML model in db
 func (vendorListReq *VendorListReqRawXML) SaveModel() {
-	db := db2.GetPostgresDb()
+	db := db.GetPostgresDb()
 	db.Create(vendorListReq)
 }
 
@@ -62,16 +62,22 @@ func (vendor *Vendor) TableName() string {
 
 //Find finds vendor by id
 func (vendor *Vendor) Find(id int) {
-	db := db2.GetPostgresDb()
+	db := db.GetPostgresDb()
 	db.Find(vendor, "id = ?", id)
 }
 
 // FindAll returns slice of vendors
 func (vendor *Vendor) FindAll() []Vendor {
 	vendors := []Vendor{}
-	db := db2.GetPostgresDb()
+	db := db.GetPostgresDb()
 	db.Table("tb_vendor").Select("tb_vendor.*, vc.name_rus as category").
 		Joins("inner join tb_vendor_category as vc on vc.id = tb_vendor.category_id").Where("tb_vendor.is_active = true").
 		Order("tb_vendor.category_id").Scan(&vendors)
+	return vendors
+}
+
+func (vendor *Vendor) FindAllVendors() (vendors []Vendor) {
+	postgresDb := db.GetPostgresDb()
+	postgresDb.Table(`tb_vendor`).Select("tb_vendor.*")
 	return vendors
 }

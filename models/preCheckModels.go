@@ -1,7 +1,7 @@
 package models
 
 import (
-	db2 "MF/db"
+	"MF/db"
 	"encoding/xml"
 	"fmt"
 	"log"
@@ -30,7 +30,7 @@ type PreCheckReqRawXML struct {
 
 //SaveModel saves PreCheckReqRawXML model in db
 func (preCheckReq *PreCheckReqRawXML) SaveModel() {
-	db := db2.GetPostgresDb()
+	db := db.GetPostgresDb()
 	if err := db.Create(preCheckReq).Error; err != nil {
 		log.Println("PreCheckReqRawXMLSaveModel: ", err)
 	}
@@ -38,7 +38,7 @@ func (preCheckReq *PreCheckReqRawXML) SaveModel() {
 
 //FindFirst finds first request by id
 func (preCheckReq *PreCheckReqRawXML) FindFirst(id uint) {
-	db := db2.GetPostgresDb()
+	db := db.GetPostgresDb()
 	db.First(preCheckReq, id)
 }
 
@@ -80,19 +80,19 @@ type TablePreeCheck struct {
 //
 //SaveModel saves TablePreeCheck model in db
 func (tablePreeCheck *TablePreeCheck) SaveModel() {
-	db := db2.GetPostgresDb()
+	db := db.GetPostgresDb()
 	db.Create(tablePreeCheck)
 }
 
 // UpdateModel updates transaction model
 func (tablePreeCheck *TablePreeCheck) UpdateModel() {
-	db := db2.GetPostgresDb()
+	db := db.GetPostgresDb()
 	db.Save(tablePreeCheck)
 }
 
 //FindFirst finds precheck by id and cretae_time last ten minutes
 func (tablePreeCheck *TablePreeCheck) FindFirst(preCheckQueueID int) {
-	db := db2.GetPostgresDb()
+	db := db.GetPostgresDb()
 	//now := fmt.Sprint(time.Now().Format("2006-01-02 15:04:05"))
 	now := fmt.Sprint(time.Now().Add(time.Second).Format("2006-01-02 15:04:05"))
 	nowMinusTenMin := fmt.Sprint(time.Now().Add(time.Minute * -20).Format("2006-01-02 15:04:05"))

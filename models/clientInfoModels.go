@@ -1,7 +1,7 @@
 package models
 
 import (
-	db2 "MF/db"
+	"MF/db"
 	"encoding/xml"
 	"github.com/sirupsen/logrus"
 	"regexp"
@@ -50,7 +50,7 @@ type ClientInfoResponse struct {
 //SaveModel saves ClientInfo model in db
 func (clientInfo *ClientInfo) SaveMode() string {
 
-	db := db2.GetPostgresDb()
+	db := db.GetPostgresDb()
 	if err := db.Create(&clientInfo).Error; err != nil {
 		logrus.Println("ClientInfoSaveModel ", err.Error())
 
@@ -76,7 +76,7 @@ func (clientInfo ClientInfo) TableName() string {
 
 //Get ClientInfo by phone
 func GetClientInfo(phone string) (clientInfo ClientInfo) {
-	if err := db2.GetPostgresDb().Where("phone = ?", phone).Last(&clientInfo).Error; err != nil {
+	if err := db.GetPostgresDb().Where("phone = ?", phone).Last(&clientInfo).Error; err != nil {
 		logrus.Println("GetClientInfo By Phone ", err)
 	}
 	return clientInfo

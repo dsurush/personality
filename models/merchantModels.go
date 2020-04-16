@@ -2,7 +2,7 @@ package models
 
 import (
 	"encoding/xml"
-	"personalarea/db"
+	"MF/db"
 	"time"
 )
 

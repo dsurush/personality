@@ -1,7 +1,7 @@
 package models
 
 import (
-	db2 "MF/db"
+	"MF/db"
 	"encoding/xml"
 	"github.com/sirupsen/logrus"
 	"time"
@@ -30,7 +30,7 @@ type PaymentReqRawXML struct {
 //
 ////SaveModel saves PaymentReqRawXML model in db
 func (payReq *PaymentReqRawXML) SaveModel() {
-	db := db2.GetPostgresDb()
+	db := db.GetPostgresDb()
 	db.Create(payReq)
 }
 
@@ -41,7 +41,7 @@ func (payReq PaymentReqRawXML) TableName() string {
 //
 ////FindByID finds transaction by id
 func (payReq *PaymentReqRawXML) FindByID(ID uint) {
-	db := db2.GetPostgresDb()
+	db := db.GetPostgresDb()
 	db.Find(payReq, ID)
 }
 
@@ -80,7 +80,7 @@ type TableTransaction struct {
 //
 ////SaveModel saves TableTransaction model in db
 func (tableTransaction *TableTransaction) SaveModel() {
-	db := db2.GetPostgresDb()
+	db := db.GetPostgresDb()
 	if err := db.Create(tableTransaction).Error; err != nil {
 		logrus.Warn("TransactionSaveModel ", err)
 	}
@@ -88,7 +88,7 @@ func (tableTransaction *TableTransaction) SaveModel() {
 //
 //// UpdateModel updates transaction model
 func (tableTransaction *TableTransaction) UpdateModel() {
-	db := db2.GetPostgresDb()
+	db := db.GetPostgresDb()
 	if err := db.Save(tableTransaction).Error; err != nil {
 		logrus.Warnln("UpdateStatusTransaction ", err)
 	}
@@ -96,13 +96,13 @@ func (tableTransaction *TableTransaction) UpdateModel() {
 //
 //FindByID finds transaction by id
 func (tableTransaction *TableTransaction) FindByID(queueID int) {
-	db := db2.GetPostgresDb()
+	db := db.GetPostgresDb()
 	db.Find(tableTransaction, queueID)
 }
 //
 //// IsPaymentAccepted to check whether payment was accepted or not
 func (tableTransaction *TableTransaction) IsPaymentAccepted(precheckQueueID int) bool {
-	db := db2.GetPostgresDb()
+	db := db.GetPostgresDb()
 	db.Joins("INNER JOIN tb_request_log as rl ON rl.id = tb_transaction.request_id AND rl.precheck_queue_id = ?", precheckQueueID).First(tableTransaction)
 	if tableTransaction.ID > 0 {
 		return true
@@ -112,14 +112,14 @@ func (tableTransaction *TableTransaction) IsPaymentAccepted(precheckQueueID int)
 ////
 //// Delete transaction info from table
 func (tableTransaction *TableTransaction) Delete() {
-	db := db2.GetPostgresDb()
+	db := db.GetPostgresDb()
 	db.Delete(tableTransaction)
 }
 //
 //// NotHandledTransactions returns all not handled transactions
 func (tableTransaction *TableTransaction) NotHandledTransactions() []TableTransaction {
 	var transactions []TableTransaction
-	db := db2.GetPostgresDb()
+	db := db.GetPostgresDb()
 	db.Where("vendor_id <> ? AND (state_id = ? OR state_id = ?) AND payment_id <> 0", "0", "Accepted", "Sent").Find(&transactions)
 	return transactions
 }
@@ -127,14 +127,14 @@ func (tableTransaction *TableTransaction) NotHandledTransactions() []TableTransa
 //// NotSendedPayments gets all transactions where not sended to payment system
 func (tableTransaction *TableTransaction) NotSendedPayments() []TableTransaction {
 	var transactions []TableTransaction
-	db := db2.GetPostgresDb()
+	db := db.GetPostgresDb()
 	db.Where("vendor_id <> ? AND state_id = ? AND payment_id = ?", "0", "Accepted", "0").Find(&transactions)
 	return transactions
 }
 
 func (tableTransaction *TableTransaction) GetTransactionsForRefund() []TableTransaction {
 	var transactions []TableTransaction
-	db := db2.GetPostgresDb()
+	db := db.GetPostgresDb()
 	db.Joins("INNER JOIN tb_request_log as rl ON rl.id = tb_transaction.request_id").Where("state_id = ? AND rl.request_type IN (?,?)", "Failed", "card_online", "card_onsite").Find(&transactions)
 	return transactions
 }
@@ -146,7 +146,7 @@ type Suma struct {
 //
 // GetMonthTransSum gets transaction sum by account payer (need for limits)
 func GetMonthTransSum(acountPayer string) float64 {
-	db := db2.GetPostgresDb()
+	db := db.GetPostgresDb()
 	now := time.Now()
 	beginOfMonth := time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, time.Local)
 	// var sum float64

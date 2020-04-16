@@ -1,7 +1,7 @@
 package models
 
 import (
-	db2 "MF/db"
+	"MF/db"
 	"encoding/xml"
 	"time"
 )
@@ -22,7 +22,7 @@ type ResponseLog struct {
 //
 ////SaveModel saves ResponseLog model in db
 func (responseLog *ResponseLog) SaveModel() {
-	db := db2.GetPostgresDb()
+	db := db.GetPostgresDb()
 	db.Create(responseLog)
 }
 
@@ -40,7 +40,7 @@ type ResponseXML struct {
 
 //SaveModel saves ResponseXML model in db
 func (errorResponse *ResponseXML) SaveModel() {
-	db := db2.GetPostgresDb()
+	db := db.GetPostgresDb()
 	db.Create(errorResponse)
 }
 
@@ -62,7 +62,7 @@ type RawXML struct {
 
 //SaveModel saves RawXML model in db
 func (rawXML *RawXML) SaveModel() {
-	db := db2.GetPostgresDb()
+	db := db.GetPostgresDb()
 	db.Create(rawXML)
 }
 
@@ -81,7 +81,7 @@ type RefundedCardTransactions struct {
 }
 
 func (refTrans *RefundedCardTransactions) SaveModel() {
-	db := db2.GetPostgresDb()
+	db := db.GetPostgresDb()
 	db.Create(refTrans)
 }
 
