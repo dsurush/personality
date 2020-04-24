@@ -27,6 +27,7 @@ type PaymentReqRawXML struct {
 	IPAddress         string    `xml:"-" gorm:"column:ip_address"`
 	GateWay           string    `xml:"gateWay" gorm:"column:gate_way; default:'MEGAFON'"`
 }
+
 //
 ////SaveModel saves PaymentReqRawXML model in db
 func (payReq *PaymentReqRawXML) SaveModel() {
@@ -38,6 +39,7 @@ func (payReq *PaymentReqRawXML) SaveModel() {
 func (payReq PaymentReqRawXML) TableName() string {
 	return "tb_request_log"
 }
+
 //
 ////FindByID finds transaction by id
 func (payReq *PaymentReqRawXML) FindByID(ID uint) {
@@ -77,7 +79,42 @@ type TableTransaction struct {
 	AggregatorStatus    string           `gorm:"column:aggregator_status"`
 	AggregatorTransTime time.Time        `gorm:"column:agr_trans_time"`
 }
-//
+
+// struct for view
+type ViewTableTransaction struct {
+	ID                int64     `xml:"id"`
+	RequestId         int64     `xml:"request_id"`
+	PaymentID         int64     `xml:"payment_id"`
+	PreCheckQueueID   int64     `xml:"pre_check_queue_id"`
+	Vendor            int       `xml:"vendor"`
+	VendorName        string    `xml:"vendor_name"`
+	Route             int       `xml:"route"`
+	RequestType       string    `xml:"request_type"` ///?
+	SendToCft         int       `xml:"send_to_cft"`
+	AccountPayer      string    `xml:"account_payer"`
+	AccountReceiver   string    `xml:"account_receiver"`
+	StateID           string    `xml:"state_id"`
+	Aggregator        string    `xml:"aggregator"`
+	CreateTime        time.Time `xml:"create_time"`
+	Amount            int64     `xml:"amount"`
+	AmountWithCommiss int64     `xml:"amount_with_commiss"`
+	Commiss           int64     `xml:"commiss"`
+	CardHash          string    `xml:"card_hash"`
+	AgrTransTime      time.Time `xml:"agr_trans_time"`
+	AggregatorStatus  string    `xml:"aggregator_status"`
+	GateWay           string    `xml:"gate_way"`
+	QrCode            string    `xml:"qr_code"`
+	NameRus           string    `xml:"name_rus"`
+	TimeDiff          time.Time `xml:"time_diff"`
+}
+
+////Get From view_transaction
+func GetViewTransactions(size, page int64) (Transaction []ViewTableTransaction) {
+	postgresDb := db.GetPostgresDb()
+	postgresDb.Table(`view_transaction`).Select("view_transaction.*").Limit(size).Offset(page * size).Scan(&Transaction)
+	return Transaction
+}
+
 ////SaveModel saves TableTransaction model in db
 func (tableTransaction *TableTransaction) SaveModel() {
 	db := db.GetPostgresDb()
@@ -85,6 +122,7 @@ func (tableTransaction *TableTransaction) SaveModel() {
 		logrus.Warn("TransactionSaveModel ", err)
 	}
 }
+
 //
 //// UpdateModel updates transaction model
 func (tableTransaction *TableTransaction) UpdateModel() {
@@ -93,12 +131,14 @@ func (tableTransaction *TableTransaction) UpdateModel() {
 		logrus.Warnln("UpdateStatusTransaction ", err)
 	}
 }
+
 //
 //FindByID finds transaction by id
 func (tableTransaction *TableTransaction) FindByID(queueID int) {
 	db := db.GetPostgresDb()
 	db.Find(tableTransaction, queueID)
 }
+
 //
 //// IsPaymentAccepted to check whether payment was accepted or not
 func (tableTransaction *TableTransaction) IsPaymentAccepted(precheckQueueID int) bool {
@@ -109,12 +149,14 @@ func (tableTransaction *TableTransaction) IsPaymentAccepted(precheckQueueID int)
 	}
 	return false
 }
+
 ////
 //// Delete transaction info from table
 func (tableTransaction *TableTransaction) Delete() {
 	db := db.GetPostgresDb()
 	db.Delete(tableTransaction)
 }
+
 //
 //// NotHandledTransactions returns all not handled transactions
 func (tableTransaction *TableTransaction) NotHandledTransactions() []TableTransaction {
@@ -143,6 +185,7 @@ func (tableTransaction *TableTransaction) GetTransactionsForRefund() []TableTran
 type Suma struct {
 	Sum float64
 }
+
 //
 // GetMonthTransSum gets transaction sum by account payer (need for limits)
 func GetMonthTransSum(acountPayer string) float64 {

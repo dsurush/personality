@@ -357,3 +357,5 @@
 2020-04-24 18:09:23: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/clients
 2020-04-24 18:27:24: [127.0.0.1] login: surush Get client:  Method: GET, path: /api/client/2326889
 2020-04-24 18:27:42: [127.0.0.1] login: surush Get client:  Method: GET, path: /api/client/2326889
+2020-04-24 23:12:44: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/vendors
+2020-04-24 23:12:47: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login

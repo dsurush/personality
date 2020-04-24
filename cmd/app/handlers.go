@@ -107,7 +107,6 @@ func (server *MainServer) GetClientsInfoByFilterHandler(writer http.ResponseWrit
 		log.Print(err)
 	}
 }
-
 /// UnUse
 func (server *MainServer) LoginHandler1(writer http.ResponseWriter, _*http.Request, _ httprouter.Params) {
 	bytes, err := ioutil.ReadFile("web/templates/index.gohtml")
@@ -178,6 +177,27 @@ func (server *MainServer) GetVendorCategoryByPageSizeHandler(writer http.Respons
 	var vendor models.Vendor
 	response := vendor.FindAllVendorsByPageSize(pageInt, rowsInt)
 	err := json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Print(err)
+	}
+}
+
+func (server *MainServer) GetViewTransactionsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	fmt.Println("I am get all clients")
+	pageInt := 1
+	rowsInt := 100
+	page := request.URL.Query().Get(`page`)
+	rows := request.URL.Query().Get(`rows`)
+	pageInt, err := strconv.Atoi(page)
+	if err != nil{
+		pageInt = 1
+	}
+	rowsInt, err = strconv.Atoi(rows)
+	if err != nil {
+		rowsInt = 100
+	}
+	response := models.GetViewTransactions(int64(rowsInt), int64(pageInt - 1))
+	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)
 	}
