@@ -21,6 +21,7 @@ func NewTokenSvc(secret []byte) *TokenSvc {
 type Payload struct {
 	Id    int64    `json:"id"`
 	Exp   int64    `json:"exp"`
+	Login string   `json:"login"`
 	Role string    `json:"role"`
 }
 
@@ -52,6 +53,7 @@ func (receiver *TokenSvc) Generate(context context.Context, request *RequestDTO)
 	response.Token, err = jwt.Encode(Payload{
 		Id:    user.Id,
 		Exp:   time.Now().Add(time.Hour).Unix(),
+		Login: user.Login,
 		Role:  user.Role,
 	}, receiver.secret)
 	return

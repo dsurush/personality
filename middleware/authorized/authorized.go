@@ -3,9 +3,7 @@ package authorized
 import (
 	"MF/token"
 	"context"
-	"fmt"
 	"github.com/julienschmidt/httprouter"
-	"log"
 	"net/http"
 )
 
@@ -14,9 +12,9 @@ func Authorized(roles []string, payload func(ctx context.Context) interface{}) f
 		return func(writer http.ResponseWriter, request *http.Request, pr httprouter.Params) {
 			auth := payload(request.Context()).(*token.Payload)
 			for _, role := range roles {
-				fmt.Println(role)
+			//	fmt.Println(role)
 				if role == auth.Role {
-					log.Printf("access granted %v %v", roles, auth)
+				//	log.Printf("access granted %v %v", roles, auth)
 					next(writer, request, pr)
 					return
 				}
@@ -26,3 +24,4 @@ func Authorized(roles []string, payload func(ctx context.Context) interface{}) f
 		}
 	}
 }
+

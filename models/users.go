@@ -43,7 +43,7 @@ func NewUsersvc() *Usersvc {
 
 
 func (receiver *Usersvc) GetClientsInfo() (clientsInfo []ClientInfo) {
-	if err := db.GetPostgresDb().Find(&clientsInfo).Error; err != nil{
+	if err := db.GetPostgresDb().Limit(100).Offset(0).Find(&clientsInfo).Error; err != nil{
 		logrus.Warn("GetClientsInfo:", err.Error())
 		return nil
 	}

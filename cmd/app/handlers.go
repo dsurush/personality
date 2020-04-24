@@ -9,9 +9,10 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 )
 
-func (server *MainServer) LoginHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+func (server *MainServer) LoginHandler(writer http.ResponseWriter, request *http.Request, pr httprouter.Params) {
 	fmt.Println("login\n")
 	var requestBody token.RequestDTO
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
@@ -21,7 +22,7 @@ func (server *MainServer) LoginHandler(writer http.ResponseWriter, request *http
 		log.Print(err)
 		return
 	}
-	//		log.Printf("login = %s, pass = %s\n", requestBody.Username, requestBody.Password)
+	//	log.Printf("login = %s, pass = %s\n", requestBody.Username, requestBody.Password)
 	response, err := server.tokenSvc.Generate(request.Context(), &requestBody)
 	//log.Println(response)
 	if err != nil {
@@ -38,15 +39,16 @@ func (server *MainServer) LoginHandler(writer http.ResponseWriter, request *http
 	}
 }
 
-func (server *MainServer) GetClientInfoHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
+func (server *MainServer) GetClientInfoByPhoneNumberHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
 	fmt.Println("I am find client By number phone")
 	phone := param.ByName(`phone`)
 	fmt.Println(phone)
-	response := models.GetClientInfo(phone)
+	response := models.GetClientInfoByPhoneNumber(phone)
 	if response.ClientID == 0{
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
+
 	fmt.Println(response)
 	err := json.NewEncoder(writer).Encode(&response)
 	if err != nil {
@@ -56,13 +58,56 @@ func (server *MainServer) GetClientInfoHandler(writer http.ResponseWriter, reque
 
 func (server *MainServer) GetClientsInfoHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	fmt.Println("I am get all clients")
-	
 	response := server.userSvc.GetClientsInfo()
 	err := json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)
 	}
 }
+
+func (server *MainServer) GetClientsInfoByFilterHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	fmt.Println("I am get all clients")
+	var clientDefault models.ClientInfo
+	pageInt := 1
+	rowsInt := 100
+	page := request.URL.Query().Get(`page`)
+	rows := request.URL.Query().Get(`rows`)
+	IsActive, err := strconv.ParseBool(request.URL.Query().Get(`IsActive`))
+	if err == nil {
+		clientDefault.IsActive = IsActive
+	}
+	IsIdentified, err := strconv.ParseBool(request.URL.Query().Get(`IsIdentified`))
+	if err != nil {
+		clientDefault.IsIdentified = IsIdentified
+	}
+	IsBlackList, err := strconv.ParseBool(request.URL.Query().Get(`IsBlackList`))
+	if err != nil {
+		clientDefault.IsBlackList = IsBlackList
+	}
+	SendToCft, err := strconv.ParseBool(request.URL.Query().Get(`SendToCft`))
+	if err != nil {
+		clientDefault.SendToCft = SendToCft
+	}
+	Sex := request.URL.Query().Get(`Sex`)
+	clientDefault.Sex = Sex
+
+	pageInt, err = strconv.Atoi(page)
+	if err != nil{
+		pageInt = 1
+	}
+	rowsInt, err = strconv.Atoi(rows)
+	if err != nil {
+		rowsInt = 100
+	}
+
+	fmt.Println(clientDefault)
+	response := models.GetClients(clientDefault, rowsInt, pageInt - 1)
+	err = json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Print(err)
+	}
+}
+
 /// UnUse
 func (server *MainServer) LoginHandler1(writer http.ResponseWriter, _*http.Request, _ httprouter.Params) {
 	bytes, err := ioutil.ReadFile("web/templates/index.gohtml")
@@ -116,6 +161,23 @@ func (server *MainServer) GetVendorCategoryHandler(writer http.ResponseWriter, r
 	vendors := vendor.FindAll()
 	//fmt.Println("Hello I am vendors\n", vendors)
 	err := json.NewEncoder(writer).Encode(&vendors)
+	if err != nil {
+		log.Print(err)
+	}
+}
+
+func (server *MainServer) GetVendorCategoryByPageSizeHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
+	fmt.Println("I am find client By number phone")
+//	page := param.ByName("page")
+//	rows := param.ByName(`rows`)
+	page := request.URL.Query().Get(`page`)
+	rows := request.URL.Query().Get(`rows`)
+	//fmt.Println(get1, get2, "eeeeee")
+	pageInt, _ := strconv.Atoi(page)
+	rowsInt, _ := strconv.Atoi(rows)
+	var vendor models.Vendor
+	response := vendor.FindAllVendorsByPageSize(pageInt, rowsInt)
+	err := json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)
 	}

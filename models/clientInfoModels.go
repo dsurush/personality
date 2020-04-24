@@ -75,10 +75,16 @@ func (clientInfo ClientInfo) TableName() string {
 }
 
 //Get ClientInfo by phone
-func GetClientInfo(phone string) (clientInfo ClientInfo) {
+func GetClientInfoByPhoneNumber(phone string) (clientInfo ClientInfo) {
 	if err := db.GetPostgresDb().Where("phone = ?", phone).Last(&clientInfo).Error; err != nil {
-		logrus.Println("GetClientInfo By Phone ", err)
+		logrus.Println("GetClientInfoByPhoneNumber By Phone ", err)
 	}
 	return clientInfo
 }
-
+//
+func GetClients(client ClientInfo, size, page int) (clientsSlice []ClientInfo){
+	if err := db.GetPostgresDb().Where(&client).Limit(size).Offset(page * size).Find(&clientsSlice).Error; err != nil{
+		logrus.Println(" ", err)
+	}
+	return
+}
