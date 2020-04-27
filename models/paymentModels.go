@@ -81,7 +81,7 @@ type TableTransaction struct {
 }
 
 // struct for view
-type ViewTableTransaction struct {
+type ViewTransaction struct {
 	ID                int64     `xml:"id"`
 	RequestId         int64     `xml:"request_id"`
 	PaymentID         int64     `xml:"payment_id"`
@@ -96,9 +96,9 @@ type ViewTableTransaction struct {
 	StateID           string    `xml:"state_id"`
 	Aggregator        string    `xml:"aggregator"`
 	CreateTime        time.Time `xml:"create_time"`
-	Amount            int64     `xml:"amount"`
-	AmountWithCommiss int64     `xml:"amount_with_commiss"`
-	Commiss           int64     `xml:"commiss"`
+	Amount            float64   `xml:"amount"`
+	AmountWithCommiss float64   `xml:"amount_with_commiss"`
+	Commiss           float64   `xml:"commiss"`
 	CardHash          string    `xml:"card_hash"`
 	AgrTransTime      time.Time `xml:"agr_trans_time"`
 	AggregatorStatus  string    `xml:"aggregator_status"`
@@ -109,9 +109,9 @@ type ViewTableTransaction struct {
 }
 
 ////Get From view_transaction
-func GetViewTransactions(size, page int64) (Transaction []ViewTableTransaction) {
+func GetViewTransactions(transaction ViewTransaction, size, page int64) (Transaction []ViewTransaction) {
 	postgresDb := db.GetPostgresDb()
-	postgresDb.Table(`view_transaction`).Select("view_transaction.*").Limit(size).Offset(page * size).Scan(&Transaction)
+	postgresDb.Table(`view_transaction view_transactions `).Where(&transaction).Limit(size).Offset(page * size).Scan(&Transaction)
 	return Transaction
 }
 

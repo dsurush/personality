@@ -359,3 +359,34 @@
 2020-04-24 18:27:42: [127.0.0.1] login: surush Get client:  Method: GET, path: /api/client/2326889
 2020-04-24 23:12:44: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/vendors
 2020-04-24 23:12:47: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-04-27 17:34:23: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/clients
+2020-04-27 17:35:52: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-04-27 17:36:05: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/vendors
+2020-04-27 17:36:10: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/vendors
+2020-04-27 17:36:18: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/clients
+2020-04-27 17:36:24: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/clients
+2020-04-27 17:36:50: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/vendors
+2020-04-27 17:36:58: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/clients
+2020-04-27 17:37:14: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/clients
+2020-04-27 17:37:24: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/clients
+2020-04-27 17:37:56: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/clients
+2020-04-27 18:21:26: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/clients
+2020-04-27 18:21:40: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/clients
+2020-04-27 18:22:26: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/clients
+2020-04-27 18:24:07: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/clients
+2020-04-27 18:26:18: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/clients
+2020-04-27 18:26:54: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/clients
+2020-04-27 18:34:21: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/clients
+2020-04-27 18:45:42: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/clients
+2020-04-27 19:03:55: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-04-27 19:04:38: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/clients
+2020-04-27 19:04:51: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/clients
+2020-04-27 19:04:54: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/clients
+2020-04-27 19:07:09: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/clients
+2020-04-27 19:07:41: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/clients
+2020-04-27 19:07:54: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/clients
+2020-04-27 19:08:06: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/clients
+2020-04-27 19:41:02: [127.0.0.1] login: surush Get client:  Method: GET, path: /api/client/2326889
+2020-04-27 19:41:17: [127.0.0.1] login: surush Get client:  Method: GET, path: /api/client/2326889
+2020-04-27 19:41:26: [127.0.0.1] login: surush Get client:  Method: GET, path: /api/client/2326889
+2020-04-27 19:45:02: [127.0.0.1] login: surush Get client:  Method: GET, path: /api/client/901445599

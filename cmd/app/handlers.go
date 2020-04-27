@@ -55,7 +55,7 @@ func (server *MainServer) GetClientInfoByPhoneNumberHandler(writer http.Response
 		log.Print(err)
 	}
 }
-
+//UnUse
 func (server *MainServer) GetClientsInfoHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	fmt.Println("I am get all clients")
 	response := server.userSvc.GetClientsInfo()
@@ -77,15 +77,15 @@ func (server *MainServer) GetClientsInfoByFilterHandler(writer http.ResponseWrit
 		clientDefault.IsActive = IsActive
 	}
 	IsIdentified, err := strconv.ParseBool(request.URL.Query().Get(`IsIdentified`))
-	if err != nil {
+	if err == nil {
 		clientDefault.IsIdentified = IsIdentified
 	}
 	IsBlackList, err := strconv.ParseBool(request.URL.Query().Get(`IsBlackList`))
-	if err != nil {
+	if err == nil {
 		clientDefault.IsBlackList = IsBlackList
 	}
 	SendToCft, err := strconv.ParseBool(request.URL.Query().Get(`SendToCft`))
-	if err != nil {
+	if err == nil {
 		clientDefault.SendToCft = SendToCft
 	}
 	Sex := request.URL.Query().Get(`Sex`)
@@ -196,7 +196,68 @@ func (server *MainServer) GetViewTransactionsHandler(writer http.ResponseWriter,
 	if err != nil {
 		rowsInt = 100
 	}
-	response := models.GetViewTransactions(int64(rowsInt), int64(pageInt - 1))
+	transaction := models.ViewTransaction{}
+	RequestId, err := strconv.Atoi(request.URL.Query().Get(`RequestId`))
+	if err == nil {
+		transaction.RequestId = int64(RequestId)
+	}
+	PaymentID, err := strconv.Atoi(request.URL.Query().Get(`PaymentID`))
+	if err == nil {
+		transaction.PaymentID =  int64(PaymentID)
+	}
+	PreCheckQueueID, err := strconv.Atoi(request.URL.Query().Get(`PreCheckQueueID`))
+	if err == nil {
+		transaction.PreCheckQueueID =  int64(PreCheckQueueID)
+	}
+	Vendor, err := strconv.Atoi(request.URL.Query().Get(`Vendor`))
+	if err == nil {
+		transaction.Vendor =  Vendor
+	}
+	VendorName := request.URL.Query().Get(`VendorName`)
+	transaction.VendorName = VendorName
+	RequestType := request.URL.Query().Get(`RequestType`)
+	transaction.RequestType = RequestType
+	AccountPayer := request.URL.Query().Get(`AccountPayer`)
+	transaction.AccountPayer = AccountPayer
+	AccountReceiver := request.URL.Query().Get(`AccountReceiver`)
+	transaction.AccountReceiver = AccountReceiver
+	StateID := request.URL.Query().Get(`StateID`)
+	transaction.StateID = StateID
+	Aggregator := request.URL.Query().Get(`Aggregator`)
+	transaction.Aggregator = Aggregator
+	GateWay := request.URL.Query().Get(`GateWay`)
+	transaction.GateWay = GateWay
+	Amount, err := strconv.ParseFloat(request.URL.Query().Get(`Amount`), 64)
+	if err == nil {
+		transaction.Amount =  Amount
+	}
+	response := models.GetViewTransactions(transaction, int64(rowsInt), int64(pageInt - 1))
+	err = json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Print(err)
+	}
+}
+
+func (server *MainServer) GetViewReportsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	fmt.Println("I am get clients")
+	pageInt := 1
+	rowsInt := 100
+	page := request.URL.Query().Get(`page`)
+	rows := request.URL.Query().Get(`rows`)
+	pageInt, err := strconv.Atoi(page)
+	if err != nil{
+		pageInt = 1
+	}
+	rowsInt, err = strconv.Atoi(rows)
+	if err != nil {
+		rowsInt = 100
+	}
+	response, err := models.GetViewReport(int64(rowsInt), int64(pageInt - 1))
+	if err != nil {
+		err := json.NewEncoder(writer).Encode([]string{`error mismatch this raport'`})
+		log.Print(err)
+		return
+	}
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)

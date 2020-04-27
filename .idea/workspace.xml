@@ -2,12 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="71267d85-1089-4ba6-85c4-348988794b49" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/models/raport.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmd/app/handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/app/handlers.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmd/app/routes.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/app/routes.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logfile.log" beforeDir="false" afterPath="$PROJECT_DIR$/logfile.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/paymentModels.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/paymentModels.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings-dev.json" beforeDir="false" afterPath="$PROJECT_DIR$/settings-dev.json" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -204,5 +204,16 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/cmd/app/handlers.go</url>
+          <line>184</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
