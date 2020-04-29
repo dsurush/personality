@@ -14,6 +14,7 @@ import (
 
 func (server *MainServer) LoginHandler(writer http.ResponseWriter, request *http.Request, pr httprouter.Params) {
 	fmt.Println("login\n")
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	var requestBody token.RequestDTO
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
 	if err != nil {
@@ -41,6 +42,7 @@ func (server *MainServer) LoginHandler(writer http.ResponseWriter, request *http
 
 func (server *MainServer) GetClientInfoByPhoneNumberHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
 	fmt.Println("I am find client By number phone")
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	phone := param.ByName(`phone`)
 	fmt.Println(phone)
 	response := models.GetClientInfoByPhoneNumber(phone)
@@ -58,6 +60,7 @@ func (server *MainServer) GetClientInfoByPhoneNumberHandler(writer http.Response
 
 func (server *MainServer) GetClientsInfoByFilterHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	fmt.Println("I am get all clients")
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	var clientDefault models.ClientInfo
 	pageInt := 1
 	rowsInt := 100
@@ -98,7 +101,7 @@ func (server *MainServer) GetClientsInfoByFilterHandler(writer http.ResponseWrit
 		log.Print(err)
 	}
 }
-/// UnUse
+//UnUse
 func (server *MainServer) LoginHandler1(writer http.ResponseWriter, _*http.Request, _ httprouter.Params) {
 	bytes, err := ioutil.ReadFile("web/templates/index.gohtml")
 	if err != nil {
@@ -145,7 +148,7 @@ func (server *MainServer) MainPageHandler(writer http.ResponseWriter, request *h
 		log.Print(err)
 	}
 }
-
+//UnUse
 func (server *MainServer) GetVendorCategoryHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	var vendor models.Vendor
 	vendors := vendor.FindAll()
@@ -157,6 +160,7 @@ func (server *MainServer) GetVendorCategoryHandler(writer http.ResponseWriter, r
 }
 
 func (server *MainServer) GetVendorCategoryByPageSizeHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	page := request.URL.Query().Get(`page`)
 	rows := request.URL.Query().Get(`rows`)
 	pageInt, _ := strconv.Atoi(page)
@@ -171,6 +175,7 @@ func (server *MainServer) GetVendorCategoryByPageSizeHandler(writer http.Respons
 
 func (server *MainServer) GetViewTransactionsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	fmt.Println("I am view Transaction")
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	pageInt := 1
 	rowsInt := 100
 	page := request.URL.Query().Get(`page`)
@@ -227,6 +232,7 @@ func (server *MainServer) GetViewTransactionsHandler(writer http.ResponseWriter,
 
 func (server *MainServer) GetViewReportsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	fmt.Println("I am get clients")
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	pageInt := 1
 	rowsInt := 100
 	page := request.URL.Query().Get(`page`)
@@ -268,6 +274,45 @@ func (server *MainServer) SaveNewVendorHandler(writer http.ResponseWriter, reque
 		log.Print(err)
 		return
 	}
+	err = json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Print(err)
+	}
+}
+
+func (server *MainServer) UpdateVendorHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params){
+	var requestBody models.Vendor
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	err := json.NewDecoder(request.Body).Decode(&requestBody)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		err := json.NewEncoder(writer).Encode([]string{"err.json_invalid"})
+		log.Print(err)
+		return
+	}
+	response := requestBody.Update(requestBody)
+	fmt.Println(response)
+	if response.ID <= 0{
+		writer.WriteHeader(http.StatusNotFound)
+		err := json.NewEncoder(writer).Encode([]string{"err.json_invalid"})
+		log.Print(err)
+		return
+	}
+	err = json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Print(err)
+	}
+}
+//Unuse
+func (server *MainServer) GetVendorHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params){
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	param := params.ByName(`id`)
+	id, err := strconv.Atoi(param)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	response := models.GetVendorById(int64(id))
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)

@@ -3,6 +3,7 @@ package models
 import (
 	"MF/db"
 	"encoding/xml"
+	"github.com/sirupsen/logrus"
 	"time"
 )
 
@@ -92,4 +93,17 @@ func (Vendor *Vendor) Save() Vendor{
 	postgresDb := db.GetPostgresDb()
 	postgresDb.Create(&Vendor)
 	return *Vendor
+}
+
+func (Vendor *Vendor) Update(vendor Vendor) Vendor {
+	postgresDb := db.GetPostgresDb()
+	postgresDb.Model(&Vendor).Updates(vendor)
+	return *Vendor
+}
+
+func GetVendorById(id int64) (vendor Vendor) {
+	if err := db.GetPostgresDb().Where("id = ?", id).First(&vendor).Error; err != nil {
+		logrus.Println("GetVendorById ", err)
+	}
+	return vendor
 }
