@@ -55,15 +55,6 @@ func (server *MainServer) GetClientInfoByPhoneNumberHandler(writer http.Response
 		log.Print(err)
 	}
 }
-//UnUse
-func (server *MainServer) GetClientsInfoHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-	fmt.Println("I am get all clients")
-	response := server.userSvc.GetClientsInfo()
-	err := json.NewEncoder(writer).Encode(&response)
-	if err != nil {
-		log.Print(err)
-	}
-}
 
 func (server *MainServer) GetClientsInfoByFilterHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	fmt.Println("I am get all clients")
@@ -175,7 +166,7 @@ func (server *MainServer) GetVendorCategoryByPageSizeHandler(writer http.Respons
 	pageInt, _ := strconv.Atoi(page)
 	rowsInt, _ := strconv.Atoi(rows)
 	var vendor models.Vendor
-	response := vendor.FindAllVendorsByPageSize(pageInt, rowsInt)
+	response := vendor.FindAllVendorsByPageSize(pageInt-1, rowsInt)
 	err := json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)
