@@ -51,7 +51,7 @@ type Vendor struct {
 	Route        int       `xml:"-" gorm:"column:route"`
 	MinSum       float64   `xml:"minSum" gorm:"column:min_sum"`
 	CreateTime   time.Time `xml:"-" gorm:"column:create_time"`
-	Type         string    `xml:"type,omitempty"`
+//	Type         string    `xml:"type,omitempty"`
 	IsActive     bool      `xml:"-" gorm:"column:is_active"`
 }
 
@@ -86,4 +86,10 @@ func (Vendor *Vendor) FindAllVendorsByPageSize(page int, size int) (vendors []Ve
 	postgresDb := db.GetPostgresDb()
 	postgresDb.Table(`tb_vendor`).Select("tb_vendor.*").Limit(size).Offset(page * size).Scan(&vendors)
 	return vendors
+}
+
+func (Vendor *Vendor) Save() Vendor{
+	postgresDb := db.GetPostgresDb()
+	postgresDb.Create(&Vendor)
+	return *Vendor
 }

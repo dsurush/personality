@@ -157,12 +157,8 @@ func (server *MainServer) GetVendorCategoryHandler(writer http.ResponseWriter, r
 }
 
 func (server *MainServer) GetVendorCategoryByPageSizeHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
-	fmt.Println("I am find client By number phone")
-//	page := param.ByName("page")
-//	rows := param.ByName(`rows`)
 	page := request.URL.Query().Get(`page`)
 	rows := request.URL.Query().Get(`rows`)
-	//fmt.Println(get1, get2, "eeeeee")
 	pageInt, _ := strconv.Atoi(page)
 	rowsInt, _ := strconv.Atoi(rows)
 	var vendor models.Vendor
@@ -174,7 +170,7 @@ func (server *MainServer) GetVendorCategoryByPageSizeHandler(writer http.Respons
 }
 
 func (server *MainServer) GetViewTransactionsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-	fmt.Println("I am get all clients")
+	fmt.Println("I am view Transaction")
 	pageInt := 1
 	rowsInt := 100
 	page := request.URL.Query().Get(`page`)
@@ -246,6 +242,29 @@ func (server *MainServer) GetViewReportsHandler(writer http.ResponseWriter, requ
 	response, err := models.GetViewReport(int64(rowsInt), int64(pageInt - 1))
 	if err != nil {
 		err := json.NewEncoder(writer).Encode([]string{`error mismatch this raport'`})
+		log.Print(err)
+		return
+	}
+	err = json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Print(err)
+	}
+}
+
+func (server *MainServer) SaveNewVendorHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params){
+	var requestBody models.Vendor
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	err := json.NewDecoder(request.Body).Decode(&requestBody)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		err := json.NewEncoder(writer).Encode([]string{"err.json_invalid"})
+		log.Print(err)
+		return
+	}
+	response := requestBody.Save()
+	if response.ID <= 0{
+		writer.WriteHeader(http.StatusNotFound)
+		err := json.NewEncoder(writer).Encode([]string{"err.json_invalid"})
 		log.Print(err)
 		return
 	}
