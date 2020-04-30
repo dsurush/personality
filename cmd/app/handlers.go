@@ -300,10 +300,10 @@ func (server *MainServer) UpdateVendorHandler(writer http.ResponseWriter, reques
 	}
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
-		log.Print(err)
+		log.Println(err)
 	}
 }
-//Unuse
+
 func (server *MainServer) GetVendorHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params){
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	param := params.ByName(`id`)
@@ -316,5 +316,59 @@ func (server *MainServer) GetVendorHandler(writer http.ResponseWriter, request *
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)
+	}
+}
+
+func (server *MainServer) GetMerchantsHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	page := request.URL.Query().Get(`page`)
+	rows := request.URL.Query().Get(`rows`)
+	pageInt, _ := strconv.Atoi(page)
+	rowsInt, _ := strconv.Atoi(rows)
+	var merchant models.Merchant
+	response := merchant.GetMerchants(int64(rowsInt), int64(pageInt-1))
+	err := json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Print(err)
+	}
+}
+
+func (server *MainServer) GetMerchantHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params){
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	param := params.ByName(`id`)
+	id, err := strconv.Atoi(param)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	response := models.Merchant{}
+	merchant := response.GetMerchantById(int64(id))
+	err = json.NewEncoder(writer).Encode(&merchant)
+	if err != nil {
+		log.Print(err)
+	}
+}
+//UNUSE
+func (server *MainServer) UpdateMerchantHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params){
+	var requestBody models.Merchant
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	err := json.NewDecoder(request.Body).Decode(&requestBody)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		err := json.NewEncoder(writer).Encode([]string{"err.json_invalid"})
+		log.Print(err)
+		return
+	}
+	response := requestBody.Update(requestBody)
+	fmt.Println(response)
+	if response.ID <= 0{
+		writer.WriteHeader(http.StatusNotFound)
+		err := json.NewEncoder(writer).Encode([]string{"err.json_invalid"})
+		log.Print(err)
+		return
+	}
+	err = json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Println(err)
 	}
 }

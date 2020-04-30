@@ -33,6 +33,24 @@ func (merchant *Merchant) GetList() []Merchant {
 	db.Find(&merchants)
 	return merchants
 }
+// Get merchantlist by page and rowssize
+func (merchant *Merchant) GetMerchants(size, page int64) (merchants []Merchant) {
+	postgresDb := db.GetPostgresDb()
+	postgresDb.Table(`tb_ho_merchant`).Select("tb_ho_merchant.*").Limit(size).Offset(page * size).Scan(&merchants)
+	return merchants
+}
+//Get merchant by ID
+func (merchant *Merchant) GetMerchantById(id int64) (merchantsById Merchant) {
+	postgresDb := db.GetPostgresDb()
+	postgresDb.First(&merchantsById, id)
+	return merchantsById
+}
+//
+func (Merchant *Merchant) Update(merchant Merchant) Merchant {
+	postgresDb := db.GetPostgresDb()
+	postgresDb.Model(&Merchant).Updates(merchant)
+	return *Merchant
+}
 //
 func (merchant *Merchant) save() {
 	db := db.GetPostgresDb()
