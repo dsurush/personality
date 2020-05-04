@@ -94,13 +94,13 @@ func (Vendor *Vendor) Save() Vendor{
 	postgresDb.Create(&Vendor)
 	return *Vendor
 }
-
+// Create Method for update
 func (Vendor *Vendor) Update(vendor Vendor) Vendor {
 	postgresDb := db.GetPostgresDb()
 	postgresDb.Model(&Vendor).Updates(vendor)
 	return *Vendor
 }
-
+// Create func for Get Vendor
 func GetVendorById(id int64) (vendor Vendor) {
 	if err := db.GetPostgresDb().Where("id = ?", id).First(&vendor).Error; err != nil {
 		logrus.Println("GetVendorById ", err)

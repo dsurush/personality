@@ -35,13 +35,6 @@ func WriteToFile(filename string, data string) {
 func Logger(prefix string) func(next httprouter.Handle,) httprouter.Handle {
 	return func(next httprouter.Handle) httprouter.Handle {
 		return func(writer http.ResponseWriter, request *http.Request, pr httprouter.Params) {
-			log.Printf(
-				"%s Method: %s, path: %s",
-				prefix,
-				request.Method,
-				request.URL.Path,
-			)
-
 			var GetToken = ""
 			GetToken = request.Header.Get("Authorization")
 			var PayloadFields token.Payload
@@ -68,7 +61,15 @@ func Logger(prefix string) func(next httprouter.Handle,) httprouter.Handle {
 					return
 				}
 			}
-
+			log.Printf(
+				"%s: [%s] login: %s %s Method: %s, path: %s\n",
+				time.Now().Format("2006-01-02 15:04:05"),
+				strings.Split(request.RemoteAddr, ":")[0],
+				PayloadFields.Login,
+				prefix,
+				request.Method,
+				request.URL.Path,
+			)
 			data := fmt.Sprintf("%s: [%s] login: %s %s Method: %s, path: %s\n",
 				time.Now().Format("2006-01-02 15:04:05"),
 				strings.Split(request.RemoteAddr, ":")[0],

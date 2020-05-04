@@ -2,10 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="71267d85-1089-4ba6-85c4-348988794b49" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/middleware/logger/logger_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/app/app.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/app/app.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmd/app/handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/app/handlers.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmd/app/routes.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/app/routes.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/merchantModels.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/merchantModels.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/db.go" beforeDir="false" afterPath="$PROJECT_DIR$/db/db.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logfile.log" beforeDir="false" afterPath="$PROJECT_DIR$/logfile.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/middleware/authorized/authorized.go" beforeDir="false" afterPath="$PROJECT_DIR$/middleware/authorized/authorized.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/middleware/logger/logger.go" beforeDir="false" afterPath="$PROJECT_DIR$/middleware/logger/logger.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/raport.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/raport.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/vendorModels.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/vendorModels.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -126,7 +133,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Go Build.go build MF">
+  <component name="RunManager" selected="Go Test.TestWriteToFile in MF/middleware/logger">
     <configuration name="go build MF" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="MF" />
       <working_directory value="$PROJECT_DIR$/" />
@@ -154,8 +161,20 @@
       <directory value="$PROJECT_DIR$/" />
       <method v="2" />
     </configuration>
+    <configuration name="TestWriteToFile in MF/middleware/logger" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="MF" />
+      <working_directory value="$PROJECT_DIR$/middleware/logger" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="MF/middleware/logger" />
+      <directory value="$PROJECT_DIR$/" />
+      <filePath value="$PROJECT_DIR$/" />
+      <pattern value="^TestWriteToFile$" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Test.TestWriteToFile in MF/middleware/logger" />
         <item itemvalue="Go Build.go build MF" />
         <item itemvalue="Go Build.go build MF/cmd" />
         <item itemvalue="Go Build.go build MF/test" />

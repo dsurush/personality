@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 )
-
+// Create New struct for report
 type ViewReport struct {
 	ID                int64     `xml:"id"`
 	RequestId         int64     `xml:"request_id"`

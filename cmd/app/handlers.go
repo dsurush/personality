@@ -11,7 +11,7 @@ import (
 	"net/http"
 	"strconv"
 )
-
+//Handler for login // Get log and pass
 func (server *MainServer) LoginHandler(writer http.ResponseWriter, request *http.Request, pr httprouter.Params) {
 	fmt.Println("login\n")
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -39,7 +39,7 @@ func (server *MainServer) LoginHandler(writer http.ResponseWriter, request *http
 		log.Print(err)
 	}
 }
-
+//Get clients By Phone
 func (server *MainServer) GetClientInfoByPhoneNumberHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
 	fmt.Println("I am find client By number phone")
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -57,8 +57,8 @@ func (server *MainServer) GetClientInfoByPhoneNumberHandler(writer http.Response
 		log.Print(err)
 	}
 }
-
-func (server *MainServer) GetClientsInfoByFilterHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+//Get list clients Handler
+func (server *MainServer) GetClientsInfoHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	fmt.Println("I am get all clients")
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	var clientDefault models.ClientInfo
@@ -101,7 +101,7 @@ func (server *MainServer) GetClientsInfoByFilterHandler(writer http.ResponseWrit
 		log.Print(err)
 	}
 }
-//UnUse
+//UnUse Handler
 func (server *MainServer) LoginHandler1(writer http.ResponseWriter, _*http.Request, _ httprouter.Params) {
 	bytes, err := ioutil.ReadFile("web/templates/index.gohtml")
 	if err != nil {
@@ -112,7 +112,7 @@ func (server *MainServer) LoginHandler1(writer http.ResponseWriter, _*http.Reque
 		log.Fatal("can't send bytes to writer")
 	}
 }
-//UnUse
+//UnUse Handler
 func (server *MainServer) MainPageHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	fmt.Println("Login\n")
 	var requestBody token.RequestDTO
@@ -148,7 +148,7 @@ func (server *MainServer) MainPageHandler(writer http.ResponseWriter, request *h
 		log.Print(err)
 	}
 }
-//UnUse
+//UnUse Handler
 func (server *MainServer) GetVendorCategoryHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	var vendor models.Vendor
 	vendors := vendor.FindAll()
@@ -158,7 +158,7 @@ func (server *MainServer) GetVendorCategoryHandler(writer http.ResponseWriter, r
 		log.Print(err)
 	}
 }
-
+//GetVendorCategory
 func (server *MainServer) GetVendorCategoryByPageSizeHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	page := request.URL.Query().Get(`page`)
@@ -172,7 +172,7 @@ func (server *MainServer) GetVendorCategoryByPageSizeHandler(writer http.Respons
 		log.Print(err)
 	}
 }
-
+// Get view Trans for report
 func (server *MainServer) GetViewTransactionsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	fmt.Println("I am view Transaction")
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -229,7 +229,7 @@ func (server *MainServer) GetViewTransactionsHandler(writer http.ResponseWriter,
 		log.Print(err)
 	}
 }
-
+// Get view report for report
 func (server *MainServer) GetViewReportsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	fmt.Println("I am get clients")
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -256,7 +256,7 @@ func (server *MainServer) GetViewReportsHandler(writer http.ResponseWriter, requ
 		log.Print(err)
 	}
 }
-
+// Save New Vendor
 func (server *MainServer) SaveNewVendorHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params){
 	var requestBody models.Vendor
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -279,7 +279,7 @@ func (server *MainServer) SaveNewVendorHandler(writer http.ResponseWriter, reque
 		log.Print(err)
 	}
 }
-
+// Update  Vendor
 func (server *MainServer) UpdateVendorHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params){
 	var requestBody models.Vendor
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -303,7 +303,7 @@ func (server *MainServer) UpdateVendorHandler(writer http.ResponseWriter, reques
 		log.Println(err)
 	}
 }
-
+//Get one Vendor
 func (server *MainServer) GetVendorHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params){
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	param := params.ByName(`id`)
@@ -318,7 +318,7 @@ func (server *MainServer) GetVendorHandler(writer http.ResponseWriter, request *
 		log.Print(err)
 	}
 }
-
+//Get list Merchants
 func (server *MainServer) GetMerchantsHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	page := request.URL.Query().Get(`page`)
@@ -332,7 +332,7 @@ func (server *MainServer) GetMerchantsHandler(writer http.ResponseWriter, reques
 		log.Print(err)
 	}
 }
-
+// Get on Merchant
 func (server *MainServer) GetMerchantHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params){
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	param := params.ByName(`id`)
@@ -348,7 +348,7 @@ func (server *MainServer) GetMerchantHandler(writer http.ResponseWriter, request
 		log.Print(err)
 	}
 }
-//UNUSE
+//Update Merchant
 func (server *MainServer) UpdateMerchantHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params){
 	var requestBody models.Merchant
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")

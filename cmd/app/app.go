@@ -17,12 +17,12 @@ func NewMainServer(router *httprouter.Router, tokenSvc *token.TokenSvc, userSvc 
 	return &MainServer{router: router, tokenSvc: tokenSvc, userSvc: userSvc}
 }
 
-// В Start лежит все
+// In start all starting things
 func (server *MainServer) Start() {
 	server.InitRoutes()
 }
 
 func (server *MainServer) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
-	// delegation////
+	// delegation
 	server.router.ServeHTTP(writer, request)
 }

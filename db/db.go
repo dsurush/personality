@@ -17,7 +17,6 @@ func init() {
 	settings.AppSettings = settings.ReadSettings()
 
 	postgresMegafondbParams := settings.AppSettings.PostgresMegafonDbParams
-//	fmt.Println(postgresMegafondbParams)
 	connString := fmt.Sprintf("host=%s port=%d user=%s password=%s database=%s sslmode=disable",
 		postgresMegafondbParams.Server, postgresMegafondbParams.Port,
 		postgresMegafondbParams.User, postgresMegafondbParams.Password,
