@@ -372,3 +372,29 @@ func (server *MainServer) UpdateMerchantHandler(writer http.ResponseWriter, requ
 		log.Println(err)
 	}
 }
+//
+func (server *MainServer) GetViewLogHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	pageInt := 1
+	rowsInt := 100
+	page := request.URL.Query().Get(`page`)
+	rows := request.URL.Query().Get(`rows`)
+	pageInt, err := strconv.Atoi(page)
+	if err != nil{
+		pageInt = 1
+	}
+	rowsInt, err = strconv.Atoi(rows)
+	if err != nil {
+		rowsInt = 100
+	}
+	response, err := models.GetViewLog(int64(rowsInt), int64(pageInt - 1))
+	if err != nil {
+		err := json.NewEncoder(writer).Encode([]string{`error mismatch this view log'`})
+		log.Print(err)
+		return
+	}
+	err = json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Print(err)
+	}
+}
