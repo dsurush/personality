@@ -414,3 +414,4 @@
 2020-05-04 16:59:16: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/clients
 2020-05-04 16:59:22: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/clients
 2020-05-04 16:59:33: [127.0.0.1] login: surush Change merchant by id  Method: POST, path: /api/merchants/merchant/1060/edit
+2020-05-06 12:55:19: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/reports
