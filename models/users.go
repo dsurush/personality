@@ -2,6 +2,7 @@ package models
 
 import (
 	"MF/db"
+	"MF/hamsoyamodels"
 	"github.com/sirupsen/logrus"
 )
 
@@ -49,6 +50,19 @@ func (receiver *Usersvc) GetClientsInfo() (clientsInfo []ClientInfo) {
 	}
 	return clientsInfo
 }
-//
-//
-//
+
+func (receiver *Usersvc) GetHamsoyaTransactionsType(size, page int64) (HamsoyaTransactionsType []hamsoyamodels.HamsoyaTransactionType, err error){
+	postgresDb := db.GetHamsoyaPostgresDb()
+	if err := postgresDb.Limit(10).Offset(0).Find(&HamsoyaTransactionsType).Error; err !=  nil{
+		return HamsoyaTransactionsType, err
+	}
+	return
+}
+
+func GetHamsoyaTransactionsType(size, page int64) (HamsoyaTransactionsType []hamsoyamodels.HamsoyaTransactionType, err error){
+	postgresDb := db.GetHamsoyaPostgresDb()
+	if err := postgresDb.Limit(10).Offset(0).Find(&HamsoyaTransactionsType).Error; err !=  nil{
+		return HamsoyaTransactionsType, err
+	}
+	return
+}

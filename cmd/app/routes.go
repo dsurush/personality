@@ -4,6 +4,7 @@ import (
 	"MF/middleware/authorized"
 	"MF/middleware/jwt"
 	"MF/middleware/logger"
+	"MF/models"
 	"MF/token"
 	"fmt"
 	"net/http"
@@ -35,9 +36,9 @@ func (server *MainServer) InitRoutes() {
 }
 
 func test(){
-/*	viewLog, err := models.GetViewLogsDTO(1, 1)
+	viewLog, err := models.GetHamsoyaTransactionsType(1,1)
 	if err != nil {
 		fmt.Println("BLABLA")
 	}
-	fmt.Println(viewLog)*/
+	fmt.Println(viewLog)
 }

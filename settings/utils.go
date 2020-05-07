@@ -12,6 +12,7 @@ import (
 var (
 	// AppSettings app settnigs
 	AppSettings Settings
+	HamsoyaSettings Settings
 )
 
 // ReadSettings to init app settings
