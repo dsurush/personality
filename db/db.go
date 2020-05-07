@@ -14,7 +14,7 @@ var postgresDbCon *gorm.DB
 func init() {
 	fmt.Println("DB INIT")
 	var err error
-	settings.AppSettings = settings.ReadSettings()
+	settings.AppSettings = settings.ReadSettings("./settings-dev.json")
 
 	postgresMegafondbParams := settings.AppSettings.PostgresMegafonDbParams
 	connString := fmt.Sprintf("host=%s port=%d user=%s password=%s database=%s sslmode=disable",
@@ -22,7 +22,10 @@ func init() {
 		postgresMegafondbParams.User, postgresMegafondbParams.Password,
 		postgresMegafondbParams.Database)
 
-	// Opening connection
+	// Opening con
+	//
+	//
+	// nection
 	postgresDbCon, err = gorm.Open("postgres", connString)
 
 	postgresDbCon.LogMode(true)

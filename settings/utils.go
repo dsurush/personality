@@ -15,9 +15,9 @@ var (
 )
 
 // ReadSettings to init app settings
-func ReadSettings() Settings {
+func ReadSettings(filepath string) Settings {
 	var appParams Settings
-	doc, err := ioutil.ReadFile("./settings-dev.json")
+	doc, err := ioutil.ReadFile(filepath)
 
 	if err != nil {
 		panic(err)
