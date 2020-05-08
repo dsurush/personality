@@ -1,6 +1,7 @@
 package app
 
 import (
+	"MF/hamsoyamodels"
 	"MF/models"
 	"MF/token"
 	"encoding/json"
@@ -447,6 +448,86 @@ func (server *MainServer) GetViewLogHandler(writer http.ResponseWriter, request 
 	err = json.NewEncoder(writer).Encode(viewLog)
 	if err != nil {
 		log.Print("invalid_viewlog")
+		return
+	}
+}
+//
+func (server *MainServer) GetHamsoyaTransactionTypeHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	pageInt := 1
+	rowsInt := 100
+	page := request.URL.Query().Get(`page`)
+	rows := request.URL.Query().Get(`rows`)
+	pageInt, err := strconv.Atoi(page)
+	if err != nil{
+		pageInt = 1
+	}
+	rowsInt, err = strconv.Atoi(rows)
+	if err != nil {
+		rowsInt = 100
+	}
+	response, err := server.userSvc.GetHamsoyaTransactionsType(int64(rowsInt), int64(pageInt))
+
+	if err != nil {
+		err := json.NewEncoder(writer).Encode([]string{`error mismatch this transaction type'`})
+		log.Print(err)
+		return
+	}
+	err = json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Print(err)
+	}
+}
+//
+func (server *MainServer) GetHamsoyaTransactionsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	pageInt := 1
+	rowsInt := 100
+	page := request.URL.Query().Get(`page`)
+	rows := request.URL.Query().Get(`rows`)
+	pageInt, err := strconv.Atoi(page)
+	if err != nil{
+		pageInt = 1
+	}
+	rowsInt, err = strconv.Atoi(rows)
+	if err != nil {
+		rowsInt = 100
+	}
+	response, err := hamsoyamodels.GetHamsoyaTransactions(int64(rowsInt), int64(pageInt))
+	if err != nil {
+		err := json.NewEncoder(writer).Encode([]string{`error mismatch this transaction type`})
+		log.Println(err)
+		return
+	}
+	err = json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Println(err)
+	}
+}
+
+func (server *MainServer) GetHamsoyaTransactionById(writer http.ResponseWriter, request *http.Request, param httprouter.Params){
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	id , err := strconv.Atoi(param.ByName("id"))
+	if err != nil {
+		err := json.NewEncoder(writer).Encode("invalid_id")
+		if err != nil {
+			log.Print(err)
+			return
+		}
+		return
+	}
+	transaction, err := hamsoyamodels.GetHamsoyaTransactionById(int64(id))
+	if err != nil {
+		err := json.NewEncoder(writer).Encode("invalid_id")
+		if err != nil {
+			log.Print(err)
+			return
+		}
+		return
+	}
+	err = json.NewEncoder(writer).Encode(&transaction)
+	if err != nil {
+		log.Print("invalid_transaction")
 		return
 	}
 }

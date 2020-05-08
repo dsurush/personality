@@ -53,7 +53,11 @@ func (receiver *Usersvc) GetClientsInfo() (clientsInfo []ClientInfo) {
 
 func (receiver *Usersvc) GetHamsoyaTransactionsType(size, page int64) (HamsoyaTransactionsType []hamsoyamodels.HamsoyaTransactionType, err error){
 	postgresDb := db.GetHamsoyaPostgresDb()
-	if err := postgresDb.Limit(10).Offset(0).Find(&HamsoyaTransactionsType).Error; err !=  nil{
+	page--
+	if page < 0{
+		page = 0
+	}
+	if err := postgresDb.Limit(size).Offset(size*page).Find(&HamsoyaTransactionsType).Error; err !=  nil{
 		return HamsoyaTransactionsType, err
 	}
 	return

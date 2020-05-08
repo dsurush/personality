@@ -22,14 +22,13 @@ type ViewLog struct {
 }
 
 type ViewLogDTO struct {
-	Id                int64
-	Command           string    `xml:"command"`
-	Type              string    `xml:"request_type,omitempty"`
-	VendorID          int64     `xml:"vendor_id,omitempty"`
-	AccountPayer      string    `xml:"account_payer"`
-	CreatedAt         time.Time `xml:"create_time"`
+	Id           int64     `xml:"id"`
+	Command      string    `xml:"command"`
+	Type         string    `xml:"request_type,omitempty"`
+	VendorID     int64     `xml:"vendor_id,omitempty"`
+	AccountPayer string    `xml:"account_payer"`
+	CreatedAt    time.Time `xml:"create_time"`
 }
-
 
 func GetViewLogs(size, page int64) (viewLogs []ViewLog, err error) {
 	postgresDb := db.GetPostgresDb()
@@ -45,7 +44,7 @@ func GetViewLogs(size, page int64) (viewLogs []ViewLog, err error) {
 	return viewLogs, nil
 }
 
-func GetViewLogById(id int64) (viewLog ViewLog, err error){
+func GetViewLogById(id int64) (viewLog ViewLog, err error) {
 	postgresDb := db.GetPostgresDb()
 	err = postgresDb.Table(`view_log`).Select("view_log.*").Where("id = ?", id).Scan(&viewLog).Error
 	if err != nil {
