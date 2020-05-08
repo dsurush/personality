@@ -505,7 +505,7 @@ func (server *MainServer) GetHamsoyaTransactionsHandler(writer http.ResponseWrit
 	}
 }
 
-func (server *MainServer) GetHamsoyaTransactionById(writer http.ResponseWriter, request *http.Request, param httprouter.Params){
+func (server *MainServer) GetHamsoyaTransactionByIdHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params){
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	id , err := strconv.Atoi(param.ByName("id"))
 	if err != nil {
@@ -517,6 +517,33 @@ func (server *MainServer) GetHamsoyaTransactionById(writer http.ResponseWriter, 
 		return
 	}
 	transaction, err := hamsoyamodels.GetHamsoyaTransactionById(int64(id))
+	if err != nil {
+		err := json.NewEncoder(writer).Encode("invalid_id")
+		if err != nil {
+			log.Print(err)
+			return
+		}
+		return
+	}
+	err = json.NewEncoder(writer).Encode(&transaction)
+	if err != nil {
+		log.Print("invalid_transaction")
+		return
+	}
+}
+
+func (server *MainServer) GetHamsoyaTransactionTypeByIdHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params){
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	id , err := strconv.Atoi(param.ByName("id"))
+	if err != nil {
+		err := json.NewEncoder(writer).Encode("invalid_id")
+		if err != nil {
+			log.Print(err)
+			return
+		}
+		return
+	}
+	transaction, err := hamsoyamodels.GetHamsoyaTransactionTypeById(int64(id))
 	if err != nil {
 		err := json.NewEncoder(writer).Encode("invalid_id")
 		if err != nil {

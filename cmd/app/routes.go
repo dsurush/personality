@@ -1,6 +1,7 @@
 package app
 
 import (
+	"MF/hamsoyamodels"
 	"MF/middleware/authorized"
 	"MF/middleware/jwt"
 	"MF/middleware/logger"
@@ -32,16 +33,17 @@ func (server *MainServer) InitRoutes() {
 	server.router.GET(`/api/megafon/logs/DTO`, server.GetViewLogsDTOHandler)
 	///Hamsoya
 	server.router.GET(`/api/hamsoya/transactionstype`, server.GetHamsoyaTransactionTypeHandler)
+	server.router.GET(`/api/hamsoya/transactionstype/transactiontype/:id`, server.GetHamsoyaTransactionTypeByIdHandler)
 	server.router.GET(`/api/hamsoya/transactions`, server.GetHamsoyaTransactionsHandler)
-	server.router.GET(`/api/hamsoya/transactions/transaction/:id`, server.GetHamsoyaTransactionById)
+	server.router.GET(`/api/hamsoya/transactions/transaction/:id`, server.GetHamsoyaTransactionByIdHandler)
 	panic(http.ListenAndServe("127.0.0.1:8080", server))
 }
 
 func test(){
-	//HamsoyaTransactions, err := hamsoyamodels.GetHamsoyaTransactionById(42)
-	//if err != nil {
-	//	fmt.Println("BlabLa")
-	//	return
-	//}
-	//fmt.Println(HamsoyaTransactions)
+	HamsoyaTransactions, err := hamsoyamodels.GetHamsoyaTransactionTypeById(1)
+	if err != nil {
+		fmt.Println("BlabLa")
+		return
+	}
+	fmt.Println(HamsoyaTransactions)
 }

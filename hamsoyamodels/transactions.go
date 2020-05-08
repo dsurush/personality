@@ -35,6 +35,13 @@ type HamsoyaTransaction struct {
 func (*HamsoyaTransaction) TableName() string {
 	return "transactions"
 }
+func GetHamsoyaTransactionTypeById(id int64) (HamsoyaTransactionType HamsoyaTransactionType, err error) {
+	postgresDb := db.GetHamsoyaPostgresDb()
+	if err := postgresDb.Where("id = ?", id).First(&HamsoyaTransactionType).Error; err != nil {
+		return HamsoyaTransactionType, err
+	}
+	return
+}
 
 func GetHamsoyaTransactions(size, page int64) (HamsoyaTransactions []HamsoyaTransaction, err error) {
 	page--
@@ -50,7 +57,7 @@ func GetHamsoyaTransactions(size, page int64) (HamsoyaTransactions []HamsoyaTran
 
 func GetHamsoyaTransactionById(id int64) (HamsoyaTransaction HamsoyaTransaction, err error) {
 	postgresDb := db.GetHamsoyaPostgresDb()
-	if err := postgresDb.Where("id = ?", id).Find(&HamsoyaTransaction).Error; err != nil {
+	if err := postgresDb.Where("id = ?", id).First(&HamsoyaTransaction).Error; err != nil {
 		return HamsoyaTransaction, err
 	}
 	return
