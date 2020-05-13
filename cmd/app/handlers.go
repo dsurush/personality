@@ -536,7 +536,7 @@ func (server *MainServer) GetHamsoyaTransactionsHandler(writer http.ResponseWrit
 		log.Println(err)
 	}
 }
-// Get transaction By id
+//Get transaction By id
 func (server *MainServer) GetHamsoyaTransactionByIdHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params){
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	id , err := strconv.Atoi(param.ByName("id"))
@@ -563,7 +563,7 @@ func (server *MainServer) GetHamsoyaTransactionByIdHandler(writer http.ResponseW
 		return
 	}
 }
-// Get TransactionType By Id
+//Get TransactionType By Id
 func (server *MainServer) GetHamsoyaTransactionTypeByIdHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params){
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	id , err := strconv.Atoi(param.ByName("id"))
@@ -590,7 +590,7 @@ func (server *MainServer) GetHamsoyaTransactionTypeByIdHandler(writer http.Respo
 		return
 	}
 }
-// Save transactionType
+//Save transactionType
 func (server *MainServer) SaveHamsoyaTransactionType(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	var requestBody hamsoyamodels.HamsoyaTransactionType
@@ -640,3 +640,55 @@ func (server *MainServer) UpdateHamsoyaTransactionTypeHandler(writer http.Respon
 		log.Println(err)
 	}
 }
+// Get Configs
+func (server *MainServer) GetHamosyaConfigsHandler (writer http.ResponseWriter, request *http.Request, _ httprouter.Params){
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	pageInt := 1
+	rowsInt := 100
+	page := request.URL.Query().Get(`page`)
+	pageInt, err := strconv.Atoi(page)
+	if err != nil{
+		pageInt = 1
+	}
+
+	rows := request.URL.Query().Get(`rows`)
+	rowsInt, err = strconv.Atoi(rows)
+	if err != nil {
+		rowsInt = 100
+	}
+	var newHamsoyaConfig hamsoyamodels.HamsoyaConfig
+	id, err := strconv.Atoi(request.URL.Query().Get(`id`))
+	if err == nil {
+		newHamsoyaConfig.Id = int64(id)
+	}
+	code := request.URL.Query().Get(`code`)
+	newHamsoyaConfig.Code = code
+
+	value, err := strconv.Atoi(request.URL.Query().Get(`value`))
+	if err == nil {
+		newHamsoyaConfig.Value = int64(value)
+	}
+
+	valueStr := request.URL.Query().Get(`valuestr`)
+	newHamsoyaConfig.ValueStr = valueStr
+
+	HamsoyaConfig, err := hamsoyamodels.GetHamsoyaConfig(newHamsoyaConfig, int64(rowsInt), int64(pageInt))
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		err := json.NewEncoder(writer).Encode(`mismatch_hamsoyaConfig`)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		return
+	}
+	err = json.NewEncoder(writer).Encode(HamsoyaConfig)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	return
+}
+// TODO: Save Configs
+// TODO: Edit Configs
+// TODO: GET ONE config

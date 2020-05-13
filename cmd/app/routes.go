@@ -38,6 +38,7 @@ func (server *MainServer) InitRoutes() {
 	server.router.POST(`/api/hamsoya/transactionstype/transactiontype/:id/edit`, server.UpdateHamsoyaTransactionTypeHandler)
 	server.router.GET(`/api/hamsoya/transactions`, server.GetHamsoyaTransactionsHandler)
 	server.router.GET(`/api/hamsoya/transactions/transaction/:id`, server.GetHamsoyaTransactionByIdHandler)
+	server.router.GET(`/api/hamsoya/configs`, server.GetHamosyaConfigsHandler)
 	panic(http.ListenAndServe("127.0.0.1:8080", server))
 }
 
