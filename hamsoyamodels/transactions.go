@@ -19,6 +19,18 @@ func (*HamsoyaTransactionType) TableName() string {
 	return "transaction_type"
 }
 
+
+func (HamsoyaTransactionType *HamsoyaTransactionType) Save() HamsoyaTransactionType{
+	postgresDb := db.GetHamsoyaPostgresDb()
+	postgresDb.Create(&HamsoyaTransactionType)
+	return *HamsoyaTransactionType
+}
+func (HamsoyaTransactionType *HamsoyaTransactionType) Update(transactionType HamsoyaTransactionType) HamsoyaTransactionType {
+	postgresDb := db.GetHamsoyaPostgresDb()
+	postgresDb.Model(&HamsoyaTransactionType).Update(transactionType)
+	return *HamsoyaTransactionType
+}
+
 type HamsoyaTransaction struct {
 	Id            int64     `xml:"id"`
 	PreCheckId    int64     `xml:"pre_check_id"`
@@ -43,17 +55,22 @@ func GetHamsoyaTransactionTypeById(id int64) (HamsoyaTransactionType HamsoyaTran
 	return
 }
 
-func GetHamsoyaTransactions(size, page int64) (HamsoyaTransactions []HamsoyaTransaction, err error) {
+func GetHamsoyaTransactions(transaction HamsoyaTransaction, size, page int64) (HamsoyaTransactions []HamsoyaTransaction, err error) {
 	page--
 	if page < 0 {
 		page = 0
 	}
 	postgresDb := db.GetHamsoyaPostgresDb()
-	if err := postgresDb.Limit(size).Offset(page * size).Find(&HamsoyaTransactions).Error; err != nil {
+	if err := postgresDb.Where(&transaction).Limit(size).Offset(page * size).Find(&HamsoyaTransactions).Error; err != nil {
 		return HamsoyaTransactions, err
 	}
 	return
 }
+/*func GetViewTransactions(transaction ViewTransaction, size, page int64) (Transaction []ViewTransaction) {
+	postgresDb := db.GetPostgresDb()
+	postgresDb.Table(`view_transaction view_transactions `).Where(&transaction).Limit(size).Offset(page * size).Scan(&Transaction)
+	return Transaction
+}*/
 
 func GetHamsoyaTransactionById(id int64) (HamsoyaTransaction HamsoyaTransaction, err error) {
 	postgresDb := db.GetHamsoyaPostgresDb()

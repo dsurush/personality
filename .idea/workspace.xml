@@ -73,10 +73,6 @@
         <item name="public: schema" type="983ebcf7:PgImplModel$Schema" />
         <item name="views" type="d4e8921:DatabaseStructure$FamilyGroup" />
       </path>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="magafonfindb@localhost" type="feb32156:DbDataSourceImpl" />
-      </path>
     </expand>
     <select />
   </component>

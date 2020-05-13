@@ -1,7 +1,6 @@
 package app
 
 import (
-	"MF/hamsoyamodels"
 	"MF/middleware/authorized"
 	"MF/middleware/jwt"
 	"MF/middleware/logger"
@@ -9,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
+	"time"
 )
 
 func (server *MainServer) InitRoutes() {
@@ -34,16 +34,20 @@ func (server *MainServer) InitRoutes() {
 	///Hamsoya
 	server.router.GET(`/api/hamsoya/transactionstype`, server.GetHamsoyaTransactionTypeHandler)
 	server.router.GET(`/api/hamsoya/transactionstype/transactiontype/:id`, server.GetHamsoyaTransactionTypeByIdHandler)
+	server.router.POST(`/api/hamsya/transactionstype/save`,  server.SaveHamsoyaTransactionType)
+	server.router.POST(`/api/hamsoya/transactionstype/transactiontype/:id/edit`, server.UpdateHamsoyaTransactionTypeHandler)
 	server.router.GET(`/api/hamsoya/transactions`, server.GetHamsoyaTransactionsHandler)
 	server.router.GET(`/api/hamsoya/transactions/transaction/:id`, server.GetHamsoyaTransactionByIdHandler)
 	panic(http.ListenAndServe("127.0.0.1:8080", server))
 }
 
 func test(){
-	HamsoyaTransactions, err := hamsoyamodels.GetHamsoyaTransactionTypeById(1)
+
+	myDateString := "2019-10-30T01:07:39.085082+05:00"
+	fmt.Println("My Starting Date:\t", myDateString)
+	myDate, err := time.Parse( time.RFC3339, myDateString)
 	if err != nil {
-		fmt.Println("BlabLa")
-		return
+		panic(err)
 	}
-	fmt.Println(HamsoyaTransactions)
+	fmt.Println("My Date Reformatted:\t", myDate)
 }
