@@ -34,14 +34,22 @@ func (server *MainServer) InitRoutes() {
 	///Hamsoya
 	server.router.GET(`/api/hamsoya/transactionstype`, server.GetHamsoyaTransactionTypeHandler)
 	server.router.GET(`/api/hamsoya/transactionstype/transactiontype/:id`, server.GetHamsoyaTransactionTypeByIdHandler)
-	server.router.POST(`/api/hamsya/transactionstype/save`,  server.SaveHamsoyaTransactionType)
+	server.router.POST(`/api/hamsoya/transactionstype/save`,  server.SaveHamsoyaTransactionType)
 	server.router.POST(`/api/hamsoya/transactionstype/transactiontype/:id/edit`, server.UpdateHamsoyaTransactionTypeHandler)
+
 	server.router.GET(`/api/hamsoya/transactions`, server.GetHamsoyaTransactionsHandler)
 	server.router.GET(`/api/hamsoya/transactions/transaction/:id`, server.GetHamsoyaTransactionByIdHandler)
+
 	server.router.GET(`/api/hamsoya/configs`, server.GetHamosyaConfigsHandler)
 	server.router.GET(`/api/hamsoya/configs/config/:id`, server.GetHamsoyaConfigByIdHandler)
 	server.router.POST(`/api/hamsoya/configs/save`, server.SaveHamsoyaConfigHandler)
 	server.router.POST(`/api/hamsoya/configs/config/:id/edit`, server.UpdateHamsoyaConfigHandler)
+
+	server.router.GET(`/api/hamsoya/acoounttypes`, server.GetHamosyaAccountTypesHandler)
+	server.router.GET(`/api/hamsoya/acoounttypes/accounttype/:id`, server.GetHamsoyaAccountTypeByIdHandler)
+	server.router.POST(`/api/hamsoya/acoounttypes/accounttype/:id/edit`, server.UpdateHamsoyaAccountTypeHandler)
+	server.router.POST(`/api/hamsoya/acoounttypes/save`, server.SaveHamsoyaAccountTypeHandler)
+
 	panic(http.ListenAndServe("127.0.0.1:8080", server))
 }
 

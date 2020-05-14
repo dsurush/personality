@@ -721,7 +721,7 @@ func (server *MainServer) SaveHamsoyaConfigHandler(writer http.ResponseWriter, r
 }
 // TODO: Edit Configs check for id and configs.id
 func (server *MainServer) UpdateHamsoyaConfigHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+//	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	var requestBody hamsoyamodels.HamsoyaConfig
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
@@ -749,7 +749,7 @@ func (server *MainServer) UpdateHamsoyaConfigHandler(writer http.ResponseWriter,
 	}
 	return
 }
-// TODO: GET ONE config
+// GET ONE config
 func (server *MainServer) GetHamsoyaConfigByIdHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params){
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	id , err := strconv.Atoi(param.ByName("id"))
@@ -775,4 +775,143 @@ func (server *MainServer) GetHamsoyaConfigByIdHandler(writer http.ResponseWriter
 		log.Print("invalid_config.")
 		return
 	}
+}
+// Get AccountTypes
+func (server *MainServer) GetHamosyaAccountTypesHandler (writer http.ResponseWriter, request *http.Request, _ httprouter.Params){
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	pageInt := 1
+	rowsInt := 100
+	page := request.URL.Query().Get(`page`)
+	pageInt, err := strconv.Atoi(page)
+	if err != nil{
+		pageInt = 1
+	}
+	rows := request.URL.Query().Get(`rows`)
+	rowsInt, err = strconv.Atoi(rows)
+	if err != nil {
+		rowsInt = 100
+	}
+	var newHamsoyaAccountType hamsoyamodels.HamsoyaAccountType
+	id, err := strconv.Atoi(request.URL.Query().Get(`id`))
+	if err == nil {
+		newHamsoyaAccountType.Id = int64(id)
+	}
+	code := request.URL.Query().Get(`code`)
+	newHamsoyaAccountType.Code = code
+
+	Type := request.URL.Query().Get(`type`)
+	newHamsoyaAccountType.Type = Type
+
+	Name := request.URL.Query().Get(`name`)
+	newHamsoyaAccountType.Name = Name
+
+	prefix, err := strconv.Atoi(request.URL.Query().Get(`prefix`))
+	if err == nil {
+		newHamsoyaAccountType.Prefix = int64(prefix)
+	}
+
+	HamsoyaAccountTypes, err := hamsoyamodels.GetHamsoyaAccountTypes(newHamsoyaAccountType, int64(rowsInt), int64(pageInt))
+
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		err := json.NewEncoder(writer).Encode(`mismatch_hamsoyaConfig`)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		return
+	}
+	err = json.NewEncoder(writer).Encode(HamsoyaAccountTypes)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	return
+}
+// Get AccountType
+func (server *MainServer) GetHamsoyaAccountTypeByIdHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params){
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	id , err := strconv.Atoi(param.ByName("id"))
+	if err != nil {
+		err := json.NewEncoder(writer).Encode("invalid_id")
+		if err != nil {
+			log.Print(err)
+			return
+		}
+		return
+	}
+	AccountTypes, err := hamsoyamodels.GetHamsoyaAccountTypeById(int64(id))
+	if err != nil {
+		err := json.NewEncoder(writer).Encode("invalid_id")
+		if err != nil {
+			log.Print(err)
+			return
+		}
+		return
+	}
+	err = json.NewEncoder(writer).Encode(&AccountTypes)
+	if err != nil {
+		log.Print("invalid_config.")
+		return
+	}
+}
+// Save AccountType
+func (server *MainServer) SaveHamsoyaAccountTypeHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	var requestBody hamsoyamodels.HamsoyaAccountType
+	err := json.NewDecoder(request.Body).Decode(&requestBody)
+	fmt.Println(requestBody)
+	if err != nil {
+		log.Println(err)
+		writer.WriteHeader(http.StatusBadRequest)
+		err := json.NewEncoder(writer).Encode("err.json_invalid")
+		log.Println(err)
+		return
+	}
+//	requestBody.CreateDate = time.Now()
+	response, err := requestBody.Save()
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		err := json.NewEncoder(writer).Encode("wrong_date")
+		if err != nil {
+			log.Println(err)
+			return
+		}
+	}
+	err = json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	return
+}
+// Edit AccountType
+func (server *MainServer) UpdateHamsoyaAccountTypeHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+//	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	var requestBody hamsoyamodels.HamsoyaAccountType
+	err := json.NewDecoder(request.Body).Decode(&requestBody)
+	fmt.Println(requestBody)
+	if err != nil {
+		log.Println(err)
+		writer.WriteHeader(http.StatusBadRequest)
+		err := json.NewEncoder(writer).Encode("err.json_invalid")
+		log.Println(err)
+		return
+	}
+	response, err := requestBody.Update(requestBody)
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		err := json.NewEncoder(writer).Encode("wrong_date")
+		if err != nil {
+			log.Println(err)
+			return
+		}
+	}
+	err = json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	return
 }
