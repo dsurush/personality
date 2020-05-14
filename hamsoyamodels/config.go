@@ -47,3 +47,11 @@ func (HamsoyaConfig *HamsoyaConfig) Update(Config HamsoyaConfig) (HamsoyaConfig,
 	}
 	return *HamsoyaConfig, nil
 }
+
+func GetHamsoyaConfigById(id int64) (HamsoyaConfig HamsoyaConfig, err error) {
+	postgresDb := db.GetHamsoyaPostgresDb()
+	if err := postgresDb.Where("id = ?", id).First(&HamsoyaConfig).Error; err != nil {
+		return HamsoyaConfig, err
+	}
+	return
+}

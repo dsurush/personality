@@ -39,7 +39,7 @@ func (server *MainServer) InitRoutes() {
 	server.router.GET(`/api/hamsoya/transactions`, server.GetHamsoyaTransactionsHandler)
 	server.router.GET(`/api/hamsoya/transactions/transaction/:id`, server.GetHamsoyaTransactionByIdHandler)
 	server.router.GET(`/api/hamsoya/configs`, server.GetHamosyaConfigsHandler)
-	//server.router.GET(`/api/hamsoya/configs/config/:id`, server)
+	server.router.GET(`/api/hamsoya/configs/config/:id`, server.GetHamsoyaConfigByIdHandler)
 	server.router.POST(`/api/hamsoya/configs/save`, server.SaveHamsoyaConfigHandler)
 	server.router.POST(`/api/hamsoya/configs/config/:id/edit`, server.UpdateHamsoyaConfigHandler)
 	panic(http.ListenAndServe("127.0.0.1:8080", server))

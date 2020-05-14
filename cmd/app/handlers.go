@@ -750,3 +750,29 @@ func (server *MainServer) UpdateHamsoyaConfigHandler(writer http.ResponseWriter,
 	return
 }
 // TODO: GET ONE config
+func (server *MainServer) GetHamsoyaConfigByIdHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params){
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	id , err := strconv.Atoi(param.ByName("id"))
+	if err != nil {
+		err := json.NewEncoder(writer).Encode("invalid_id")
+		if err != nil {
+			log.Print(err)
+			return
+		}
+		return
+	}
+	transaction, err := hamsoyamodels.GetHamsoyaConfigById(int64(id))
+	if err != nil {
+		err := json.NewEncoder(writer).Encode("invalid_id")
+		if err != nil {
+			log.Print(err)
+			return
+		}
+		return
+	}
+	err = json.NewEncoder(writer).Encode(&transaction)
+	if err != nil {
+		log.Print("invalid_config.")
+		return
+	}
+}
