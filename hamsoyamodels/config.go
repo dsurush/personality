@@ -29,3 +29,21 @@ func GetHamsoyaConfig(config HamsoyaConfig, rows, pages int64) (HamsoyaConfig []
 	}
 	return
 }
+
+func (HamsoyaConfig *HamsoyaConfig) Save() (HamsoyaConfig, error){
+	postgresDb := db.GetHamsoyaPostgresDb()
+	err:= postgresDb.Create(&HamsoyaConfig).Error
+	if err != nil {
+		return *HamsoyaConfig, err
+	}
+	return *HamsoyaConfig, nil
+}
+
+func (HamsoyaConfig *HamsoyaConfig) Update(Config HamsoyaConfig) (HamsoyaConfig, error) {
+	postgresDb := db.GetHamsoyaPostgresDb()
+	err := postgresDb.Model(&HamsoyaConfig).Update(Config).Error
+	if err != nil {
+		return *HamsoyaConfig, err
+	}
+	return *HamsoyaConfig, nil
+}

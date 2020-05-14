@@ -66,11 +66,6 @@ func GetHamsoyaTransactions(transaction HamsoyaTransaction, size, page int64) (H
 	}
 	return
 }
-/*func GetViewTransactions(transaction ViewTransaction, size, page int64) (Transaction []ViewTransaction) {
-	postgresDb := db.GetPostgresDb()
-	postgresDb.Table(`view_transaction view_transactions `).Where(&transaction).Limit(size).Offset(page * size).Scan(&Transaction)
-	return Transaction
-}*/
 
 func GetHamsoyaTransactionById(id int64) (HamsoyaTransaction HamsoyaTransaction, err error) {
 	postgresDb := db.GetHamsoyaPostgresDb()

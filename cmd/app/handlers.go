@@ -11,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 )
 //Handler for login // Get log and pass
 func (server *MainServer) LoginHandler(writer http.ResponseWriter, request *http.Request, pr httprouter.Params) {
@@ -602,7 +603,6 @@ func (server *MainServer) SaveHamsoyaTransactionType(writer http.ResponseWriter,
 		return
 	}
 	fmt.Println(requestBody)
-	//TODO procedur
 	response := requestBody.Save()
 	if response.Id <= 0{
 		writer.WriteHeader(http.StatusNotFound)
@@ -689,6 +689,64 @@ func (server *MainServer) GetHamosyaConfigsHandler (writer http.ResponseWriter, 
 	}
 	return
 }
-// TODO: Save Configs
-// TODO: Edit Configs
+// Save Configs
+func (server *MainServer) SaveHamsoyaConfigHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	var requestBody hamsoyamodels.HamsoyaConfig
+	err := json.NewDecoder(request.Body).Decode(&requestBody)
+	fmt.Println(requestBody)
+	if err != nil {
+		log.Println(err)
+		writer.WriteHeader(http.StatusBadRequest)
+		err := json.NewEncoder(writer).Encode("err.json_invalid")
+		log.Println(err)
+		return
+	}
+	requestBody.CreateDate = time.Now()
+	response, err := requestBody.Save()
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		err := json.NewEncoder(writer).Encode("wrong_date")
+		if err != nil {
+			log.Println(err)
+			return
+		}
+	}
+	err = json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	return
+}
+// TODO: Edit Configs check for id and configs.id
+func (server *MainServer) UpdateHamsoyaConfigHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	var requestBody hamsoyamodels.HamsoyaConfig
+	err := json.NewDecoder(request.Body).Decode(&requestBody)
+	fmt.Println(requestBody)
+	if err != nil {
+		log.Println(err)
+		writer.WriteHeader(http.StatusBadRequest)
+		err := json.NewEncoder(writer).Encode("err.json_invalid")
+		log.Println(err)
+		return
+	}
+	response, err := requestBody.Update(requestBody)
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		err := json.NewEncoder(writer).Encode("wrong_date")
+		if err != nil {
+			log.Println(err)
+			return
+		}
+	}
+	err = json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	return
+}
 // TODO: GET ONE config

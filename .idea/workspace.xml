@@ -6,6 +6,7 @@
       <change beforePath="$PROJECT_DIR$/cmd/app/handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/app/handlers.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmd/app/routes.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/app/routes.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/hamsoyamodels/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/hamsoyamodels/config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hamsoyamodels/transactions.go" beforeDir="false" afterPath="$PROJECT_DIR$/hamsoyamodels/transactions.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
