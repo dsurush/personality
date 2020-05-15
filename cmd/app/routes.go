@@ -54,6 +54,13 @@ func (server *MainServer) InitRoutes() {
 	server.router.GET(`/ap/hamsoya/statuses/status/:id`, server.GetHamsoyaStatusHandler)
 	server.router.POST(`/ap/hamsoya/statuses/status/:id/edit`, server.UpdateHamsoyaStatusHandler)
 	server.router.POST(`/ap/hamsoya/statuses/save`, server.SaveHamsoyaStatusHandler)
+
+	//TODO: filter by time
+	server.router.GET(`/api/hamsoya/viewtransactions`, server.GetViewTransactionsHandler)
+	server.router.GET(`/api/hamsoya/viewtransactions/transaction/:id`, server.GetHamsoyaViewTransactionHandler)
+	//server.router.GET(`/api/hamsoya/viewtranses`, server)
+	server.router.GET(`/api/hamsoya/viewtranses/trans/:id`, server.GetHamsoyaViewTransHandler)
+
 	panic(http.ListenAndServe("127.0.0.1:8080", server))
 }
 

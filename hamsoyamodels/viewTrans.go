@@ -1,6 +1,9 @@
 package hamsoyamodels
 
-import "time"
+import (
+	"MF/db"
+	"time"
+)
 
 type HamsoyaViewTrans struct {
 	ID             int64     `xml:"id"`
@@ -22,6 +25,14 @@ type HamsoyaViewTrans struct {
 
 func (*HamsoyaViewTrans) TableName() string {
 	return "view_trans"
+}
+
+func GetHamsoyaViewTransById(id int64) (HamsoyaViewTrans HamsoyaViewTrans, err error) {
+	postgresDb := db.GetHamsoyaPostgresDb()
+	if err := postgresDb.Where("id = ?", id).First(&HamsoyaViewTrans).Error; err != nil {
+		return HamsoyaViewTrans, err
+	}
+	return
 }
 
 type HamsoyaViewTransaction struct {
@@ -51,4 +62,24 @@ type HamsoyaViewTransaction struct {
 
 func (*HamsoyaViewTransaction) TableName() string{
 	return "view_transaction"
+}
+
+func GetHamsoyaViewTransactionById(id int64) (HamsoyaViewTransaction HamsoyaViewTransaction, err error) {
+	postgresDb := db.GetHamsoyaPostgresDb()
+	if err := postgresDb.Where("id = ?", id).First(&HamsoyaViewTransaction).Error; err != nil {
+		return HamsoyaViewTransaction, err
+	}
+	return
+}
+
+func GetHamsoyaViewTransactions(transaction HamsoyaViewTransaction, size, page int64) (HamsoyaViewTransaction []HamsoyaViewTransaction, err error) {
+	page--
+	if page < 0 {
+		page = 0
+	}
+	postgresDb := db.GetHamsoyaPostgresDb()
+	if err := postgresDb.Where(&transaction).Limit(size).Offset(page * size).Find(&HamsoyaViewTransaction).Error; err != nil {
+		return HamsoyaViewTransaction, err
+	}
+	return
 }

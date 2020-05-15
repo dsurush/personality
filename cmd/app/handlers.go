@@ -1058,3 +1058,95 @@ func (server *MainServer) UpdateHamsoyaStatusHandler(writer http.ResponseWriter,
 	}
 	return
 }
+
+// Get Hamsoya view Trans
+func (server *MainServer) GetHamsoyaViewTransHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params){
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	id , err := strconv.Atoi(param.ByName("id"))
+	if err != nil {
+		err := json.NewEncoder(writer).Encode("invalid_id")
+		if err != nil {
+			log.Print(err)
+			return
+		}
+		return
+	}
+	HamsoyaViewTrans, err := hamsoyamodels.GetHamsoyaViewTransById(int64(id))
+	if err != nil {
+		err := json.NewEncoder(writer).Encode("invalid_id")
+		if err != nil {
+			log.Print(err)
+			return
+		}
+		return
+	}
+	err = json.NewEncoder(writer).Encode(&HamsoyaViewTrans)
+	if err != nil {
+		log.Print("invalid_HamsoyaViewTrans.")
+		return
+	}
+}
+// Get Hamsoya view Transes
+
+// Get Hamsoya view Transaction
+func (server *MainServer) GetHamsoyaViewTransactionHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params){
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	id , err := strconv.Atoi(param.ByName("id"))
+	if err != nil {
+		err := json.NewEncoder(writer).Encode("invalid_id")
+		if err != nil {
+			log.Print(err)
+			return
+		}
+		return
+	}
+	HamsoyaViewTransaction, err := hamsoyamodels.GetHamsoyaViewTransactionById(int64(id))
+	if err != nil {
+		err := json.NewEncoder(writer).Encode("invalid_id")
+		if err != nil {
+			log.Print(err)
+			return
+		}
+		return
+	}
+	err = json.NewEncoder(writer).Encode(&HamsoyaViewTransaction)
+	if err != nil {
+		log.Print("invalid_HamsoyaViewTransaction.")
+		return
+	}
+}
+// Get Hamsoya view Transactions TODO: check this route
+func (server *MainServer) GetHamsoyaViewTransactionsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	pageInt := 1
+	rowsInt := 100
+	page := request.URL.Query().Get(`page`)
+	pageInt, err := strconv.Atoi(page)
+	if err != nil{
+		pageInt = 1
+	}
+	rows := request.URL.Query().Get(`rows`)
+	rowsInt, err = strconv.Atoi(rows)
+	if err != nil {
+		rowsInt = 100
+	}
+	var newHamsoyaViewTransaction hamsoyamodels.HamsoyaViewTransaction
+
+	HamsoyaViewTransaction, err := hamsoyamodels.GetHamsoyaViewTransactions(newHamsoyaViewTransaction, int64(rowsInt), int64(pageInt))
+
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		err := json.NewEncoder(writer).Encode(`mismatch_hamsoyaStatus`)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		return
+	}
+	err = json.NewEncoder(writer).Encode(HamsoyaViewTransaction)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	return
+}
