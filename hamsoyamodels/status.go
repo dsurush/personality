@@ -27,7 +27,7 @@ func GetHamsoyaStatusById(id int64) (HamsoyaStatus HamsoyaStatus, err error){
 	return HamsoyaStatus, nil
 }
 
-func GetHamsoyaStatusTypes(hamsoyaStatus HamsoyaStatus, rows, pages int64) (HamsoyaStatus []HamsoyaAccountType, err error){
+func GetHamsoyaStatuses(hamsoyaStatus HamsoyaStatus, rows, pages int64) (HamsoyaStatus []HamsoyaStatus, err error){
 	pages--
 	if pages < 0 {
 		pages = 0

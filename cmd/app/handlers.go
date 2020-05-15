@@ -452,33 +452,6 @@ func (server *MainServer) GetViewLogHandler(writer http.ResponseWriter, request 
 		return
 	}
 }
-//
-func (server *MainServer) GetHamsoyaTransactionTypeHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
-	pageInt := 1
-	rowsInt := 100
-	page := request.URL.Query().Get(`page`)
-	rows := request.URL.Query().Get(`rows`)
-	pageInt, err := strconv.Atoi(page)
-	if err != nil{
-		pageInt = 1
-	}
-	rowsInt, err = strconv.Atoi(rows)
-	if err != nil {
-		rowsInt = 100
-	}
-	response, err := server.userSvc.GetHamsoyaTransactionsType(int64(rowsInt), int64(pageInt))
-
-	if err != nil {
-		err := json.NewEncoder(writer).Encode([]string{`error mismatch this transaction type'`})
-		log.Print(err)
-		return
-	}
-	err = json.NewEncoder(writer).Encode(&response)
-	if err != nil {
-		log.Print(err)
-	}
-}
 
 // TODO: найти проблему как распарсить время, чтобы парсилась из string в time.time
 func (server *MainServer) GetHamsoyaTransactionsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
@@ -564,6 +537,34 @@ func (server *MainServer) GetHamsoyaTransactionByIdHandler(writer http.ResponseW
 		return
 	}
 }
+
+//
+func (server *MainServer) GetHamsoyaTransactionTypeHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	pageInt := 1
+	rowsInt := 100
+	page := request.URL.Query().Get(`page`)
+	rows := request.URL.Query().Get(`rows`)
+	pageInt, err := strconv.Atoi(page)
+	if err != nil{
+		pageInt = 1
+	}
+	rowsInt, err = strconv.Atoi(rows)
+	if err != nil {
+		rowsInt = 100
+	}
+	response, err := server.userSvc.GetHamsoyaTransactionsType(int64(rowsInt), int64(pageInt))
+
+	if err != nil {
+		err := json.NewEncoder(writer).Encode([]string{`error mismatch this transaction type'`})
+		log.Print(err)
+		return
+	}
+	err = json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Print(err)
+	}
+}
 //Get TransactionType By Id
 func (server *MainServer) GetHamsoyaTransactionTypeByIdHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params){
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -640,6 +641,7 @@ func (server *MainServer) UpdateHamsoyaTransactionTypeHandler(writer http.Respon
 		log.Println(err)
 	}
 }
+
 // Get Configs
 func (server *MainServer) GetHamosyaConfigsHandler (writer http.ResponseWriter, request *http.Request, _ httprouter.Params){
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -776,6 +778,7 @@ func (server *MainServer) GetHamsoyaConfigByIdHandler(writer http.ResponseWriter
 		return
 	}
 }
+
 // Get AccountTypes
 func (server *MainServer) GetHamosyaAccountTypesHandler (writer http.ResponseWriter, request *http.Request, _ httprouter.Params){
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -890,6 +893,146 @@ func (server *MainServer) UpdateHamsoyaAccountTypeHandler(writer http.ResponseWr
 //	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	var requestBody hamsoyamodels.HamsoyaAccountType
+	err := json.NewDecoder(request.Body).Decode(&requestBody)
+	fmt.Println(requestBody)
+	if err != nil {
+		log.Println(err)
+		writer.WriteHeader(http.StatusBadRequest)
+		err := json.NewEncoder(writer).Encode("err.json_invalid")
+		log.Println(err)
+		return
+	}
+	response, err := requestBody.Update(requestBody)
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		err := json.NewEncoder(writer).Encode("wrong_date")
+		if err != nil {
+			log.Println(err)
+			return
+		}
+	}
+	err = json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	return
+}
+
+// Get Statuses
+func (server *MainServer) GetHamsoyaStatusesHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	pageInt := 1
+	rowsInt := 100
+	page := request.URL.Query().Get(`page`)
+	pageInt, err := strconv.Atoi(page)
+	if err != nil{
+		pageInt = 1
+	}
+	rows := request.URL.Query().Get(`rows`)
+	rowsInt, err = strconv.Atoi(rows)
+	if err != nil {
+		rowsInt = 100
+	}
+	var newHamsoyaStatus hamsoyamodels.HamsoyaStatus
+	id, err := strconv.Atoi(request.URL.Query().Get(`id`))
+	if err == nil {
+		newHamsoyaStatus.Id = int64(id)
+	}
+	code := request.URL.Query().Get(`code`)
+	newHamsoyaStatus.Code = code
+
+	Name := request.URL.Query().Get(`name`)
+	newHamsoyaStatus.Name = Name
+
+	ExtCode := request.URL.Query().Get(`extcode`)
+	newHamsoyaStatus.ExtCode = ExtCode
+
+	resultCode, err := strconv.Atoi(request.URL.Query().Get(`resultcode`))
+	if err == nil {
+		newHamsoyaStatus.ResultCode = int64(resultCode)
+	}
+
+
+	HamsoyaStatus, err := hamsoyamodels.GetHamsoyaStatuses(newHamsoyaStatus, int64(rowsInt), int64(pageInt))
+
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		err := json.NewEncoder(writer).Encode(`mismatch_hamsoyaStatus`)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		return
+	}
+	err = json.NewEncoder(writer).Encode(HamsoyaStatus)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	return
+}
+// Get Status
+func (server *MainServer) GetHamsoyaStatusHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params){
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	id , err := strconv.Atoi(param.ByName("id"))
+	if err != nil {
+		err := json.NewEncoder(writer).Encode("invalid_id")
+		if err != nil {
+			log.Print(err)
+			return
+		}
+		return
+	}
+	HamsoyaStatus, err := hamsoyamodels.GetHamsoyaStatusById(int64(id))
+	if err != nil {
+		err := json.NewEncoder(writer).Encode("invalid_id")
+		if err != nil {
+			log.Print(err)
+			return
+		}
+		return
+	}
+	err = json.NewEncoder(writer).Encode(&HamsoyaStatus)
+	if err != nil {
+		log.Print("invalid_HamsoyaStatus.")
+		return
+	}
+}
+// Save Status
+func (server *MainServer) SaveHamsoyaStatusHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	var requestBody hamsoyamodels.HamsoyaStatus
+	err := json.NewDecoder(request.Body).Decode(&requestBody)
+	fmt.Println(requestBody)
+	if err != nil {
+		log.Println(err)
+		writer.WriteHeader(http.StatusBadRequest)
+		err := json.NewEncoder(writer).Encode("err.json_invalid")
+		log.Println(err)
+		return
+	}
+	//	requestBody.CreateDate = time.Now()
+	response, err := requestBody.Save()
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		err := json.NewEncoder(writer).Encode("wrong_date")
+		if err != nil {
+			log.Println(err)
+			return
+		}
+	}
+	err = json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	return
+}
+// Edit Status
+func (server *MainServer) UpdateHamsoyaStatusHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	var requestBody hamsoyamodels.HamsoyaStatus
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
 	fmt.Println(requestBody)
 	if err != nil {

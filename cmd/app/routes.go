@@ -50,6 +50,10 @@ func (server *MainServer) InitRoutes() {
 	server.router.POST(`/api/hamsoya/acoounttypes/accounttype/:id/edit`, server.UpdateHamsoyaAccountTypeHandler)
 	server.router.POST(`/api/hamsoya/acoounttypes/save`, server.SaveHamsoyaAccountTypeHandler)
 
+	server.router.GET(`/ap/hamsoya/statuses`, server.GetHamsoyaStatusesHandler)
+	server.router.GET(`/ap/hamsoya/statuses/status/:id`, server.GetHamsoyaStatusHandler)
+	server.router.POST(`/ap/hamsoya/statuses/status/:id/edit`, server.UpdateHamsoyaStatusHandler)
+	server.router.POST(`/ap/hamsoya/statuses/save`, server.SaveHamsoyaStatusHandler)
 	panic(http.ListenAndServe("127.0.0.1:8080", server))
 }
 
