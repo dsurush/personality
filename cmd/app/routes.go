@@ -61,7 +61,7 @@ func (server *MainServer) InitRoutes() {
 	server.router.POST(`/ap/hamsoya/statuses/save`, server.SaveHamsoyaStatusHandler)
 
 	//TODO: filter by time
-	server.router.GET(`/api/hamsoya/viewtransactions`, server.GetHamsoyaViewTransactionHandler)
+	server.router.GET(`/api/hamsoya/viewtransactions`, server.GetHamsoyaViewTransactionsHandler)
 	server.router.GET(`/api/hamsoya/viewtransactions/transaction/:id`, server.GetHamsoyaViewTransactionHandler)
 
 	//server.router.GET(`/api/hamsoya/viewtranses`, server)

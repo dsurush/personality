@@ -1164,9 +1164,9 @@ func (server *MainServer) GetHamsoyaViewTransactionsHandler(writer http.Response
 	}
 	var newHamsoyaViewTransaction hamsoyamodels.HamsoyaViewTransaction
 
-	HamsoyaViewTransaction, err := hamsoyamodels.GetHamsoyaViewTransactions(newHamsoyaViewTransaction, int64(rowsInt), int64(pageInt))
+	HamsoyaViewTransaction := hamsoyamodels.GetHamsoyaViewTransactions(newHamsoyaViewTransaction, int64(rowsInt), int64(pageInt))
 
-	if err != nil {
+	if HamsoyaViewTransaction.Error != nil {
 		writer.WriteHeader(http.StatusNotFound)
 		err := json.NewEncoder(writer).Encode(`mismatch_hamsoyaStatus`)
 		if err != nil {
