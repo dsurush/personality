@@ -13,9 +13,14 @@ type HamsoyaStatus struct {
 	IsAmountHold bool   `xml:"is_amount_hold"`
 }
 
-
 func (*HamsoyaStatus) TableName() string {
 	return "status"
+}
+
+type ResponseHamsoyaStatuses struct {
+	Error error
+	Count int64
+	HamsoyaStatusList []HamsoyaStatus
 }
 
 func GetHamsoyaStatusById(id int64) (HamsoyaStatus HamsoyaStatus, err error){
@@ -27,16 +32,16 @@ func GetHamsoyaStatusById(id int64) (HamsoyaStatus HamsoyaStatus, err error){
 	return HamsoyaStatus, nil
 }
 
-func GetHamsoyaStatuses(hamsoyaStatus HamsoyaStatus, rows, pages int64) (HamsoyaStatus []HamsoyaStatus, err error){
+func GetHamsoyaStatuses(hamsoyaStatus HamsoyaStatus, rows, pages int64) (HamsoyaStatus ResponseHamsoyaStatuses){
 	pages--
 	if pages < 0 {
 		pages = 0
 	}
 	postgresDb := db.GetHamsoyaPostgresDb()
-	if err := postgresDb.Where(&hamsoyaStatus).Limit(rows).Offset(rows * pages).Find(&HamsoyaStatus).Error; err != nil{
-		return HamsoyaStatus, err
+	if err := postgresDb.Where(&hamsoyaStatus).Limit(rows).Offset(rows * pages).Find(&HamsoyaStatus.HamsoyaStatusList).Count(&HamsoyaStatus.Count).Error; err != nil{
+		HamsoyaStatus.Error = err
 	}
-	return HamsoyaStatus, nil
+	return
 }
 
 func (HamsoyaStatus *HamsoyaStatus) Save() (HamsoyaStatus, error){

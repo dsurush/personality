@@ -981,9 +981,9 @@ func (server *MainServer) GetHamsoyaStatusesHandler(writer http.ResponseWriter, 
 		newHamsoyaStatus.ResultCode = int64(resultCode)
 	}
 
-	HamsoyaStatus, err := hamsoyamodels.GetHamsoyaStatuses(newHamsoyaStatus, int64(rowsInt), int64(pageInt))
+	HamsoyaStatus := hamsoyamodels.GetHamsoyaStatuses(newHamsoyaStatus, int64(rowsInt), int64(pageInt))
 
-	if err != nil {
+	if HamsoyaStatus.Error != nil {
 		writer.WriteHeader(http.StatusNotFound)
 		err := json.NewEncoder(writer).Encode(`mismatch_hamsoyaStatus`)
 		if err != nil {
