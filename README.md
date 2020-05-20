@@ -1,1 +1,1 @@
-# MEGAFON and Hamsoya PR
+# Megafon and Hamsoya PR
