@@ -68,12 +68,12 @@ func (server *MainServer) InitRoutes() {
 	//server.router.GET(`/api/hamsoya/viewtranses`, server)
 	server.router.GET(`/api/hamsoya/viewtranses/trans/:id`, logger.Logger(`Get Hamsoya viewtrans by id `)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaViewTransHandler)))))
 
+	server.router.GET(`/api/hamsoya/documents/document/:id`, server.GetHamsoyaDocumentByIdHandler)
 	panic(http.ListenAndServe("127.0.0.1:8080", server))
 }
 
 func test(){
-	var a hamsoyamodels.HamsoyaClientType
-
-	count := a.Count()
-	fmt.Println(count)
+//	var a hamsoyamodels.HamsoyaClientType
+	Document, _ := hamsoyamodels.GetHamsoyaDocument(1)
+	fmt.Println(Document)
 }

@@ -1182,3 +1182,33 @@ func (server *MainServer) GetHamsoyaViewTransactionsHandler(writer http.Response
 	}
 	return
 }
+
+// Get Hamsoya Documents
+func (server *MainServer) GetHamsoyaDocumentByIdHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	id, err := strconv.Atoi(params.ByName("id"))
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		err := json.NewEncoder(writer).Encode("invalid_id")
+		if err != nil {
+			log.Print(err)
+			return
+		}
+		return
+	}
+	Document, err := hamsoyamodels.GetHamsoyaDocument(int64(id))
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		err := json.NewEncoder(writer).Encode("server wrong")
+		if err != nil {
+			log.Print(err)
+			return
+		}
+		return
+	}
+	err = json.NewEncoder(writer).Encode(&Document)
+	if err != nil {
+		log.Print("invalid_HamsoyaViewTransaction.")
+		return
+	}
+}
