@@ -49,7 +49,11 @@ type ResponseHamsoyaTransactionsType struct {
 	Count int64
 	HamsoyaTransactionTypeList []HamsoyaTransactionType
 }
-
+type ResponseHamsoyaTransactions struct {
+	Error error
+	Count int64
+	HamsoyaTransactionList []HamsoyaTransaction
+}
 func (*HamsoyaTransaction) TableName() string {
 	return "transactions"
 }
@@ -61,14 +65,14 @@ func GetHamsoyaTransactionTypeById(id int64) (HamsoyaTransactionType HamsoyaTran
 	return
 }
 
-func GetHamsoyaTransactions(transaction HamsoyaTransaction, size, page int64) (HamsoyaTransactions []HamsoyaTransaction, err error) {
+func GetHamsoyaTransactions(transaction HamsoyaTransaction, size, page int64) (HamsoyaTransactions ResponseHamsoyaTransactions) {
 	page--
 	if page < 0 {
 		page = 0
 	}
 	postgresDb := db.GetHamsoyaPostgresDb()
-	if err := postgresDb.Where(&transaction).Limit(size).Offset(page * size).Find(&HamsoyaTransactions).Error; err != nil {
-		return HamsoyaTransactions, err
+	if err := postgresDb.Where(&transaction).Limit(size).Offset(page * size).Find(&HamsoyaTransactions.HamsoyaTransactionList).Count(&HamsoyaTransactions.Count).Error; err != nil {
+		HamsoyaTransactions.Error = err
 	}
 	return
 }

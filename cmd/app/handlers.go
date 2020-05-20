@@ -498,9 +498,9 @@ func (server *MainServer) GetHamsoyaTransactionsHandler(writer http.ResponseWrit
 	//fmt.Println("My Date Reformatted:\t", myDate)
 	//transaction.CreateDate = myDate
 
-	response, err := hamsoyamodels.GetHamsoyaTransactions(transaction, int64(rowsInt), int64(pageInt))
+	response := hamsoyamodels.GetHamsoyaTransactions(transaction, int64(rowsInt), int64(pageInt))
 
-	if err != nil {
+	if response.Error != nil {
 		err := json.NewEncoder(writer).Encode([]string{`error mismatch this transaction type`})
 		log.Println(err)
 		return
