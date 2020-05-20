@@ -44,6 +44,12 @@ type HamsoyaTransaction struct {
 	ClientPayerId int64     `xml:"client_payer_id"`
 }
 
+type ResponseHamsoyaTransactionsType struct {
+	Error error
+	Count int64
+	HamsoyaTransactionTypeList []HamsoyaTransactionType
+}
+
 func (*HamsoyaTransaction) TableName() string {
 	return "transactions"
 }

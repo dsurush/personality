@@ -553,9 +553,9 @@ func (server *MainServer) GetHamsoyaTransactionTypeHandler(writer http.ResponseW
 	if err != nil {
 		rowsInt = 100
 	}
-	response, err := server.userSvc.GetHamsoyaTransactionsType(int64(rowsInt), int64(pageInt))
+	response := server.userSvc.GetHamsoyaTransactionsType(int64(rowsInt), int64(pageInt))
 
-	if err != nil {
+	if response.Error != nil {
 		err := json.NewEncoder(writer).Encode([]string{`error mismatch this transaction type'`})
 		log.Print(err)
 		return

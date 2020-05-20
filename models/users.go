@@ -50,15 +50,14 @@ func (receiver *Usersvc) GetClientsInfo() (clientsInfo []ClientInfo) {
 	}
 	return clientsInfo
 }
-
-func (receiver *Usersvc) GetHamsoyaTransactionsType(size, page int64) (HamsoyaTransactionsType []hamsoyamodels.HamsoyaTransactionType, err error){
+func (receiver *Usersvc) GetHamsoyaTransactionsType(size, page int64) (HamsoyaTransactionsType hamsoyamodels.ResponseHamsoyaTransactionsType){
 	postgresDb := db.GetHamsoyaPostgresDb()
 	page--
 	if page < 0{
 		page = 0
 	}
-	if err := postgresDb.Limit(size).Offset(size*page).Find(&HamsoyaTransactionsType).Error; err !=  nil{
-		return HamsoyaTransactionsType, err
+	if err := postgresDb.Limit(size).Offset(size*page).Find(&HamsoyaTransactionsType.HamsoyaTransactionTypeList).Count(&HamsoyaTransactionsType.Count).Error; err !=  nil{
+		HamsoyaTransactionsType.Error = err
 	}
 	return
 }
