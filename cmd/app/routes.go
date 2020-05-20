@@ -37,35 +37,36 @@ func (server *MainServer) InitRoutes() {
 	//This router for not full logs form (DataTransferObject)
 	server.router.GET(`/api/megafon/logs/DTO`, logger.Logger(`Change Megafon logs DTO `)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetViewLogsDTOHandler)))))
 	///Hamsoya
-	server.router.GET(`/api/hamsoya/transactionstype`, server.GetHamsoyaTransactionTypeHandler)
-	server.router.GET(`/api/hamsoya/transactionstype/transactiontype/:id`, server.GetHamsoyaTransactionTypeByIdHandler)
-	server.router.POST(`/api/hamsoya/transactionstype/save`,  server.SaveHamsoyaTransactionType)
-	server.router.POST(`/api/hamsoya/transactionstype/transactiontype/:id/edit`, server.UpdateHamsoyaTransactionTypeHandler)
 
-	server.router.GET(`/api/hamsoya/transactions`, server.GetHamsoyaTransactionsHandler)
-	server.router.GET(`/api/hamsoya/transactions/transaction/:id`, server.GetHamsoyaTransactionByIdHandler)
+	server.router.GET(`/api/hamsoya/transactionstype`, logger.Logger(`Get Hamsoya TransactionTypeTypes`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaTransactionTypeHandler)))))
+	server.router.GET(`/api/hamsoya/transactionstype/transactiontype/:id`, logger.Logger(`Get Hamsoya TransactionType by id `)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaTransactionTypeByIdHandler)))))
+	server.router.POST(`/api/hamsoya/transactionstype/save`,  logger.Logger(`save new Hamsoya TransactionType`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.SaveHamsoyaTransactionType)))))
+	server.router.POST(`/api/hamsoya/transactionstype/transactiontype/:id/edit`, logger.Logger(`Edit Hamsoya TransactionType`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.UpdateHamsoyaTransactionTypeHandler)))))
 
-	server.router.GET(`/api/hamsoya/configs`, server.GetHamosyaConfigsHandler)
-	server.router.GET(`/api/hamsoya/configs/config/:id`, server.GetHamsoyaConfigByIdHandler)
-	server.router.POST(`/api/hamsoya/configs/save`, server.SaveHamsoyaConfigHandler)
-	server.router.POST(`/api/hamsoya/configs/config/:id/edit`, server.UpdateHamsoyaConfigHandler)
+	server.router.GET(`/api/hamsoya/transactions`, logger.Logger(`Get Hamsoya Transactions`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaTransactionsHandler)))))
+	server.router.GET(`/api/hamsoya/transactions/transaction/:id`, logger.Logger(`Get Hamsoya Transaction by id`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaTransactionByIdHandler)))))
 
-	server.router.GET(`/api/hamsoya/acoounttypes`, server.GetHamosyaAccountTypesHandler)
-	server.router.GET(`/api/hamsoya/acoounttypes/accounttype/:id`, server.GetHamsoyaAccountTypeByIdHandler)
-	server.router.POST(`/api/hamsoya/acoounttypes/accounttype/:id/edit`, server.UpdateHamsoyaAccountTypeHandler)
-	server.router.POST(`/api/hamsoya/acoounttypes/save`, server.SaveHamsoyaAccountTypeHandler)
+	server.router.GET(`/api/hamsoya/configs`, logger.Logger(`Get Hamsoya configs`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamosyaConfigsHandler)))))
+	server.router.GET(`/api/hamsoya/configs/config/:id`, logger.Logger(`Get Hamsoya config by id`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaConfigByIdHandler)))))
+	server.router.POST(`/api/hamsoya/configs/save`, logger.Logger(`Save Hamsoya config`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.SaveHamsoyaConfigHandler)))))
+	server.router.POST(`/api/hamsoya/configs/config/:id/edit`, logger.Logger(`Edit Hamsoya config`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.UpdateHamsoyaConfigHandler)))))
 
-	server.router.GET(`/ap/hamsoya/statuses`, server.GetHamsoyaStatusesHandler)
-	server.router.GET(`/ap/hamsoya/statuses/status/:id`, server.GetHamsoyaStatusHandler)
-	server.router.POST(`/ap/hamsoya/statuses/status/:id/edit`, server.UpdateHamsoyaStatusHandler)
-	server.router.POST(`/ap/hamsoya/statuses/save`, server.SaveHamsoyaStatusHandler)
+	server.router.GET(`/api/hamsoya/acoounttypes`, logger.Logger(`Get Hamsoya accounttypes`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamosyaAccountTypesHandler)))))
+	server.router.GET(`/api/hamsoya/acoounttypes/accounttype/:id`, logger.Logger(`Get Hamsoya accounttype by id`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaAccountTypeByIdHandler)))))
+	server.router.POST(`/api/hamsoya/acoounttypes/accounttype/:id/edit`, logger.Logger(`Edit Hamsoya accounttype`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.UpdateHamsoyaAccountTypeHandler)))))
+	server.router.POST(`/api/hamsoya/acoounttypes/save`, logger.Logger(`Save Hamsoya accounttype`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.SaveHamsoyaAccountTypeHandler)))))
+
+	server.router.GET(`/ap/hamsoya/statuses`, logger.Logger(`Get Hamsoya statuses`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaStatusesHandler)))))
+	server.router.GET(`/ap/hamsoya/statuses/status/:id`, logger.Logger(`Get Hamsoya status by id `)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaStatusHandler)))))
+	server.router.POST(`/ap/hamsoya/statuses/status/:id/edit`, logger.Logger(`Edit Hamsoya status`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.UpdateHamsoyaStatusHandler)))))
+	server.router.POST(`/ap/hamsoya/statuses/save`, logger.Logger(`Save Hamsoya status`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.SaveHamsoyaStatusHandler)))))
 
 	//TODO: filter by time
-	server.router.GET(`/api/hamsoya/viewtransactions`, server.GetHamsoyaViewTransactionsHandler)
-	server.router.GET(`/api/hamsoya/viewtransactions/transaction/:id`, server.GetHamsoyaViewTransactionHandler)
+	server.router.GET(`/api/hamsoya/viewtransactions`, logger.Logger(`Get Hamsoya viewtransactions`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaViewTransactionsHandler)))))
+	server.router.GET(`/api/hamsoya/viewtransactions/transaction/:id`, logger.Logger(`Get Hamsoya viewtransaction by id`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaViewTransactionHandler)))))
 
 	//server.router.GET(`/api/hamsoya/viewtranses`, server)
-	server.router.GET(`/api/hamsoya/viewtranses/trans/:id`, server.GetHamsoyaViewTransHandler)
+	server.router.GET(`/api/hamsoya/viewtranses/trans/:id`, logger.Logger(`Get Hamsoya viewtrans by id `)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaViewTransHandler)))))
 
 	panic(http.ListenAndServe("127.0.0.1:8080", server))
 }
