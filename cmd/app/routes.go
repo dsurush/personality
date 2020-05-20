@@ -68,8 +68,8 @@ func (server *MainServer) InitRoutes() {
 	//server.router.GET(`/api/hamsoya/viewtranses`, server)
 	server.router.GET(`/api/hamsoya/viewtranses/trans/:id`, logger.Logger(`Get Hamsoya viewtrans by id `)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaViewTransHandler)))))
 
-	server.router.GET(`/api/hamsoya/documents`, server.GetHamsoyaDocumentsHandler)
-	server.router.GET(`/api/hamsoya/documents/document/:id`, server.GetHamsoyaDocumentByIdHandler)
+	server.router.GET(`/api/hamsoya/documents`, logger.Logger(`Get Hamsoya Documents`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaDocumentsHandler)))))
+	server.router.GET(`/api/hamsoya/documents/document/:id`, logger.Logger(`Get Hamsoya Document by id`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaDocumentByIdHandler)))))
 	panic(http.ListenAndServe("127.0.0.1:8080", server))
 }
 
