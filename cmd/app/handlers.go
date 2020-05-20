@@ -13,9 +13,10 @@ import (
 	"strconv"
 	"time"
 )
+
 //Handler for login // Get log and pass
 func (server *MainServer) LoginHandler(writer http.ResponseWriter, request *http.Request, pr httprouter.Params) {
-//	fmt.Println("login\n")
+	//	fmt.Println("login\n")
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	var requestBody token.RequestDTO
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
@@ -41,6 +42,7 @@ func (server *MainServer) LoginHandler(writer http.ResponseWriter, request *http
 		log.Print(err)
 	}
 }
+
 //Get clients By Phone
 func (server *MainServer) GetClientInfoByPhoneNumberHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
 	fmt.Println("I am find client By number phone")
@@ -48,7 +50,7 @@ func (server *MainServer) GetClientInfoByPhoneNumberHandler(writer http.Response
 	phone := param.ByName(`phone`)
 	fmt.Println(phone)
 	response := models.GetClientInfoByPhoneNumber(phone)
-	if response.ClientID == 0{
+	if response.ClientID == 0 {
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -59,6 +61,7 @@ func (server *MainServer) GetClientInfoByPhoneNumberHandler(writer http.Response
 		log.Print(err)
 	}
 }
+
 //Get list clients Handler ::: TODO CHANGE
 func (server *MainServer) GetClientsInfoHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	fmt.Println("I am get all clients")
@@ -88,7 +91,7 @@ func (server *MainServer) GetClientsInfoHandler(writer http.ResponseWriter, requ
 	clientDefault.Sex = Sex
 
 	pageInt, err = strconv.Atoi(page)
-	if err != nil{
+	if err != nil {
 		pageInt = 1
 	}
 	rowsInt, err = strconv.Atoi(rows)
@@ -96,15 +99,16 @@ func (server *MainServer) GetClientsInfoHandler(writer http.ResponseWriter, requ
 		rowsInt = 100
 	}
 
-	fmt.Println("I am = \n" , clientDefault)
-	response := models.GetClients(clientDefault, rowsInt, pageInt - 1)
+	fmt.Println("I am = \n", clientDefault)
+	response := models.GetClients(clientDefault, rowsInt, pageInt-1)
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)
 	}
 }
+
 //UnUse Handler
-func (server *MainServer) LoginHandler1(writer http.ResponseWriter, _*http.Request, _ httprouter.Params) {
+func (server *MainServer) LoginHandler1(writer http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 	bytes, err := ioutil.ReadFile("web/templates/index.gohtml")
 	if err != nil {
 		log.Fatal("can't read from /web/templates.index.gohtml\nerr: ", err)
@@ -114,9 +118,10 @@ func (server *MainServer) LoginHandler1(writer http.ResponseWriter, _*http.Reque
 		log.Fatal("can't send bytes to writer")
 	}
 }
+
 //UnUse Handler
 func (server *MainServer) MainPageHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-//	fmt.Println("Login\n")
+	//	fmt.Println("Login\n")
 	var requestBody token.RequestDTO
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
 	if err != nil {
@@ -150,6 +155,7 @@ func (server *MainServer) MainPageHandler(writer http.ResponseWriter, request *h
 		log.Print(err)
 	}
 }
+
 //UnUse Handler
 func (server *MainServer) GetVendorCategoryHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	var vendor models.Vendor
@@ -160,6 +166,7 @@ func (server *MainServer) GetVendorCategoryHandler(writer http.ResponseWriter, r
 		log.Print(err)
 	}
 }
+
 //GetVendorCategory
 func (server *MainServer) GetVendorCategoryByPageSizeHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -174,6 +181,7 @@ func (server *MainServer) GetVendorCategoryByPageSizeHandler(writer http.Respons
 		log.Print(err)
 	}
 }
+
 // Get view Trans for report
 func (server *MainServer) GetViewTransactionsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	fmt.Println("I am view Transaction")
@@ -183,7 +191,7 @@ func (server *MainServer) GetViewTransactionsHandler(writer http.ResponseWriter,
 	page := request.URL.Query().Get(`page`)
 	rows := request.URL.Query().Get(`rows`)
 	pageInt, err := strconv.Atoi(page)
-	if err != nil{
+	if err != nil {
 		pageInt = 1
 	}
 	rowsInt, err = strconv.Atoi(rows)
@@ -197,15 +205,15 @@ func (server *MainServer) GetViewTransactionsHandler(writer http.ResponseWriter,
 	}
 	PaymentID, err := strconv.Atoi(request.URL.Query().Get(`PaymentID`))
 	if err == nil {
-		transaction.PaymentID =  int64(PaymentID)
+		transaction.PaymentID = int64(PaymentID)
 	}
 	PreCheckQueueID, err := strconv.Atoi(request.URL.Query().Get(`PreCheckQueueID`))
 	if err == nil {
-		transaction.PreCheckQueueID =  int64(PreCheckQueueID)
+		transaction.PreCheckQueueID = int64(PreCheckQueueID)
 	}
 	Vendor, err := strconv.Atoi(request.URL.Query().Get(`Vendor`))
 	if err == nil {
-		transaction.Vendor =  Vendor
+		transaction.Vendor = Vendor
 	}
 	VendorName := request.URL.Query().Get(`VendorName`)
 	transaction.VendorName = VendorName
@@ -223,14 +231,15 @@ func (server *MainServer) GetViewTransactionsHandler(writer http.ResponseWriter,
 	transaction.GateWay = GateWay
 	Amount, err := strconv.ParseFloat(request.URL.Query().Get(`Amount`), 64)
 	if err == nil {
-		transaction.Amount =  Amount
+		transaction.Amount = Amount
 	}
-	response := models.GetViewTransactions(transaction, int64(rowsInt), int64(pageInt - 1))
+	response := models.GetViewTransactions(transaction, int64(rowsInt), int64(pageInt-1))
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)
 	}
 }
+
 // Get view report for report
 func (server *MainServer) GetViewReportsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	fmt.Println("I am get clients")
@@ -240,14 +249,14 @@ func (server *MainServer) GetViewReportsHandler(writer http.ResponseWriter, requ
 	page := request.URL.Query().Get(`page`)
 	rows := request.URL.Query().Get(`rows`)
 	pageInt, err := strconv.Atoi(page)
-	if err != nil{
+	if err != nil {
 		pageInt = 1
 	}
 	rowsInt, err = strconv.Atoi(rows)
 	if err != nil {
 		rowsInt = 100
 	}
-	response := models.GetViewReport(int64(rowsInt), int64(pageInt - 1))
+	response := models.GetViewReport(int64(rowsInt), int64(pageInt-1))
 	if response.Error != nil {
 		err := json.NewEncoder(writer).Encode([]string{`error mismatch this raport'`})
 		log.Print(err)
@@ -258,8 +267,9 @@ func (server *MainServer) GetViewReportsHandler(writer http.ResponseWriter, requ
 		log.Print(err)
 	}
 }
+
 // Save New Vendor
-func (server *MainServer) SaveNewVendorHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params){
+func (server *MainServer) SaveNewVendorHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	var requestBody models.Vendor
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
@@ -270,7 +280,7 @@ func (server *MainServer) SaveNewVendorHandler(writer http.ResponseWriter, reque
 		return
 	}
 	response := requestBody.Save()
-	if response.ID <= 0{
+	if response.ID <= 0 {
 		writer.WriteHeader(http.StatusNotFound)
 		err := json.NewEncoder(writer).Encode([]string{"err.json_invalid"})
 		log.Print(err)
@@ -281,8 +291,9 @@ func (server *MainServer) SaveNewVendorHandler(writer http.ResponseWriter, reque
 		log.Print(err)
 	}
 }
+
 // Update  Vendor
-func (server *MainServer) UpdateVendorHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params){
+func (server *MainServer) UpdateVendorHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	var requestBody models.Vendor
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
@@ -294,7 +305,7 @@ func (server *MainServer) UpdateVendorHandler(writer http.ResponseWriter, reques
 	}
 	response := requestBody.Update(requestBody)
 	fmt.Println(response)
-	if response.ID <= 0{
+	if response.ID <= 0 {
 		writer.WriteHeader(http.StatusNotFound)
 		err := json.NewEncoder(writer).Encode([]string{"err.json_invalid"})
 		log.Print(err)
@@ -305,8 +316,9 @@ func (server *MainServer) UpdateVendorHandler(writer http.ResponseWriter, reques
 		log.Println(err)
 	}
 }
+
 //Get one Vendor
-func (server *MainServer) GetVendorHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params){
+func (server *MainServer) GetVendorHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	param := params.ByName(`id`)
 	id, err := strconv.Atoi(param)
@@ -320,6 +332,7 @@ func (server *MainServer) GetVendorHandler(writer http.ResponseWriter, request *
 		log.Print(err)
 	}
 }
+
 //Get list Merchants
 func (server *MainServer) GetMerchantsHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -334,8 +347,9 @@ func (server *MainServer) GetMerchantsHandler(writer http.ResponseWriter, reques
 		log.Print(err)
 	}
 }
+
 //Get on Merchant
-func (server *MainServer) GetMerchantHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params){
+func (server *MainServer) GetMerchantHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	param := params.ByName(`id`)
 	id, err := strconv.Atoi(param)
@@ -350,8 +364,9 @@ func (server *MainServer) GetMerchantHandler(writer http.ResponseWriter, request
 		log.Print(err)
 	}
 }
+
 //Update Merchant
-func (server *MainServer) UpdateMerchantHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params){
+func (server *MainServer) UpdateMerchantHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	var requestBody models.Merchant
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
@@ -363,7 +378,7 @@ func (server *MainServer) UpdateMerchantHandler(writer http.ResponseWriter, requ
 	}
 	response := requestBody.Update(requestBody)
 	fmt.Println(response)
-	if response.ID <= 0{
+	if response.ID <= 0 {
 		writer.WriteHeader(http.StatusNotFound)
 		err := json.NewEncoder(writer).Encode([]string{"err.json_invalid"})
 		log.Print(err)
@@ -374,6 +389,7 @@ func (server *MainServer) UpdateMerchantHandler(writer http.ResponseWriter, requ
 		log.Println(err)
 	}
 }
+
 //Get all ViewLog by page
 func (server *MainServer) GetViewLogsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -382,7 +398,7 @@ func (server *MainServer) GetViewLogsHandler(writer http.ResponseWriter, request
 	page := request.URL.Query().Get(`page`)
 	rows := request.URL.Query().Get(`rows`)
 	pageInt, err := strconv.Atoi(page)
-	if err != nil{
+	if err != nil {
 		pageInt = 1
 	}
 	rowsInt, err = strconv.Atoi(rows)
@@ -400,6 +416,7 @@ func (server *MainServer) GetViewLogsHandler(writer http.ResponseWriter, request
 		log.Print(err)
 	}
 }
+
 //GetViewDTO
 func (server *MainServer) GetViewLogsDTOHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -408,7 +425,7 @@ func (server *MainServer) GetViewLogsDTOHandler(writer http.ResponseWriter, requ
 	page := request.URL.Query().Get(`page`)
 	rows := request.URL.Query().Get(`rows`)
 	pageInt, err := strconv.Atoi(page)
-	if err != nil{
+	if err != nil {
 		pageInt = 1
 	}
 	rowsInt, err = strconv.Atoi(rows)
@@ -426,9 +443,10 @@ func (server *MainServer) GetViewLogsDTOHandler(writer http.ResponseWriter, requ
 		log.Print(err)
 	}
 }
+
 //
-func (server *MainServer) GetViewLogHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params){
-	id , err := strconv.Atoi(param.ByName("id"))
+func (server *MainServer) GetViewLogHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
+	id, err := strconv.Atoi(param.ByName("id"))
 	if err != nil {
 		err := json.NewEncoder(writer).Encode("invalid_id")
 		if err != nil {
@@ -461,7 +479,7 @@ func (server *MainServer) GetHamsoyaTransactionsHandler(writer http.ResponseWrit
 	var transaction hamsoyamodels.HamsoyaTransaction
 	page := request.URL.Query().Get(`page`)
 	pageInt, err := strconv.Atoi(page)
-	if err != nil{
+	if err != nil {
 		pageInt = 1
 	}
 
@@ -510,10 +528,11 @@ func (server *MainServer) GetHamsoyaTransactionsHandler(writer http.ResponseWrit
 		log.Println(err)
 	}
 }
+
 //Get transaction By id
-func (server *MainServer) GetHamsoyaTransactionByIdHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params){
+func (server *MainServer) GetHamsoyaTransactionByIdHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
-	id , err := strconv.Atoi(param.ByName("id"))
+	id, err := strconv.Atoi(param.ByName("id"))
 	if err != nil {
 		err := json.NewEncoder(writer).Encode("invalid_id")
 		if err != nil {
@@ -546,7 +565,7 @@ func (server *MainServer) GetHamsoyaTransactionTypeHandler(writer http.ResponseW
 	page := request.URL.Query().Get(`page`)
 	rows := request.URL.Query().Get(`rows`)
 	pageInt, err := strconv.Atoi(page)
-	if err != nil{
+	if err != nil {
 		pageInt = 1
 	}
 	rowsInt, err = strconv.Atoi(rows)
@@ -565,10 +584,11 @@ func (server *MainServer) GetHamsoyaTransactionTypeHandler(writer http.ResponseW
 		log.Print(err)
 	}
 }
+
 //Get TransactionType By Id
-func (server *MainServer) GetHamsoyaTransactionTypeByIdHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params){
+func (server *MainServer) GetHamsoyaTransactionTypeByIdHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
-	id , err := strconv.Atoi(param.ByName("id"))
+	id, err := strconv.Atoi(param.ByName("id"))
 	if err != nil {
 		err := json.NewEncoder(writer).Encode("invalid_id")
 		if err != nil {
@@ -592,6 +612,7 @@ func (server *MainServer) GetHamsoyaTransactionTypeByIdHandler(writer http.Respo
 		return
 	}
 }
+
 //Save transactionType
 func (server *MainServer) SaveHamsoyaTransactionType(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -605,7 +626,7 @@ func (server *MainServer) SaveHamsoyaTransactionType(writer http.ResponseWriter,
 	}
 	fmt.Println(requestBody)
 	response := requestBody.Save()
-	if response.Id <= 0{
+	if response.Id <= 0 {
 		writer.WriteHeader(http.StatusNotFound)
 		err := json.NewEncoder(writer).Encode([]string{"err.json_invalid"})
 		log.Print(err)
@@ -616,6 +637,7 @@ func (server *MainServer) SaveHamsoyaTransactionType(writer http.ResponseWriter,
 		log.Print(err)
 	}
 }
+
 //Edit transactionType
 func (server *MainServer) UpdateHamsoyaTransactionTypeHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	fmt.Println("here")
@@ -630,7 +652,7 @@ func (server *MainServer) UpdateHamsoyaTransactionTypeHandler(writer http.Respon
 	}
 	response := requestBody.Update(requestBody)
 	fmt.Println(response)
-	if response.Id <= 0{
+	if response.Id <= 0 {
 		writer.WriteHeader(http.StatusNotFound)
 		err := json.NewEncoder(writer).Encode([]string{"err.json_invalid"})
 		log.Print(err)
@@ -643,13 +665,13 @@ func (server *MainServer) UpdateHamsoyaTransactionTypeHandler(writer http.Respon
 }
 
 // Get Configs
-func (server *MainServer) GetHamosyaConfigsHandler (writer http.ResponseWriter, request *http.Request, _ httprouter.Params){
+func (server *MainServer) GetHamosyaConfigsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	pageInt := 1
 	rowsInt := 100
 	page := request.URL.Query().Get(`page`)
 	pageInt, err := strconv.Atoi(page)
-	if err != nil{
+	if err != nil {
 		pageInt = 1
 	}
 
@@ -674,7 +696,7 @@ func (server *MainServer) GetHamosyaConfigsHandler (writer http.ResponseWriter, 
 	valueStr := request.URL.Query().Get(`valuestr`)
 	newHamsoyaConfig.ValueStr = valueStr
 
-	HamsoyaConfig:= hamsoyamodels.GetHamsoyaConfig(newHamsoyaConfig, int64(rowsInt), int64(pageInt))
+	HamsoyaConfig := hamsoyamodels.GetHamsoyaConfig(newHamsoyaConfig, int64(rowsInt), int64(pageInt))
 	if HamsoyaConfig.Error != nil {
 		writer.WriteHeader(http.StatusNotFound)
 		err := json.NewEncoder(writer).Encode(`mismatch_hamsoyaConfig`)
@@ -691,6 +713,7 @@ func (server *MainServer) GetHamosyaConfigsHandler (writer http.ResponseWriter, 
 	}
 	return
 }
+
 // Save Configs
 func (server *MainServer) SaveHamsoyaConfigHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -721,9 +744,10 @@ func (server *MainServer) SaveHamsoyaConfigHandler(writer http.ResponseWriter, r
 	}
 	return
 }
+
 // TODO: Edit Configs check for id and configs.id
 func (server *MainServer) UpdateHamsoyaConfigHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-//	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	//	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	var requestBody hamsoyamodels.HamsoyaConfig
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
@@ -751,10 +775,11 @@ func (server *MainServer) UpdateHamsoyaConfigHandler(writer http.ResponseWriter,
 	}
 	return
 }
+
 // GET ONE config
-func (server *MainServer) GetHamsoyaConfigByIdHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params){
+func (server *MainServer) GetHamsoyaConfigByIdHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
-	id , err := strconv.Atoi(param.ByName("id"))
+	id, err := strconv.Atoi(param.ByName("id"))
 	if err != nil {
 		err := json.NewEncoder(writer).Encode("invalid_id")
 		if err != nil {
@@ -780,13 +805,13 @@ func (server *MainServer) GetHamsoyaConfigByIdHandler(writer http.ResponseWriter
 }
 
 // Get AccountTypes
-func (server *MainServer) GetHamosyaAccountTypesHandler (writer http.ResponseWriter, request *http.Request, _ httprouter.Params){
+func (server *MainServer) GetHamosyaAccountTypesHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	pageInt := 1
 	rowsInt := 100
 	page := request.URL.Query().Get(`page`)
 	pageInt, err := strconv.Atoi(page)
-	if err != nil{
+	if err != nil {
 		pageInt = 1
 	}
 	rows := request.URL.Query().Get(`rows`)
@@ -813,9 +838,9 @@ func (server *MainServer) GetHamosyaAccountTypesHandler (writer http.ResponseWri
 		newHamsoyaAccountType.Prefix = int64(prefix)
 	}
 
-	HamsoyaAccountTypes, err := hamsoyamodels.GetHamsoyaAccountTypes(newHamsoyaAccountType, int64(rowsInt), int64(pageInt))
+	HamsoyaAccountTypes := hamsoyamodels.GetHamsoyaAccountTypes(newHamsoyaAccountType, int64(rowsInt), int64(pageInt))
 
-	if err != nil {
+	if HamsoyaAccountTypes.Error != nil {
 		writer.WriteHeader(http.StatusNotFound)
 		err := json.NewEncoder(writer).Encode(`mismatch_hamsoyaConfig`)
 		if err != nil {
@@ -831,10 +856,11 @@ func (server *MainServer) GetHamosyaAccountTypesHandler (writer http.ResponseWri
 	}
 	return
 }
+
 // Get AccountType
-func (server *MainServer) GetHamsoyaAccountTypeByIdHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params){
+func (server *MainServer) GetHamsoyaAccountTypeByIdHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
-	id , err := strconv.Atoi(param.ByName("id"))
+	id, err := strconv.Atoi(param.ByName("id"))
 	if err != nil {
 		err := json.NewEncoder(writer).Encode("invalid_id")
 		if err != nil {
@@ -858,6 +884,7 @@ func (server *MainServer) GetHamsoyaAccountTypeByIdHandler(writer http.ResponseW
 		return
 	}
 }
+
 // Save AccountType
 func (server *MainServer) SaveHamsoyaAccountTypeHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -871,7 +898,7 @@ func (server *MainServer) SaveHamsoyaAccountTypeHandler(writer http.ResponseWrit
 		log.Println(err)
 		return
 	}
-//	requestBody.CreateDate = time.Now()
+	//	requestBody.CreateDate = time.Now()
 	response, err := requestBody.Save()
 	if err != nil {
 		writer.WriteHeader(http.StatusNotFound)
@@ -888,9 +915,10 @@ func (server *MainServer) SaveHamsoyaAccountTypeHandler(writer http.ResponseWrit
 	}
 	return
 }
+
 // Edit AccountType
 func (server *MainServer) UpdateHamsoyaAccountTypeHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-//	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	//	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	var requestBody hamsoyamodels.HamsoyaAccountType
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
@@ -926,7 +954,7 @@ func (server *MainServer) GetHamsoyaStatusesHandler(writer http.ResponseWriter, 
 	rowsInt := 100
 	page := request.URL.Query().Get(`page`)
 	pageInt, err := strconv.Atoi(page)
-	if err != nil{
+	if err != nil {
 		pageInt = 1
 	}
 	rows := request.URL.Query().Get(`rows`)
@@ -953,7 +981,6 @@ func (server *MainServer) GetHamsoyaStatusesHandler(writer http.ResponseWriter, 
 		newHamsoyaStatus.ResultCode = int64(resultCode)
 	}
 
-
 	HamsoyaStatus, err := hamsoyamodels.GetHamsoyaStatuses(newHamsoyaStatus, int64(rowsInt), int64(pageInt))
 
 	if err != nil {
@@ -972,10 +999,11 @@ func (server *MainServer) GetHamsoyaStatusesHandler(writer http.ResponseWriter, 
 	}
 	return
 }
+
 // Get Status
-func (server *MainServer) GetHamsoyaStatusHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params){
+func (server *MainServer) GetHamsoyaStatusHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
-	id , err := strconv.Atoi(param.ByName("id"))
+	id, err := strconv.Atoi(param.ByName("id"))
 	if err != nil {
 		err := json.NewEncoder(writer).Encode("invalid_id")
 		if err != nil {
@@ -999,6 +1027,7 @@ func (server *MainServer) GetHamsoyaStatusHandler(writer http.ResponseWriter, re
 		return
 	}
 }
+
 // Save Status
 func (server *MainServer) SaveHamsoyaStatusHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -1029,6 +1058,7 @@ func (server *MainServer) SaveHamsoyaStatusHandler(writer http.ResponseWriter, r
 	}
 	return
 }
+
 // Edit Status
 func (server *MainServer) UpdateHamsoyaStatusHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -1060,9 +1090,9 @@ func (server *MainServer) UpdateHamsoyaStatusHandler(writer http.ResponseWriter,
 }
 
 // Get Hamsoya view Trans
-func (server *MainServer) GetHamsoyaViewTransHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params){
+func (server *MainServer) GetHamsoyaViewTransHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
-	id , err := strconv.Atoi(param.ByName("id"))
+	id, err := strconv.Atoi(param.ByName("id"))
 	if err != nil {
 		err := json.NewEncoder(writer).Encode("invalid_id")
 		if err != nil {
@@ -1086,12 +1116,13 @@ func (server *MainServer) GetHamsoyaViewTransHandler(writer http.ResponseWriter,
 		return
 	}
 }
+
 // Get Hamsoya view Transes
 
 // Get Hamsoya view Transaction
-func (server *MainServer) GetHamsoyaViewTransactionHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params){
+func (server *MainServer) GetHamsoyaViewTransactionHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
-	id , err := strconv.Atoi(param.ByName("id"))
+	id, err := strconv.Atoi(param.ByName("id"))
 	if err != nil {
 		err := json.NewEncoder(writer).Encode("invalid_id")
 		if err != nil {
@@ -1115,6 +1146,7 @@ func (server *MainServer) GetHamsoyaViewTransactionHandler(writer http.ResponseW
 		return
 	}
 }
+
 // Get Hamsoya view Transactions TODO: check this route
 func (server *MainServer) GetHamsoyaViewTransactionsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -1122,7 +1154,7 @@ func (server *MainServer) GetHamsoyaViewTransactionsHandler(writer http.Response
 	rowsInt := 100
 	page := request.URL.Query().Get(`page`)
 	pageInt, err := strconv.Atoi(page)
-	if err != nil{
+	if err != nil {
 		pageInt = 1
 	}
 	rows := request.URL.Query().Get(`rows`)
