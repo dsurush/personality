@@ -674,8 +674,8 @@ func (server *MainServer) GetHamosyaConfigsHandler (writer http.ResponseWriter, 
 	valueStr := request.URL.Query().Get(`valuestr`)
 	newHamsoyaConfig.ValueStr = valueStr
 
-	HamsoyaConfig, err := hamsoyamodels.GetHamsoyaConfig(newHamsoyaConfig, int64(rowsInt), int64(pageInt))
-	if err != nil {
+	HamsoyaConfig:= hamsoyamodels.GetHamsoyaConfig(newHamsoyaConfig, int64(rowsInt), int64(pageInt))
+	if HamsoyaConfig.Error != nil {
 		writer.WriteHeader(http.StatusNotFound)
 		err := json.NewEncoder(writer).Encode(`mismatch_hamsoyaConfig`)
 		if err != nil {

@@ -18,14 +18,21 @@ func (*HamsoyaConfig) TableName() string{
 	return "config"
 }
 
-func GetHamsoyaConfig(config HamsoyaConfig, rows, pages int64) (HamsoyaConfig []HamsoyaConfig, err error) {
+
+type ResponseHamsoyaConfigs struct {
+	Error error
+	Count int64
+	HamsoyaConfigList []HamsoyaConfig
+}
+
+func GetHamsoyaConfig(config HamsoyaConfig, rows, pages int64) (HamsoyaConfig ResponseHamsoyaConfigs) {
 	pages--
 	if pages < 0 {
 		pages = 0
 	}
 	postgresDb := db.GetHamsoyaPostgresDb()
-	if err := postgresDb.Where(&config).Limit(rows).Offset(pages * rows).Find(&HamsoyaConfig).Error; err != nil {
-		return HamsoyaConfig, err
+	if err := postgresDb.Where(&config).Limit(rows).Offset(pages * rows).Find(&HamsoyaConfig.HamsoyaConfigList).Count(&HamsoyaConfig.Count).Error; err != nil {
+		HamsoyaConfig.Error = err
 	}
 	return
 }
