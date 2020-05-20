@@ -415,3 +415,51 @@
 2020-05-04 16:59:22: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/clients
 2020-05-04 16:59:33: [127.0.0.1] login: surush Change merchant by id  Method: POST, path: /api/merchants/merchant/1060/edit
 2020-05-06 12:55:19: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/reports
+2020-05-18 19:15:46: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-05-18 19:16:53: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-05-18 19:19:38: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-05-20 14:50:57: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-05-20 14:51:02: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-05-20 14:53:31: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-05-20 14:54:32: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-05-20 14:56:59: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-05-20 15:07:35: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-05-20 15:09:00: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-05-20 15:09:30: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-05-20 15:11:18: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-05-20 15:12:51: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-05-20 15:12:55: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-05-20 15:13:12: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-05-20 15:13:28: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-05-20 15:14:08: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-05-20 15:14:16: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-05-20 15:15:13: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/megafon/vendors
+2020-05-20 15:23:37: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-05-20 15:23:53: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-05-20 15:24:44: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-05-20 15:24:47: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-05-20 15:28:00: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-05-20 15:29:34: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-05-20 15:29:54: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-05-20 15:30:04: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-05-20 15:30:19: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-05-20 15:34:57: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-05-20 15:36:41: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-05-20 15:38:06: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-05-20 15:38:22: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-05-20 15:47:26: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-05-20 15:47:58: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-05-20 15:49:47: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-05-20 15:50:21: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-05-20 15:50:35: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-05-20 15:57:32: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-05-20 15:57:41: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-05-20 15:57:47: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-05-20 15:58:26: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-05-20 16:00:12: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-05-20 16:00:21: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-05-20 16:00:27: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-05-20 16:00:38: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-05-20 16:02:15: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-05-20 16:04:07: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-05-20 16:09:44: [127.0.0.1] login: surush Get merchants  Method: GET, path: /api/megafon/merchants

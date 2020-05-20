@@ -30,18 +30,25 @@ type ViewLogDTO struct {
 	CreatedAt    time.Time `xml:"create_time"`
 }
 
-func GetViewLogs(size, page int64) (viewLogs []ViewLog, err error) {
+type ResponseViewLogs struct {
+	Error error
+	Count int64
+	ViewLogList []ViewLog
+}
+
+func GetViewLogs(size, page int64) (viewLogs ResponseViewLogs) {
 	postgresDb := db.GetPostgresDb()
 	page--
 	if page < 0 {
 		page = 0
 	}
-	err = postgresDb.Table(`view_log`).Select("view_log.*").Limit(size).Offset(page * size).Scan(&viewLogs).Error
+	err := postgresDb.Table(`view_log`).Select("view_log.*").Limit(size).Offset(page * size).Scan(&viewLogs.ViewLogList).Count(&viewLogs.Count).Error
 	if err != nil {
 		log.Printf("can't get from db view log %e\n", err)
-		return nil, err
+		viewLogs.Error = err
+		return
 	}
-	return viewLogs, nil
+	return
 }
 
 func GetViewLogById(id int64) (viewLog ViewLog, err error) {

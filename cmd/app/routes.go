@@ -1,6 +1,7 @@
 package app
 
 import (
+	"MF/hamsoyamodels"
 	"MF/middleware/authorized"
 	"MF/middleware/jwt"
 	"MF/middleware/logger"
@@ -31,10 +32,10 @@ func (server *MainServer) InitRoutes() {
 	server.router.GET(`/api/megafon/merchants/merchant/:id`, logger.Logger(`Get merchant `)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetMerchantHandler)))))
 	server.router.POST(`/api/megafon/merchants/merchant/:id/edit`, logger.Logger(`Change merchant by id `)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.UpdateMerchantHandler)))))
 
-	server.router.GET(`/api/megafon/logs`, server.GetViewLogsHandler)
-	server.router.GET(`/api/megafon/logs/log/:id`, server.GetViewLogHandler)
+	server.router.GET(`/api/megafon/logs`, logger.Logger(`Get Megafon logs `)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetViewLogsHandler)))))
+	server.router.GET(`/api/megafon/logs/log/:id`, logger.Logger(`Get by id Megafing log`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetViewLogHandler)))))
 	//This router for not full logs form (DataTransferObject)
-	server.router.GET(`/api/megafon/logs/DTO`, server.GetViewLogsDTOHandler)
+	server.router.GET(`/api/megafon/logs/DTO`, logger.Logger(`Change Megafon logs DTO `)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetViewLogsDTOHandler)))))
 	///Hamsoya
 	server.router.GET(`/api/hamsoya/transactionstype`, server.GetHamsoyaTransactionTypeHandler)
 	server.router.GET(`/api/hamsoya/transactionstype/transactiontype/:id`, server.GetHamsoyaTransactionTypeByIdHandler)
@@ -60,8 +61,9 @@ func (server *MainServer) InitRoutes() {
 	server.router.POST(`/ap/hamsoya/statuses/save`, server.SaveHamsoyaStatusHandler)
 
 	//TODO: filter by time
-	server.router.GET(`/api/hamsoya/viewtransactions`, server.GetViewTransactionsHandler)
+	server.router.GET(`/api/hamsoya/viewtransactions`, server.GetHamsoyaViewTransactionHandler)
 	server.router.GET(`/api/hamsoya/viewtransactions/transaction/:id`, server.GetHamsoyaViewTransactionHandler)
+
 	//server.router.GET(`/api/hamsoya/viewtranses`, server)
 	server.router.GET(`/api/hamsoya/viewtranses/trans/:id`, server.GetHamsoyaViewTransHandler)
 
@@ -69,5 +71,8 @@ func (server *MainServer) InitRoutes() {
 }
 
 func test(){
+	var a hamsoyamodels.HamsoyaClientType
 
+	count := a.Count()
+	fmt.Println(count)
 }

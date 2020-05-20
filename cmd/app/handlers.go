@@ -59,7 +59,7 @@ func (server *MainServer) GetClientInfoByPhoneNumberHandler(writer http.Response
 		log.Print(err)
 	}
 }
-//Get list clients Handler
+//Get list clients Handler ::: TODO CHANGE
 func (server *MainServer) GetClientsInfoHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	fmt.Println("I am get all clients")
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -96,7 +96,7 @@ func (server *MainServer) GetClientsInfoHandler(writer http.ResponseWriter, requ
 		rowsInt = 100
 	}
 
-	fmt.Println(clientDefault)
+	fmt.Println("I am = \n" , clientDefault)
 	response := models.GetClients(clientDefault, rowsInt, pageInt - 1)
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
@@ -247,8 +247,8 @@ func (server *MainServer) GetViewReportsHandler(writer http.ResponseWriter, requ
 	if err != nil {
 		rowsInt = 100
 	}
-	response, err := models.GetViewReport(int64(rowsInt), int64(pageInt - 1))
-	if err != nil {
+	response := models.GetViewReport(int64(rowsInt), int64(pageInt - 1))
+	if response.Error != nil {
 		err := json.NewEncoder(writer).Encode([]string{`error mismatch this raport'`})
 		log.Print(err)
 		return
@@ -389,8 +389,8 @@ func (server *MainServer) GetViewLogsHandler(writer http.ResponseWriter, request
 	if err != nil {
 		rowsInt = 100
 	}
-	response, err := models.GetViewLogs(int64(rowsInt), int64(pageInt))
-	if err != nil {
+	response := models.GetViewLogs(int64(rowsInt), int64(pageInt))
+	if response.Error != nil {
 		err := json.NewEncoder(writer).Encode([]string{`error mismatch this view log'`})
 		log.Print(err)
 		return

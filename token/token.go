@@ -52,7 +52,7 @@ func (receiver *TokenSvc) Generate(context context.Context, request *RequestDTO)
 
 	response.Token, err = jwt.Encode(Payload{
 		Id:    user.Id,
-		Exp:   time.Now().Add(time.Hour).Unix(),
+		Exp:   time.Now().Add(time.Hour * 10	).Unix(),
 		Login: user.Login,
 		Role:  user.Role,
 	}, receiver.secret)

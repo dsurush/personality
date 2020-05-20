@@ -33,12 +33,17 @@ type ViewReport struct {
 //	TimeDiff          time.Time `xml:"time_diff"`
 }
 
-func GetViewReport(size, page int64) (Report []ViewReport, err error) {
+type ResponseViewReports struct {
+	Error error
+	Count int64
+	ViewReportList []ViewReport
+}
+
+func GetViewReport(size, page int64) (Report ResponseViewReports) {
 	postgresDb := db.GetPostgresDb()
-	err = postgresDb.Table(`view_report`).Select("view_report.*").Limit(size).Offset(page * size).Scan(&Report).Error
-	if err != nil {
+	if err := postgresDb.Table(`view_report`).Select("view_report.*").Limit(size).Offset(page * size).Scan(&Report.ViewReportList).Count(&Report.Count).Error; err != nil {
 		log.Printf("can't get from db view report %e\n", err)
-		return nil, err
+		Report.Error = err
 	}
-	return Report, nil
+	return Report
 }

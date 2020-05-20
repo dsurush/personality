@@ -3,6 +3,7 @@ package models
 import (
 	"encoding/xml"
 	"MF/db"
+	"fmt"
 	"time"
 )
 
@@ -21,6 +22,12 @@ type Merchant struct {
 	UpdateTime   time.Time `gorm:"column:update_time" xml:"-"`
 }
 
+type ResponseMerchants struct {
+	Error error
+	Count int64
+	MerchantList []Merchant
+}
+
 //TableName for changing struct name to db name
 func (merchant *Merchant) TableName() string {
 	return "tb_ho_merchant"
@@ -34,9 +41,12 @@ func (merchant *Merchant) GetList() []Merchant {
 	return merchants
 }
 // Get merchantlist by page and rowssize
-func (merchant *Merchant) GetMerchants(size, page int64) (merchants []Merchant) {
+func (merchant *Merchant) GetMerchants(size, page int64) (merchants ResponseMerchants) {
 	postgresDb := db.GetPostgresDb()
-	postgresDb.Table(`tb_ho_merchant`).Select("tb_ho_merchant.*").Limit(size).Offset(page * size).Scan(&merchants)
+	if err := postgresDb.Table(`tb_ho_merchant`).Select("tb_ho_merchant.*").Limit(size).Offset(page * size).Scan(&merchants.MerchantList).Count(&merchants.Count).Error; err != nil {
+		fmt.Println("Can't get Merchats from db")
+		merchants.Error = err
+	}
 	return merchants
 }
 //Get merchant by ID

@@ -3,6 +3,7 @@ package models
 import (
 	"MF/db"
 	"encoding/xml"
+	"fmt"
 	"github.com/sirupsen/logrus"
 	"time"
 )
@@ -108,12 +109,21 @@ type ViewTransaction struct {
 	TimeDiff          time.Time `xml:"time_diff"`
 }
 
+type ResponseViewTransactions struct {
+	Count               int64
+	ViewTransactionList []ViewTransaction
+}
+
 ////Get From view_transaction
-func GetViewTransactions(transaction ViewTransaction, size, page int64) (Transaction []ViewTransaction) {
+func GetViewTransactions(transaction ViewTransaction, size, page int64) (Transaction ResponseViewTransactions) {
 	postgresDb := db.GetPostgresDb()
-	postgresDb.Table(`view_transaction view_transactions `).Where(&transaction).Limit(size).Offset(page * size).Scan(&Transaction)
+	err := postgresDb.Table(`view_transaction`).Select("view_transaction.*").Where(&transaction).Limit(size).Offset(page * size).Find(&Transaction.ViewTransactionList).Count(&Transaction.Count).Error
+	if err != nil {
+		fmt.Println("can't take from db")
+	}
 	return Transaction
 }
+
 
 ////SaveModel saves TableTransaction model in db
 func (tableTransaction *TableTransaction) SaveModel() {
@@ -205,4 +215,7 @@ func GetMonthTransSum(acountPayer string) float64 {
 //TableName for changing struct name to db name
 func (tableTransaction TableTransaction) TableName() string {
 	return "tb_transaction"
+}
+func (*ViewTransaction) TableName() string {
+	return "view_transaction"
 }
