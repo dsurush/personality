@@ -1183,7 +1183,7 @@ func (server *MainServer) GetHamsoyaViewTransactionsHandler(writer http.Response
 	return
 }
 
-// Get Hamsoya Documents
+// Get Hamsoya Document
 func (server *MainServer) GetHamsoyaDocumentByIdHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	id, err := strconv.Atoi(params.ByName("id"))
@@ -1211,4 +1211,39 @@ func (server *MainServer) GetHamsoyaDocumentByIdHandler(writer http.ResponseWrit
 		log.Print("invalid_HamsoyaViewTransaction.")
 		return
 	}
+}
+
+// Get Hamsoya Documents
+func (server *MainServer) GetHamsoyaDocumentsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	pageInt := 1
+	rowsInt := 100
+	page := request.URL.Query().Get(`page`)
+	pageInt, err := strconv.Atoi(page)
+	if err != nil {
+		pageInt = 1
+	}
+	rows := request.URL.Query().Get(`rows`)
+	rowsInt, err = strconv.Atoi(rows)
+	if err != nil {
+		rowsInt = 100
+	}
+	var newHamsoyaDocument hamsoyamodels.HamsoyaDocument
+	Documents := hamsoyamodels.GetHamsoyaDocuments(newHamsoyaDocument, int64(rowsInt), int64(pageInt))
+
+	if Documents.Error != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		err := json.NewEncoder(writer).Encode(`mismatch_hamsoyaDocuments`)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		return
+	}
+	err = json.NewEncoder(writer).Encode(Documents)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	return
 }
