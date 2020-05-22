@@ -77,6 +77,7 @@ func (server *MainServer) InitRoutes() {
 	server.router.GET(`/api/hamsoya/prechecks`, logger.Logger(`Get Hamsoya prechecks`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaPrechecksHandler)))))
 	server.router.GET(`/api/hamsoya/prechecks/precheck/:id`, logger.Logger(`Get Hamsoya precheck by id`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaPrecheckByIdHandler)))))
 
+	server.router.GET(`/api/hamsoya/accounts/account/:id`, server.GetHamsoyaAccountByIdHandler)
 
 	panic(http.ListenAndServe("127.0.0.1:8080", server))
 }
