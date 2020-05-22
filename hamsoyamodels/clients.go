@@ -1,6 +1,9 @@
 package hamsoyamodels
 
-import "time"
+import (
+	"MF/db"
+	"time"
+)
 
 type HamsoyaClient struct {
 	Id         int64     `xml:"id"`
@@ -22,4 +25,13 @@ type ResponseHamsoyaClients struct {
 	Error error
 	Count int64
 	HamsoyaClientList []HamsoyaClient
+}
+
+func GetHamsoyaClientById(id int64) (HamsoyaClient HamsoyaClient, err error){
+	postgresDb := db.GetHamsoyaPostgresDb()
+	postgresDb.Where("id = ?", id).First(&HamsoyaClient)
+	if err := postgresDb.Where("id = ?", id).First(&HamsoyaClient).Error; err != nil {
+		return HamsoyaClient, err
+	}
+	return HamsoyaClient, nil
 }
