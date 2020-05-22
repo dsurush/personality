@@ -35,3 +35,15 @@ func GetHamsoyaClientById(id int64) (HamsoyaClient HamsoyaClient, err error){
 	}
 	return HamsoyaClient, nil
 }
+
+func GetHamsoyaClients(hamsoyaClient HamsoyaClient, rows, pages int64) (HamsoyaClient ResponseHamsoyaClients){
+	pages--
+	if pages < 0 {
+		pages = 0
+	}
+	postgresDb := db.GetHamsoyaPostgresDb()
+	if err := postgresDb.Where(&hamsoyaClient).Limit(rows).Offset(rows * pages).Find(&HamsoyaClient.HamsoyaClientList).Count(&HamsoyaClient.Count).Error; err != nil{
+		HamsoyaClient.Error = err
+	}
+	return
+}
