@@ -84,3 +84,13 @@ func GetHamsoyaTransactionById(id int64) (HamsoyaTransaction HamsoyaTransaction,
 	}
 	return
 }
+
+func GetTEST(timet, size, page int64) (HamsoyaTransactions ResponseHamsoyaTransactions) {
+	//i := time.Unix(timet, 0)
+	//from := i.Format(time.RFC3339)
+	postgresDb := db.GetHamsoyaPostgresDb()
+	if err := postgresDb.Where(`create_date < ?`, "2020-02-14 11:54:14.485335 +00:00").Limit(size).Offset(page * size).Find(&HamsoyaTransactions.HamsoyaTransactionList).Count(&HamsoyaTransactions.Count).Error; err != nil {
+		HamsoyaTransactions.Error = err
+	}
+	return
+}

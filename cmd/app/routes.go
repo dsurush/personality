@@ -70,11 +70,33 @@ func (server *MainServer) InitRoutes() {
 
 	server.router.GET(`/api/hamsoya/documents`, logger.Logger(`Get Hamsoya Documents`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaDocumentsHandler)))))
 	server.router.GET(`/api/hamsoya/documents/document/:id`, logger.Logger(`Get Hamsoya Document by id`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaDocumentByIdHandler)))))
+
+	server.router.GET(`/api/hamsoya/records`, logger.Logger(`Get Hamsoya records`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaRecordsHandler)))))
+	server.router.GET(`/api/hamsoya/records/record/:id`, logger.Logger(`Get Hamsoya record by id`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaRecordByIdHandler)))))
+
+	server.router.GET(`/api/hamsoya/prechecks`, logger.Logger(`Get Hamsoya prechecks`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaPrechecksHandler)))))
+	server.router.GET(`/api/hamsoya/prechecks/precheck/:id`, logger.Logger(`Get Hamsoya precheck by id`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaPrecheckByIdHandler)))))
+
+
 	panic(http.ListenAndServe("127.0.0.1:8080", server))
 }
 
 func test(){
 //	var a hamsoyamodels.HamsoyaClientType
-	Document, _ := hamsoyamodels.GetHamsoyaDocument(1)
-	fmt.Println(Document)
+//	unix := time.Now().Unix()
+//	fmt.Println(unix)
+//	i := time.Unix(unix, 0)
+//	fmt.Println(i.Format(time.RFC3339))
+//	myDataString := "2020-02-14T11:54:14.186066+00:00"
+//	myDate, err := time.Parse(time.RFC3339, myDataString)
+//	if err != nil {
+//		panic(err)
+//	}
+//	fmt.Println(myDate.Unix())
+//	HamsoyaTransactions := hamsoyamodels.GetTEST(1581681254, 1, 20)
+//	fmt.Println(HamsoyaTransactions)
+	HamsoyaPreCheck, err := hamsoyamodels.GetHamsoyaPreCheckById(8)
+	fmt.Println(HamsoyaPreCheck, err);
+	HamsoyaRecord, err := hamsoyamodels.GetHamsoyaRecordById(8)
+	fmt.Println(HamsoyaRecord, err);
 }

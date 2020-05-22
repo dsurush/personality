@@ -1247,3 +1247,133 @@ func (server *MainServer) GetHamsoyaDocumentsHandler(writer http.ResponseWriter,
 	}
 	return
 }
+
+// Get Hamsoya Record
+func (server *MainServer) GetHamsoyaRecordByIdHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	id, err := strconv.Atoi(params.ByName("id"))
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		err := json.NewEncoder(writer).Encode("invalid_id")
+		if err != nil {
+			log.Print(err)
+			return
+		}
+		return
+	}
+	Record, err := hamsoyamodels.GetHamsoyaRecordById(int64(id))
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		err := json.NewEncoder(writer).Encode("server wrong")
+		if err != nil {
+			log.Print(err)
+			return
+		}
+		return
+	}
+	err = json.NewEncoder(writer).Encode(&Record)
+	if err != nil {
+		log.Print("invalid_HamsoyaRecord.")
+		return
+	}
+}
+
+//Get Hamsoya Records
+func (server *MainServer) GetHamsoyaRecordsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	pageInt := 1
+	rowsInt := 100
+	page := request.URL.Query().Get(`page`)
+	pageInt, err := strconv.Atoi(page)
+	if err != nil {
+		pageInt = 1
+	}
+	rows := request.URL.Query().Get(`rows`)
+	rowsInt, err = strconv.Atoi(rows)
+	if err != nil {
+		rowsInt = 100
+	}
+	var newHamsoyaRecord hamsoyamodels.HamsoyaRecord
+	Records := hamsoyamodels.GetHamsoyaRecords(newHamsoyaRecord, int64(rowsInt), int64(pageInt))
+
+	if Records.Error != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		err := json.NewEncoder(writer).Encode(`mismatch_hamsoyaDocuments`)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		return
+	}
+	err = json.NewEncoder(writer).Encode(Records)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	return
+}
+
+// Get Hamsoya Precheck
+func (server *MainServer) GetHamsoyaPrecheckByIdHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	id, err := strconv.Atoi(params.ByName("id"))
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		err := json.NewEncoder(writer).Encode("invalid_id")
+		if err != nil {
+			log.Print(err)
+			return
+		}
+		return
+	}
+	Precheck, err := hamsoyamodels.GetHamsoyaPreCheckById(int64(id))
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		err := json.NewEncoder(writer).Encode("server wrong")
+		if err != nil {
+			log.Print(err)
+			return
+		}
+		return
+	}
+	err = json.NewEncoder(writer).Encode(&Precheck)
+	if err != nil {
+		log.Print("invalid_HamsoyaPrecheck.")
+		return
+	}
+}
+
+//Get Hamsoya Prechecks
+func (server *MainServer) GetHamsoyaPrechecksHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	pageInt := 1
+	rowsInt := 100
+	page := request.URL.Query().Get(`page`)
+	pageInt, err := strconv.Atoi(page)
+	if err != nil {
+		pageInt = 1
+	}
+	rows := request.URL.Query().Get(`rows`)
+	rowsInt, err = strconv.Atoi(rows)
+	if err != nil {
+		rowsInt = 100
+	}
+	var newHamsoyaPreCheck hamsoyamodels.HamsoyaPreCheck
+	PreChecks := hamsoyamodels.GetHamsoyaPreChecks(newHamsoyaPreCheck, int64(rowsInt), int64(pageInt))
+
+	if PreChecks.Error != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		err := json.NewEncoder(writer).Encode(`mismatch_hamsoyaDocuments`)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		return
+	}
+	err = json.NewEncoder(writer).Encode(PreChecks)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	return
+}
