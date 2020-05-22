@@ -37,3 +37,15 @@ func GetHamsoyaAccountById(id int64) (HamsoyaAccount HamsoyaAccount, err error) 
 	}
 	return HamsoyaAccount, nil
 }
+
+func GetHamsoyaAccounts(hamsoyaAccount HamsoyaAccount, rows, pages int64) (HamsoyaAccount ResponseHamsoyaAccount){
+	pages--
+	if pages < 0 {
+		pages = 0
+	}
+	postgresDb := db.GetHamsoyaPostgresDb()
+	if err := postgresDb.Where(&hamsoyaAccount).Limit(rows).Offset(rows * pages).Find(&HamsoyaAccount.HamsoyaAccountList).Count(&HamsoyaAccount.Count).Error; err != nil{
+		HamsoyaAccount.Error = err
+	}
+	return
+}
