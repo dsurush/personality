@@ -80,9 +80,8 @@ func (server *MainServer) InitRoutes() {
 	server.router.GET(`/api/hamsoya/accounts`, logger.Logger(`Get Hamsoya accounts`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaAccountsHandler)))))
 	server.router.GET(`/api/hamsoya/accounts/account/:id`, logger.Logger(`Get Hamsoya account by id`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaAccountByIdHandler)))))
 
+	server.router.GET(`/api/hamsoya/clients`, logger.Logger(`Get Hamsoya clients`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaClientsHandler)))))
 	server.router.GET(`/api/hamsoya/clients/client/:id`, logger.Logger(`Get Hamsoya client by id`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaClientByIdHandler)))))
-	server.router.GET(`/api/hamsoya/clients`, server.GetHamsoyaClientsHandler)
-
 	panic(http.ListenAndServe("127.0.0.1:8080", server))
 }
 
