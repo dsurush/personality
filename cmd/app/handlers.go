@@ -1377,3 +1377,33 @@ func (server *MainServer) GetHamsoyaPrechecksHandler(writer http.ResponseWriter,
 	}
 	return
 }
+
+// Get Hamsoya Account
+func (server *MainServer) GetHamsoyaAccountByIdHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	id, err := strconv.Atoi(params.ByName("id"))
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		err := json.NewEncoder(writer).Encode("invalid_id")
+		if err != nil {
+			log.Print(err)
+			return
+		}
+		return
+	}
+	Account, err := hamsoyamodels.GetHamsoyaAccountById(int64(id))
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		err := json.NewEncoder(writer).Encode("server wrong")
+		if err != nil {
+			log.Print(err)
+			return
+		}
+		return
+	}
+	err = json.NewEncoder(writer).Encode(&Account)
+	if err != nil {
+		log.Print("invalid_HamsoyaPrecheck.")
+		return
+	}
+}
