@@ -30,3 +30,10 @@ type ResponseHamsoyaAccount struct {
 	HamsoyaAccountList []HamsoyaAccount
 }
 
+func GetHamsoyaAccountById(id int64) (HamsoyaAccount HamsoyaAccount, err error) {
+	postgresDb := db.GetHamsoyaPostgresDb()
+	if err := postgresDb.Where("id = ?", id).First(&HamsoyaAccount).Error; err != nil{
+		return HamsoyaAccount, err
+	}
+	return HamsoyaAccount, nil
+}
