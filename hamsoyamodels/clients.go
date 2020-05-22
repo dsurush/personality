@@ -17,3 +17,9 @@ type HamsoyaClient struct {
 func (*HamsoyaClient) TableName() string {
 	return "clients"
 }
+
+type ResponseHamsoyaClients struct {
+	Error error
+	Count int64
+	HamsoyaClientList []HamsoyaClient
+}
