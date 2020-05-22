@@ -1472,3 +1472,38 @@ func (server *MainServer) GetHamsoyaClientByIdHandler(writer http.ResponseWriter
 		return
 	}
 }
+
+// Get Hamsoya Clients
+func (server *MainServer) GetHamsoyaClientsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	pageInt := 1
+	rowsInt := 100
+	page := request.URL.Query().Get(`page`)
+	pageInt, err := strconv.Atoi(page)
+	if err != nil {
+		pageInt = 1
+	}
+	rows := request.URL.Query().Get(`rows`)
+	rowsInt, err = strconv.Atoi(rows)
+	if err != nil {
+		rowsInt = 100
+	}
+	var newHamsoyaClient hamsoyamodels.HamsoyaClient
+	Clients := hamsoyamodels.GetHamsoyaClients(newHamsoyaClient, int64(rowsInt), int64(pageInt))
+
+	if Clients.Error != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		err := json.NewEncoder(writer).Encode(`mismatch_hamsoyaDocuments`)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		return
+	}
+	err = json.NewEncoder(writer).Encode(Clients)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	return
+}
