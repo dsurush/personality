@@ -1,13 +1,15 @@
 package app
 
 import (
-	"MF/hamsoyamodels"
 	"MF/middleware/authorized"
+	"MF/middleware/corss"
+	"net/http"
+
+	//"MF/middleware/corss"
 	"MF/middleware/jwt"
 	"MF/middleware/logger"
 	"MF/token"
 	"fmt"
-	"net/http"
 	"reflect"
 )
 
@@ -15,10 +17,16 @@ func (server *MainServer) InitRoutes() {
 	fmt.Println("Init routes")
 	test()
 
-	server.router.POST("/api/login", logger.Logger(`Create Token for user:`)(server.LoginHandler))
+	//server.router.POST("/api/login", logger.Logger(`Create Token for user:`)(server.LoginHandler))
+	server.router.POST("/api/login", logger.Logger(`Create Token for user:`)(corss.Middleware(server.LoginHandler)))
+
+	//test
+	server.router.GET(`/api/surush`, server.LoginHandler1)
 
 	server.router.GET("/api/megafon/client/:phone", logger.Logger(`Get client: `)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetClientInfoByPhoneNumberHandler)))))
-	server.router.GET("/api/megafon/clients", logger.Logger(`Get all clients By Page and Rows`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetClientsInfoHandler)))))
+	//server.router.GET("/api/megafon/clients", logger.Logger(`Get all clients By Page and Rows`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetClientsInfoHandler)))))
+	server.router.GET("/api/megafon/clients", logger.Logger(`Get all clients By Page and Rows`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(corss.Middleware(server.GetClientsInfoHandler))))))
+//	server.router.GET("/api/megafon/clients", corss.Middleware(server.GetClientsInfoHandler))
 
 	server.router.GET("/api/megafon/vendors", logger.Logger(`Get vendors `)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetVendorCategoryByPageSizeHandler)))))
 	server.router.POST(`/api/megafon/vendors/save`, logger.Logger(`Save vendor `)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.SaveNewVendorHandler)))))
@@ -36,8 +44,8 @@ func (server *MainServer) InitRoutes() {
 	server.router.GET(`/api/megafon/logs/log/:id`, logger.Logger(`Get by id Megafing log`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetViewLogHandler)))))
 	//This router for not full logs form (DataTransferObject)
 	server.router.GET(`/api/megafon/logs/DTO`, logger.Logger(`Change Megafon logs DTO `)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetViewLogsDTOHandler)))))
-	///Hamsoya
 
+	///Hamsoya
 	server.router.GET(`/api/hamsoya/transactionstype`, logger.Logger(`Get Hamsoya TransactionTypeTypes`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaTransactionTypeHandler)))))
 	server.router.GET(`/api/hamsoya/transactionstype/transactiontype/:id`, logger.Logger(`Get Hamsoya TransactionType by id `)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaTransactionTypeByIdHandler)))))
 	server.router.POST(`/api/hamsoya/transactionstype/save`,  logger.Logger(`save new Hamsoya TransactionType`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.SaveHamsoyaTransactionType)))))
@@ -82,6 +90,8 @@ func (server *MainServer) InitRoutes() {
 
 	server.router.GET(`/api/hamsoya/clients`, logger.Logger(`Get Hamsoya clients`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaClientsHandler)))))
 	server.router.GET(`/api/hamsoya/clients/client/:id`, logger.Logger(`Get Hamsoya client by id`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaClientByIdHandler)))))
+	//handler := cors.Default().Handler(server)
+	//panic(http.ListenAndServe("127.0.0.1:8080", handler))
 	panic(http.ListenAndServe("127.0.0.1:8080", server))
 }
 
@@ -97,10 +107,5 @@ func test(){
 //		panic(err)
 //	}
 //	fmt.Println(myDate.Unix())
-//	HamsoyaTransactions := hamsoyamodels.GetTEST(1581681254, 1, 20)
-//	fmt.Println(HamsoyaTransactions)
-	HamsoyaPreCheck, err := hamsoyamodels.GetHamsoyaPreCheckById(8)
-	fmt.Println(HamsoyaPreCheck, err);
-	HamsoyaRecord, err := hamsoyamodels.GetHamsoyaRecordById(8)
-	fmt.Println(HamsoyaRecord, err);
+
 }

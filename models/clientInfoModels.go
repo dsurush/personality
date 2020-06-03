@@ -82,14 +82,15 @@ func GetClientInfoByPhoneNumber(phone string) (clientInfo ClientInfo) {
 	return clientInfo
 }
 type ResponseClientsInfo struct {
-	Error error
-	Count int64
+	Error          error
+	Page           int64
+	TotalPage      int64
 	ClientInfoList []ClientInfo
 }
 //
-func GetClients(client ClientInfo, size, page int) (clientsSlice ResponseClientsInfo){
+func GetClients(client ClientInfo, size, page int64) (clientsSlice ResponseClientsInfo){
 
-	if err := db.GetPostgresDb().Where(&client).Limit(size).Offset(page * size).Find(&clientsSlice.ClientInfoList).Count(&clientsSlice.Count).Error; err != nil{
+	if err := db.GetPostgresDb().Where(&client).Limit(size).Offset(page * size).Find(&clientsSlice.ClientInfoList).Count(&clientsSlice.TotalPage).Error; err != nil{
 		clientsSlice.Error = err
 		logrus.Println(" ", err)
 	}

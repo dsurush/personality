@@ -9,6 +9,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"io/ioutil"
 	"log"
+	"math"
 	"net/http"
 	"strconv"
 	"time"
@@ -26,7 +27,7 @@ func (server *MainServer) LoginHandler(writer http.ResponseWriter, request *http
 		log.Print(err)
 		return
 	}
-	//	log.Printf("login = %s, pass = %s\n", requestBody.Username, requestBody.Password)
+		log.Printf("login = %s, pass = %s\n", requestBody.Username, requestBody.Password)
 	response, err := server.tokenSvc.Generate(request.Context(), &requestBody)
 	//log.Println(response)
 	if err != nil {
@@ -100,7 +101,9 @@ func (server *MainServer) GetClientsInfoHandler(writer http.ResponseWriter, requ
 	}
 
 	fmt.Println("I am = \n", clientDefault)
-	response := models.GetClients(clientDefault, rowsInt, pageInt-1)
+	response := models.GetClients(clientDefault, int64(rowsInt), int64(pageInt-1))
+	response.Page = int64(pageInt)
+	response.TotalPage = int64(math.Ceil(float64(response.TotalPage) / float64(int64(rowsInt))))
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)
@@ -109,9 +112,10 @@ func (server *MainServer) GetClientsInfoHandler(writer http.ResponseWriter, requ
 
 //UnUse Handler
 func (server *MainServer) LoginHandler1(writer http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
-	bytes, err := ioutil.ReadFile("web/templates/index.gohtml")
+	fmt.Println("Login\n")
+	bytes, err := ioutil.ReadFile("web/templates/mpage.gohtml")
 	if err != nil {
-		log.Fatal("can't read from /web/templates.index.gohtml\nerr: ", err)
+		log.Fatal("can't read from /web/templates/mgpage.gohtml\nerr: ", err)
 	}
 	_, err = writer.Write(bytes)
 	if err != nil {
