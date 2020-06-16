@@ -10,6 +10,7 @@ import (
 
 var postgresDbCon *gorm.DB
 var postgresHamsoyaDbCon *gorm.DB
+
 // InitDb postgresMegafonDB init
 func init() {
 	fmt.Println("DB INIT")
@@ -17,7 +18,7 @@ func init() {
 	settings.AppSettings = settings.ReadSettings("./settings-dev.json")
 	//settings.HamsoyaSettings = settings.ReadSettings("./settings-hamsoya.json")
 
-//	postgresHamsoyadbParams := settings.HamsoyaSettings.PostgresMegafonDbParams
+	//	postgresHamsoyadbParams := settings.HamsoyaSettings.PostgresMegafonDbParams
 
 	postgresMegafondbParams := settings.AppSettings.PostgresMegafonDbParams
 	//test
@@ -63,9 +64,9 @@ func init() {
 		//panic(err)
 	}
 	/*postgresDbCon.AutoMigrate(&models.ClientInfo{}, &models.Merchant{}, &models.TablePreeCheck{},
-		&models.TableTransaction{}, &models.RefundedCardTransactions{}, &models.VendorListReqRawXML{},
-		&models.PaymentReqRawXML{}, models.ResponseLog{} , &models.Vendor{}, &models.User{}, &models.Role{})
-*/
+	&models.TableTransaction{}, &models.RefundedCardTransactions{}, &models.VendorListReqRawXML{},
+	&models.PaymentReqRawXML{}, models.ResponseLog{} , &models.Vendor{}, &models.User{}, &models.Role{})
+	*/
 }
 
 // GetPostgresDb is func for create one global connection

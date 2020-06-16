@@ -77,6 +77,7 @@ type TablePreeCheck struct {
 	ClientName    string            `gorm:"column:name"`    // need for barki tojik
 	ClientAddress string            `gorm:"column:address"` // need for barki tojik
 }
+
 //
 //SaveModel saves TablePreeCheck model in db
 func (tablePreeCheck *TablePreeCheck) SaveModel() {

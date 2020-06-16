@@ -16,6 +16,6 @@ func (*HamsoyaClientType) TableName() string {
 func (a *HamsoyaClientType) Count() (count int64) {
 	postgresDb := db.GetHamsoyaPostgresDb()
 	postgresDb.Table("client_type").Count(&count)
-//	postgresDb.Where("id > 0").First(&a)
+	//	postgresDb.Where("id > 0").First(&a)
 	return
 }

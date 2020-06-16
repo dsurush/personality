@@ -19,8 +19,7 @@ func (*HamsoyaTransactionType) TableName() string {
 	return "transaction_type"
 }
 
-
-func (HamsoyaTransactionType *HamsoyaTransactionType) Save() HamsoyaTransactionType{
+func (HamsoyaTransactionType *HamsoyaTransactionType) Save() HamsoyaTransactionType {
 	postgresDb := db.GetHamsoyaPostgresDb()
 	postgresDb.Create(&HamsoyaTransactionType)
 	return *HamsoyaTransactionType
@@ -45,15 +44,16 @@ type HamsoyaTransaction struct {
 }
 
 type ResponseHamsoyaTransactionsType struct {
-	Error error
-	Count int64
+	Error                      error
+	Count                      int64
 	HamsoyaTransactionTypeList []HamsoyaTransactionType
 }
 type ResponseHamsoyaTransactions struct {
-	Error error
-	Count int64
+	Error                  error
+	Count                  int64
 	HamsoyaTransactionList []HamsoyaTransaction
 }
+
 func (*HamsoyaTransaction) TableName() string {
 	return "transactions"
 }

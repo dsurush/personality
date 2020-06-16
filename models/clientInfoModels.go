@@ -5,8 +5,6 @@ import (
 	"MF/helperfunc"
 	"encoding/xml"
 	"github.com/sirupsen/logrus"
-	"regexp"
-	"strings"
 	"time"
 )
 
@@ -25,7 +23,7 @@ type ClientInfo struct {
 	Nationality         string    `xml:"nationality,omitempty" gorm:"column:nationality"`
 	Sex                 string    `xml:"sex,omitempty" gorm:"column:sex"`
 	IsActive            bool      `xml:"isActive" gorm:"column:active; default:true"`
-	CreateDate			time.Time	`xml:"-" gorm:"column:create_date; default: CURRENT_TIMESTAMP"`
+	CreateDate          time.Time `xml:"-" gorm:"column:create_date; default: CURRENT_TIMESTAMP"`
 	IsIdentified        bool      `xml:"isIdentified" gorm:"column:identify; default:true"`
 	IsBlackList         bool      `gorm:"column:black_list"`
 	SendToCft           bool      `gorm:"column:send_to_cft"`
@@ -46,28 +44,6 @@ type ClientInfoResponse struct {
 	Result               int    `xml:"result"`
 	Reason               string `xml:"reason"`
 	HashSum              string `xml:"hashSum"`
-}
-
-//SaveModel saves ClientInfo model in db
-func (clientInfo *ClientInfo) SaveMode() string {
-
-	db := db.GetPostgresDb()
-	if err := db.Create(&clientInfo).Error; err != nil {
-		logrus.Println("ClientInfoSaveModel ", err.Error())
-
-		if strings.Contains(err.Error(), "pq: duplicate key value violates unique constraint") {
-
-			re := regexp.MustCompile("tb_client_(.*?)_key")
-			match := re.FindStringSubmatch(err.Error())
-			if len(match) > 0 {
-				return "Duplicate param : " + match[1]
-			}
-
-		}
-
-		return "Missing required params"
-	}
-	return ""
 }
 
 //TableName for changing struct name to db name
@@ -91,19 +67,6 @@ type ResponseClientsInfo struct {
 	ClientInfoList []ClientInfo `json:"clientInfoList"`
 }
 
-//
-//func GetClients(client ClientInfo, size, page int64) (clientsSlice ResponseClientsInfo) {
-//
-//	if err := db.GetPostgresDb().Where(&client).Limit(size).Offset(page * size).Order("create_date desc").Find(&clientsSlice.ClientInfoList).Error; err != nil {
-//		clientsSlice.Error = err
-//		logrus.Println(" ", err)
-//	}
-//	if err := db.GetPostgresDb().Table("tb_client").Where(&client).Count(&clientsSlice.TotalPage).Error; err != nil {
-//		clientsSlice.Error = err
-//		logrus.Println(" ", err)
-//	}
-//	return
-//}
 func GetClients(client ClientInfo, clientsSlice *ResponseClientsInfo, time helperfunc.TimeInterval, page int64) (clientsSliceOver *ResponseClientsInfo) {
 
 	if err := db.GetPostgresDb().Where(&client).Where(`create_date > ? and create_date < ?`, time.From, time.To).Limit(100).Offset(page * 100).Order("create_date desc").Find(&clientsSlice.ClientInfoList).Error; err != nil {

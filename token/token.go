@@ -17,12 +17,11 @@ func NewTokenSvc(secret []byte) *TokenSvc {
 	return &TokenSvc{secret: secret}
 }
 
-
 type Payload struct {
-	Id    int64    `json:"id"`
-	Exp   int64    `json:"exp"`
-	Login string   `json:"login"`
-	Role string    `json:"role"`
+	Id    int64  `json:"id"`
+	Exp   int64  `json:"exp"`
+	Login string `json:"login"`
+	Role  string `json:"role"`
 }
 
 type RequestDTO struct {
@@ -37,7 +36,6 @@ type ResponseDTO struct {
 //var ErrInvalidLogin = errors.New("invalid login or password")
 var ErrInvalidPasswordOrLogin = errors.New("invalid password")
 
-
 func (receiver *TokenSvc) Generate(context context.Context, request *RequestDTO) (response ResponseDTO, err error) {
 	user, err := models.FindUserByLogin(request.Username)
 	if err != nil {
@@ -51,8 +49,8 @@ func (receiver *TokenSvc) Generate(context context.Context, request *RequestDTO)
 	}
 
 	response.Token, err = jwt.Encode(Payload{
-		Id:    user.Id,
-		Exp:   time.Now().Add(time.Hour * 10).Unix(),
+		Id:  user.Id,
+		Exp: time.Now().Add(time.Hour * 10).Unix(),
 		//		Exp:   time.Now().Add(time.Second * 10).Unix(),
 		Login: user.Login,
 		Role:  user.Role,

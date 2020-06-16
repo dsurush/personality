@@ -12,6 +12,7 @@ import (
 )
 
 type contextKey string
+
 var payloadContextKey = contextKey("jwt")
 
 func JWT(payloadType reflect.Type, secret jwtcore.Secret) func(next httprouter.Handle) httprouter.Handle {

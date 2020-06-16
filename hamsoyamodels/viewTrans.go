@@ -60,13 +60,13 @@ type HamsoyaViewTransaction struct {
 	AccExtFeeId       int64     `xml:"acc_ext_fee_id"`
 }
 
-func (*HamsoyaViewTransaction) TableName() string{
+func (*HamsoyaViewTransaction) TableName() string {
 	return "view_transactions"
 }
 
 type ResponseHamsoyaViewTransactions struct {
-	Error error
-	Count int64
+	Error                       error
+	Count                       int64
 	HamsoyaViewTransactionsList []HamsoyaViewTransaction
 }
 

@@ -17,6 +17,7 @@ type PostCheckReqRawXML struct {
 	CreatedAt    time.Time `xml:"-" gorm:"column:create_time;type:timestamp"`
 	IPAddress    string    `xml:"-" gorm:"column:ip_address"`
 }
+
 //
 //SaveModel saves PostCheckReqRawXML model in db
 func (postCheckReq *PostCheckReqRawXML) SaveModel() {

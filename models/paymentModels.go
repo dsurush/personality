@@ -115,18 +115,20 @@ type ViewTransaction struct {
 //	ViewTransactionList []ViewTransaction
 //}
 type ResponseViewTransactions struct {
-	Page           int64        `json:"page"`
-	TotalPage      int64        `json:"totalPage"`
-	URL            string       `json:"url"`
+	Page                int64  `json:"page"`
+	TotalPage           int64  `json:"totalPage"`
+	URL                 string `json:"url"`
 	ViewTransactionList []ViewTransaction
 }
 
 ////Get From view_transaction
 func GetViewTransactions(transaction ViewTransaction, transactionSlice *ResponseViewTransactions, time helperfunc.TimeInterval, page int64) (Transaction *ResponseViewTransactions) {
 	postgresDb := db.GetPostgresDb()
-	err := postgresDb.Table(`view_transaction`).Select("view_transaction.*").Where(&transaction).Where(`create_time > ? and create_time < ?`, time.From, time.To).Limit(100).Offset(page * 100).Order("create_time desc").Find(&transactionSlice.ViewTransactionList).Error
+	err := postgresDb.Table(`view_transaction`).Select("view_transaction.*").
+		Where(&transaction).Where(`create_time > ? and create_time < ?`, time.From, time.To).
+		Limit(100).Offset(page * 100).Order("create_time desc").Find(&transactionSlice.ViewTransactionList).Error
 	if err != nil {
-//		transactionSlice.Error = err
+		//		transactionSlice.Error = err
 		fmt.Println("can't take from db")
 	}
 	return
@@ -134,14 +136,15 @@ func GetViewTransactions(transaction ViewTransaction, transactionSlice *Response
 
 func GetViewTransactionsCount(transaction ViewTransaction, time helperfunc.TimeInterval) (Transaction ResponseViewTransactions) {
 	postgresDb := db.GetPostgresDb()
-	err := postgresDb.Table(`view_transaction`).Select("view_transaction.*").Where(&transaction).Where(`create_time > ? and create_time < ?`, time.From, time.To).Count(&Transaction.TotalPage).Error
+	err := postgresDb.Table(`view_transaction`).Select("view_transaction.*").
+		Where(&transaction).Where(`create_time > ? and create_time < ?`, time.From, time.To).
+		Count(&Transaction.TotalPage).Error
 	if err != nil {
 		//Transaction.Error = err
 		fmt.Println("can't take from db")
 	}
 	return Transaction
 }
-
 
 ////SaveModel saves TableTransaction model in db
 func (tableTransaction *TableTransaction) SaveModel() {

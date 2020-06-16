@@ -20,20 +20,18 @@ type User struct {
 	Remove   bool   `xml:"remove" gorm:"column:remove; default:false"`
 }
 
-
 func (*User) TableName() string {
 	return "tb_users"
 }
 
-func FindUserByLogin(login string) (user User, err error){
-	if err := db.GetPostgresDb().Where("login = ?", login).First(&user).Error; err != nil{
+func FindUserByLogin(login string) (user User, err error) {
+	if err := db.GetPostgresDb().Where("login = ?", login).First(&user).Error; err != nil {
 		logrus.Warn("Find User By LoginHandler ", err.Error())
 		return user, err
 	}
-//	fmt.Println("I AM = ", user)
+	//	fmt.Println("I AM = ", user)
 	return user, nil
 }
-
 
 type Usersvc struct {
 }
@@ -42,29 +40,28 @@ func NewUsersvc() *Usersvc {
 	return &Usersvc{}
 }
 
-
 func (receiver *Usersvc) GetClientsInfo() (clientsInfo []ClientInfo) {
-	if err := db.GetPostgresDb().Limit(100).Offset(0).Find(&clientsInfo).Error; err != nil{
+	if err := db.GetPostgresDb().Limit(100).Offset(0).Find(&clientsInfo).Error; err != nil {
 		logrus.Warn("GetClientsInfo:", err.Error())
 		return nil
 	}
 	return clientsInfo
 }
-func (receiver *Usersvc) GetHamsoyaTransactionsType(size, page int64) (HamsoyaTransactionsType hamsoyamodels.ResponseHamsoyaTransactionsType){
+func (receiver *Usersvc) GetHamsoyaTransactionsType(size, page int64) (HamsoyaTransactionsType hamsoyamodels.ResponseHamsoyaTransactionsType) {
 	postgresDb := db.GetHamsoyaPostgresDb()
 	page--
-	if page < 0{
+	if page < 0 {
 		page = 0
 	}
-	if err := postgresDb.Limit(size).Offset(size*page).Find(&HamsoyaTransactionsType.HamsoyaTransactionTypeList).Count(&HamsoyaTransactionsType.Count).Error; err !=  nil{
+	if err := postgresDb.Limit(size).Offset(size * page).Find(&HamsoyaTransactionsType.HamsoyaTransactionTypeList).Count(&HamsoyaTransactionsType.Count).Error; err != nil {
 		HamsoyaTransactionsType.Error = err
 	}
 	return
 }
 
-func GetHamsoyaTransactionsType(size, page int64) (HamsoyaTransactionsType []hamsoyamodels.HamsoyaTransactionType, err error){
+func GetHamsoyaTransactionsType(size, page int64) (HamsoyaTransactionsType []hamsoyamodels.HamsoyaTransactionType, err error) {
 	postgresDb := db.GetHamsoyaPostgresDb()
-	if err := postgresDb.Limit(10).Offset(0).Find(&HamsoyaTransactionsType).Error; err !=  nil{
+	if err := postgresDb.Limit(10).Offset(0).Find(&HamsoyaTransactionsType).Error; err != nil {
 		return HamsoyaTransactionsType, err
 	}
 	return

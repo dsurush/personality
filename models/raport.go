@@ -5,13 +5,14 @@ import (
 	"log"
 	"time"
 )
+
 // Create New struct for report
 type ViewReport struct {
-	ID                int64     `xml:"id"`
-	RequestId         int64     `xml:"request_id"`
-	PaymentID         int64     `xml:"payment_id"`
+	ID        int64 `xml:"id"`
+	RequestId int64 `xml:"request_id"`
+	PaymentID int64 `xml:"payment_id"`
 	//PreCheckQueueID   int64     `xml:"pre_check_queue_id"`
-	VendorID            int       `xml:"vendor_id"`
+	VendorID          int       `xml:"vendor_id"`
 	VendorName        string    `xml:"vendor_name"`
 	Route             int       `xml:"route"`
 	RequestType       string    `xml:"request_type"` ///?
@@ -21,21 +22,21 @@ type ViewReport struct {
 	StateID           string    `xml:"state_id"`
 	Aggregator        string    `xml:"aggregator"`
 	CreateTime        time.Time `xml:"create_time"`
-	Amount            float64     `xml:"amount"`
+	Amount            float64   `xml:"amount"`
 	AmountWithCommiss float64   `xml:"amount_with_commiss"`
 	Commiss           float64   `xml:"commiss"`
 	CardHash          string    `xml:"card_hash"`
 	AgrTransTime      time.Time `xml:"agr_trans_time"`
 	AggregatorStatus  string    `xml:"aggregator_status"`
 	GateWay           string    `xml:"gate_way"`
-//	QrCode            string    `xml:"qr_code"`
-//	NameRus           string    `xml:"name_rus"`
-//	TimeDiff          time.Time `xml:"time_diff"`
+	//	QrCode            string    `xml:"qr_code"`
+	//	NameRus           string    `xml:"name_rus"`
+	//	TimeDiff          time.Time `xml:"time_diff"`
 }
 
 type ResponseViewReports struct {
-	Error error
-	Count int64
+	Error          error
+	Count          int64
 	ViewReportList []ViewReport
 }
 

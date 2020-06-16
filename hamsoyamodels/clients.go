@@ -22,12 +22,12 @@ func (*HamsoyaClient) TableName() string {
 }
 
 type ResponseHamsoyaClients struct {
-	Error error
-	Count int64
+	Error             error
+	Count             int64
 	HamsoyaClientList []HamsoyaClient
 }
 
-func GetHamsoyaClientById(id int64) (HamsoyaClient HamsoyaClient, err error){
+func GetHamsoyaClientById(id int64) (HamsoyaClient HamsoyaClient, err error) {
 	postgresDb := db.GetHamsoyaPostgresDb()
 	postgresDb.Where("id = ?", id).First(&HamsoyaClient)
 	if err := postgresDb.Where("id = ?", id).First(&HamsoyaClient).Error; err != nil {
@@ -36,13 +36,13 @@ func GetHamsoyaClientById(id int64) (HamsoyaClient HamsoyaClient, err error){
 	return HamsoyaClient, nil
 }
 
-func GetHamsoyaClients(hamsoyaClient HamsoyaClient, rows, pages int64) (HamsoyaClient ResponseHamsoyaClients){
+func GetHamsoyaClients(hamsoyaClient HamsoyaClient, rows, pages int64) (HamsoyaClient ResponseHamsoyaClients) {
 	pages--
 	if pages < 0 {
 		pages = 0
 	}
 	postgresDb := db.GetHamsoyaPostgresDb()
-	if err := postgresDb.Where(&hamsoyaClient).Limit(rows).Offset(rows * pages).Find(&HamsoyaClient.HamsoyaClientList).Count(&HamsoyaClient.Count).Error; err != nil{
+	if err := postgresDb.Where(&hamsoyaClient).Limit(rows).Offset(rows * pages).Find(&HamsoyaClient.HamsoyaClientList).Count(&HamsoyaClient.Count).Error; err != nil {
 		HamsoyaClient.Error = err
 	}
 	return

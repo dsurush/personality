@@ -1,14 +1,13 @@
 package models
 
 import (
-	"encoding/xml"
 	"MF/db"
+	"encoding/xml"
 	"fmt"
 	"time"
 )
 
 var getMerchProc = "BEGIN ibs.z$dbo_doocat_megafon_fin_lib.GET_MERCHANTS(:merchants, :errorCode, :errorDescription); END;"
-
 
 //Merchant struct for tb_merchant
 type Merchant struct {
@@ -23,8 +22,8 @@ type Merchant struct {
 }
 
 type ResponseMerchants struct {
-	Error error
-	Count int64
+	Error        error
+	Count        int64
 	MerchantList []Merchant
 }
 
@@ -40,6 +39,7 @@ func (merchant *Merchant) GetList() []Merchant {
 	db.Find(&merchants)
 	return merchants
 }
+
 // Get merchantlist by page and rowssize
 func (merchant *Merchant) GetMerchants(size, page int64) (merchants ResponseMerchants) {
 	postgresDb := db.GetPostgresDb()
@@ -49,23 +49,27 @@ func (merchant *Merchant) GetMerchants(size, page int64) (merchants ResponseMerc
 	}
 	return merchants
 }
+
 //Get merchant by ID
 func (merchant *Merchant) GetMerchantById(id int64) (merchantsById Merchant) {
 	postgresDb := db.GetPostgresDb()
 	postgresDb.First(&merchantsById, id)
 	return merchantsById
 }
+
 //
 func (Merchant *Merchant) Update(merchant Merchant) Merchant {
 	postgresDb := db.GetPostgresDb()
 	postgresDb.Model(&Merchant).Updates(merchant)
 	return *Merchant
 }
+
 //
 func (merchant *Merchant) save() {
 	db := db.GetPostgresDb()
 	db.Where(Merchant{HumoOnlineID: merchant.HumoOnlineID}).Assign(Merchant{QrCode: merchant.QrCode}).FirstOrCreate(merchant)
 }
+
 //
 //Find finds merchant by qr
 func (merchant *Merchant) Find(qr string) {

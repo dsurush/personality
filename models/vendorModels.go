@@ -16,6 +16,7 @@ type VendorListReqRawXML struct {
 	CreatedAt time.Time `xml:"-" gorm:"column:create_time;type:timestamp"`
 	IPAddress string    `xml:"-" gorm:"column:ip_address"`
 }
+
 //
 ////SaveModel saves VendorListReqRawXML model in db
 func (vendorListReq *VendorListReqRawXML) SaveModel() {
@@ -52,13 +53,20 @@ type Vendor struct {
 	Route        int       `xml:"-" gorm:"column:route"`
 	MinSum       float64   `xml:"minSum" gorm:"column:min_sum"`
 	CreateTime   time.Time `xml:"-" gorm:"column:create_time"`
-//	Type         string    `xml:"type,omitempty"`
-	IsActive     bool      `xml:"-" gorm:"column:is_active"`
+	//	Type         string    `xml:"type,omitempty"`
+	IsActive bool `xml:"-" gorm:"column:is_active"`
 }
 
 //TableName for changing struct name to db name
 func (vendor *Vendor) TableName() string {
 	return "tb_vendor"
+}
+
+type ResponseVendors struct {
+	Page       int64    `json:"page"`
+	TotalPage  int64    `json:"totalPage"`
+	URL        string   `json:"url"`
+	VendorList []Vendor `json:"vendorInfoList"`
 }
 
 //Find finds vendor by id
@@ -84,17 +92,19 @@ func (Vendor *Vendor) FindAllVendorsByPageSize(page int, size int) (vendors []Ve
 	return vendors
 }
 
-func (Vendor *Vendor) Save() Vendor{
+func (Vendor *Vendor) Save() Vendor {
 	postgresDb := db.GetPostgresDb()
 	postgresDb.Create(&Vendor)
 	return *Vendor
 }
+
 // Create Method for update
 func (Vendor *Vendor) Update(vendor Vendor) Vendor {
 	postgresDb := db.GetPostgresDb()
 	postgresDb.Model(&Vendor).Updates(vendor)
 	return *Vendor
 }
+
 // Create func for Get Vendor
 func GetVendorById(id int64) (vendor Vendor) {
 	if err := db.GetPostgresDb().Where("id = ?", id).First(&vendor).Error; err != nil {

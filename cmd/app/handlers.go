@@ -28,7 +28,7 @@ func (server *MainServer) LoginHandler(writer http.ResponseWriter, request *http
 		log.Print(err)
 		return
 	}
-		log.Printf("login = %s, pass = %s\n", requestBody.Username, requestBody.Password)
+	log.Printf("login = %s, pass = %s\n", requestBody.Username, requestBody.Password)
 	response, err := server.tokenSvc.Generate(request.Context(), &requestBody)
 	//log.Println(response)
 	if err != nil {
@@ -96,8 +96,8 @@ func (server *MainServer) GetClientsInfoHandler(writer http.ResponseWriter, requ
 		PreURL += fmt.Sprintf(`&SendToCft=%s`, request.URL.Query().Get(`SendToCft`))
 	}
 	Sex := request.URL.Query().Get(`Sex`)
-	if Sex != ``{
-		if Sex == "W"{
+	if Sex != `` {
+		if Sex == "W" {
 			clientDefault.Sex = "Ж"
 			PreURL += fmt.Sprintf(`&Sex=%s`, `W`)
 		} else {
@@ -114,6 +114,7 @@ func (server *MainServer) GetClientsInfoHandler(writer http.ResponseWriter, requ
 	interval.To = unixTimeNow.Format(time.RFC3339)
 	from, err := strconv.Atoi(request.URL.Query().Get(`from`))
 	if err == nil {
+		from /= 1000
 		i := time.Unix(int64(from), 0)
 		ans := i.Format(time.RFC3339)
 		interval.From = ans
@@ -121,6 +122,7 @@ func (server *MainServer) GetClientsInfoHandler(writer http.ResponseWriter, requ
 	}
 	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
 	if err == nil {
+		from /= 1000
 		i := time.Unix(int64(to), 0)
 		ans := i.Format(time.RFC3339)
 		interval.To = ans
@@ -136,7 +138,7 @@ func (server *MainServer) GetClientsInfoHandler(writer http.ResponseWriter, requ
 	}
 	response.URL = URL + PreURL
 	fmt.Println(response.URL)
-	models.GetClients(clientDefault, &response, interval, response.Page - 1)
+	models.GetClients(clientDefault, &response, interval, response.Page-1)
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)
@@ -183,10 +185,16 @@ func (server *MainServer) MainPageHandler(writer http.ResponseWriter, request *h
 }
 
 //GetVendorCategory
-func (server *MainServer) GetVendorCategoryByPageSizeHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
+func (server *MainServer) GetVendorsHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	URL := `http://127.0.0.1:8080/api/megafon/clients`
+//	PreURL := ``
 	page := request.URL.Query().Get(`page`)
-	pageInt, err := strconv.Atoi(page)
+	pageInt, errPage := strconv.Atoi(page)
+	if errPage != nil || pageInt <= 0 {
+		pageInt = 1
+		URL += `?page=1`
+	}
 	var vendor models.Vendor
 	response := vendor.FindAll(pageInt - 1)
 	err := json.NewEncoder(writer).Encode(&response)
@@ -204,7 +212,7 @@ func (server *MainServer) GetViewTransactionsHandler(writer http.ResponseWriter,
 	RequestId, err := strconv.Atoi(request.URL.Query().Get(`RequestId`))
 	if err == nil {
 		transaction.RequestId = int64(RequestId)
-		PreURL += `&RequestId=` +request.URL.Query().Get(`RequestId`)
+		PreURL += `&RequestId=` + request.URL.Query().Get(`RequestId`)
 	}
 	PaymentID, err := strconv.Atoi(request.URL.Query().Get(`PaymentID`))
 	if err == nil {
@@ -283,7 +291,7 @@ func (server *MainServer) GetViewTransactionsHandler(writer http.ResponseWriter,
 		PreURL += `&to=` + request.URL.Query().Get(`to`)
 	}
 
-	var	response models.ResponseViewTransactions
+	var response models.ResponseViewTransactions
 	page := request.URL.Query().Get(`page`)
 	URL := `http://127.0.0.1:8080/api/megafon/transactions`
 	pageInt, err := strconv.Atoi(page)
@@ -300,7 +308,7 @@ func (server *MainServer) GetViewTransactionsHandler(writer http.ResponseWriter,
 	URL += PreURL
 	response.URL = URL
 	fmt.Println(URL)
-	models.GetViewTransactions(transaction, &response, interval, response.Page - 1)
+	models.GetViewTransactions(transaction, &response, interval, response.Page-1)
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)
@@ -1597,7 +1605,7 @@ func (server *MainServer) TESTGetHamsoyaAccountsHandler(writer http.ResponseWrit
 		newHamsoyaAccount.ClientId = int64(clientIdInt)
 	}
 
-//	Accounts := hamsoyamodels.GetHamsoyaAccounts(newHamsoyaAccount, int64(rowsInt), int64(pageInt))
+	//	Accounts := hamsoyamodels.GetHamsoyaAccounts(newHamsoyaAccount, int64(rowsInt), int64(pageInt))
 	myDataString := 1591635497
 	i := time.Unix(int64(myDataString), 0)
 	fmt.Println(time.Now().Unix())
@@ -1619,4 +1627,5 @@ func (server *MainServer) TESTGetHamsoyaAccountsHandler(writer http.ResponseWrit
 	}
 	return
 }
+
 ////

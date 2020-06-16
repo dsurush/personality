@@ -32,17 +32,17 @@ func WriteToFile(filename string, data string) {
 	}
 }
 
-func Logger(prefix string) func(next httprouter.Handle,) httprouter.Handle {
+func Logger(prefix string) func(next httprouter.Handle) httprouter.Handle {
 	return func(next httprouter.Handle) httprouter.Handle {
 		return func(writer http.ResponseWriter, request *http.Request, pr httprouter.Params) {
 			var GetToken = ""
 			GetToken = request.Header.Get("Authorization")
 			var PayloadFields token.Payload
-			if GetToken == ""  && request.URL.Path != `/api/login`{
+			if GetToken == "" && request.URL.Path != `/api/login` {
 				http.Error(writer, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 				return
 			}
-			if GetToken != ""  && request.URL.Path != `/api/login`{
+			if GetToken != "" && request.URL.Path != `/api/login` {
 				parts, err := jwt.SplitToken(GetToken)
 				if err != nil {
 					http.Error(writer, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
@@ -78,7 +78,7 @@ func Logger(prefix string) func(next httprouter.Handle,) httprouter.Handle {
 				prefix,
 				request.Method,
 				request.URL.Path,
-				)
+			)
 			WriteToFile(`logfile.log`, data)
 			next(writer, request, pr)
 		}

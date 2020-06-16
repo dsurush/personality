@@ -1,7 +1,6 @@
 package app
 
 import (
-	"MF/hamsoyamodels"
 	"MF/middleware/authorized"
 	"MF/middleware/corss"
 	"net/http"
@@ -28,9 +27,9 @@ func (server *MainServer) InitRoutes() {
 	server.router.GET("/api/megafon/client/:id", logger.Logger(`Get client by id: `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetClientInfoByIdHandler)))))
 	//server.router.GET("/api/megafon/clients", logger.Logger(`Get all clients By Page and Rows`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetClientsInfoHandler)))))
 	server.router.GET("/api/megafon/clients", logger.Logger(`Get all clients By Page and Rows`)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetClientsInfoHandler)))))
-//	server.router.GET("/api/megafon/clients", corss.Middleware(server.GetClientsInfoHandler))
+	//	server.router.GET("/api/megafon/clients", corss.Middleware(server.GetClientsInfoHandler))
 
-	server.router.GET("/api/megafon/vendors", logger.Logger(`Get vendors `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetVendorCategoryByPageSizeHandler)))))
+	server.router.GET("/api/megafon/vendors", logger.Logger(`Get vendors `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetVendorsHandler)))))
 	server.router.POST(`/api/megafon/vendors/save`, logger.Logger(`Save vendor `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.SaveNewVendorHandler)))))
 	server.router.GET(`/api/megafon/vendors/vendor/:id`, logger.Logger(`Get vendor by id `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetVendorHandler)))))
 	server.router.POST(`/api/megafon/vendors/vendor/:id/edit`, logger.Logger(`Change vendor by id `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.UpdateVendorHandler)))))
@@ -50,7 +49,7 @@ func (server *MainServer) InitRoutes() {
 	///Hamsoya
 	server.router.GET(`/api/hamsoya/transactionstype`, logger.Logger(`Get Hamsoya TransactionTypeTypes`)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaTransactionTypeHandler)))))
 	server.router.GET(`/api/hamsoya/transactionstype/transactiontype/:id`, logger.Logger(`Get Hamsoya TransactionType by id `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaTransactionTypeByIdHandler)))))
-	server.router.POST(`/api/hamsoya/transactionstype/save`,  logger.Logger(`save new Hamsoya TransactionType`)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.SaveHamsoyaTransactionType)))))
+	server.router.POST(`/api/hamsoya/transactionstype/save`, logger.Logger(`save new Hamsoya TransactionType`)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.SaveHamsoyaTransactionType)))))
 	server.router.POST(`/api/hamsoya/transactionstype/transactiontype/:id/edit`, logger.Logger(`Edit Hamsoya TransactionType`)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.UpdateHamsoyaTransactionTypeHandler)))))
 
 	server.router.GET(`/api/hamsoya/transactions`, logger.Logger(`Get Hamsoya Transactions`)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaTransactionsHandler)))))
@@ -101,22 +100,22 @@ func (server *MainServer) InitRoutes() {
 	panic(http.ListenAndServe("127.0.0.1:8080", server))
 }
 
-func test(){
-//	var a hamsoyamodels.HamsoyaClientType
-//	myDataString := 1591635497
-//	unix := time.Now().Unix()
-//	fmt.Println(unix)
-//	i := time.Unix(unix, 0)
-//	fmt.Println(i.Format(time.RFC3339))
+func test() {
+	//	var a hamsoyamodels.HamsoyaClientType
+	//	myDataString := 1591635497
+	//	unix := time.Now().Unix()
+	//	fmt.Println(unix)
+	//	i := time.Unix(unix, 0)
+	//	fmt.Println(i.Format(time.RFC3339))
 
 	//myDate, err := time.Parse(time.RFC3339, myDataString)
 	//if err != nil {
 	//	panic(err)
 	//}
-	myDataString := 1591635497
-	i := time.Unix(int64(myDataString), 0)
-	ans := i.Format(time.RFC3339)
-	HamsoyaAccount := hamsoyamodels.TESTTIME(ans)
-	fmt.Println(HamsoyaAccount)
+	//myDataString := 1591635497
+	//i := time.Unix(int64(myDataString), 0)
+	//ans := i.Format(time.RFC3339)
+	//HamsoyaAccount := hamsoyamodels.TESTTIME(ans)
+	//fmt.Println(HamsoyaAccount)
 	fmt.Println(time.Now().Unix())
 }

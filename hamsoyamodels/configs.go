@@ -14,14 +14,13 @@ type HamsoyaConfig struct {
 	ValueStr    string    `xml:"value_str"`
 }
 
-func (*HamsoyaConfig) TableName() string{
+func (*HamsoyaConfig) TableName() string {
 	return "config"
 }
 
-
 type ResponseHamsoyaConfigs struct {
-	Error error
-	Count int64
+	Error             error
+	Count             int64
 	HamsoyaConfigList []HamsoyaConfig
 }
 
@@ -37,9 +36,9 @@ func GetHamsoyaConfig(config HamsoyaConfig, rows, pages int64) (HamsoyaConfig Re
 	return
 }
 
-func (HamsoyaConfig *HamsoyaConfig) Save() (HamsoyaConfig, error){
+func (HamsoyaConfig *HamsoyaConfig) Save() (HamsoyaConfig, error) {
 	postgresDb := db.GetHamsoyaPostgresDb()
-	err:= postgresDb.Create(&HamsoyaConfig).Error
+	err := postgresDb.Create(&HamsoyaConfig).Error
 	if err != nil {
 		return *HamsoyaConfig, err
 	}

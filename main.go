@@ -3,9 +3,9 @@ package main
 import (
 	"MF/cmd/app"
 	_ "MF/db"
+	"MF/models"
 	"MF/token"
 	"github.com/julienschmidt/httprouter"
-	"MF/models"
 	"net/http"
 )
 
@@ -28,7 +28,6 @@ func main() {
 		}
 		w.WriteHeader(http.StatusNoContent)
 	})
-
 
 	server := app.NewMainServer(router, tokenSvc, usersvc)
 	server.Start()

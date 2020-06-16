@@ -13,7 +13,7 @@ func Authorized(roles []string, payload func(ctx context.Context) interface{}) f
 			auth := payload(request.Context()).(*token.Payload)
 			for _, role := range roles {
 				if role == auth.Role {
-				//	log.Printf("access granted %v %v", roles, auth)
+					//	log.Printf("access granted %v %v", roles, auth)
 					next(writer, request, pr)
 					return
 				}
@@ -23,4 +23,3 @@ func Authorized(roles []string, payload func(ctx context.Context) interface{}) f
 		}
 	}
 }
-

@@ -6,11 +6,12 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"net/http"
 )
+
 //MainServer. Структура которая реализует метод ServerHTTP. В его параметры входят все зависимости.
 type MainServer struct {
-	router *httprouter.Router
+	router   *httprouter.Router
 	tokenSvc *token.TokenSvc
-	userSvc *models.Usersvc
+	userSvc  *models.Usersvc
 }
 
 func NewMainServer(router *httprouter.Router, tokenSvc *token.TokenSvc, userSvc *models.Usersvc) *MainServer {

@@ -16,8 +16,8 @@ type HamsoyaClientPriv struct {
 }
 
 type ListHamsoyaClientPrivResponse struct {
-	Error error
-	Size int64
+	Error       error
+	Size        int64
 	ClientPrivs []HamsoyaClientPriv
 }
 

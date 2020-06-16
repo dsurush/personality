@@ -31,8 +31,8 @@ type ViewLogDTO struct {
 }
 
 type ResponseViewLogs struct {
-	Error error
-	Count int64
+	Error       error
+	Count       int64
 	ViewLogList []ViewLog
 }
 

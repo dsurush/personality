@@ -19,6 +19,7 @@ type ResponseLog struct {
 	Response     []byte    `gorm:"column:response"`
 	ResponseTime time.Time `gorm:"column:create_time"`
 }
+
 //
 ////SaveModel saves ResponseLog model in db
 func (responseLog *ResponseLog) SaveModel() {

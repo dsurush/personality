@@ -26,17 +26,17 @@ type HamsoyaPreCheck struct {
 	TopupPreCheckId int64     `xml:"topup_pre_check_id"`
 }
 
-func (*HamsoyaPreCheck) TableName() string{
+func (*HamsoyaPreCheck) TableName() string {
 	return "pre_check"
 }
 
 type ResponseHamsoyaPreChecks struct {
-	Error error
-	Count int64
+	Error               error
+	Count               int64
 	HamsoyaPreCheckList []HamsoyaPreCheck
 }
 
-func GetHamsoyaPreCheckById(id int64) (HamsoyaPreCheck HamsoyaPreCheck, err error){
+func GetHamsoyaPreCheckById(id int64) (HamsoyaPreCheck HamsoyaPreCheck, err error) {
 	postgresDb := db.GetHamsoyaPostgresDb()
 	postgresDb.Where("id = ?", id).First(&HamsoyaPreCheck)
 	if err := postgresDb.Where("id = ?", id).First(&HamsoyaPreCheck).Error; err != nil {
@@ -45,13 +45,13 @@ func GetHamsoyaPreCheckById(id int64) (HamsoyaPreCheck HamsoyaPreCheck, err erro
 	return HamsoyaPreCheck, nil
 }
 
-func GetHamsoyaPreChecks(hamsoyaPreCheck HamsoyaPreCheck, rows, pages int64) (HamsoyaPreCheck ResponseHamsoyaPreChecks){
+func GetHamsoyaPreChecks(hamsoyaPreCheck HamsoyaPreCheck, rows, pages int64) (HamsoyaPreCheck ResponseHamsoyaPreChecks) {
 	pages--
 	if pages < 0 {
 		pages = 0
 	}
 	postgresDb := db.GetHamsoyaPostgresDb()
-	if err := postgresDb.Where(&hamsoyaPreCheck).Limit(rows).Offset(rows * pages).Find(&HamsoyaPreCheck.HamsoyaPreCheckList).Count(&HamsoyaPreCheck.Count).Error; err != nil{
+	if err := postgresDb.Where(&hamsoyaPreCheck).Limit(rows).Offset(rows * pages).Find(&HamsoyaPreCheck.HamsoyaPreCheckList).Count(&HamsoyaPreCheck.Count).Error; err != nil {
 		HamsoyaPreCheck.Error = err
 	}
 	return
