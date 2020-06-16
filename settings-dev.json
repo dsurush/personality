@@ -11,5 +11,13 @@
         "user": "dsurush",
         "password": "dsurush",
         "database": "magafonfindb"
+    },
+
+    "postgresHamsoyadb" : {
+        "server": "127.0.0.1",
+        "port": 5432,
+        "user": "dsurush",
+        "password": "dsurush",
+        "database": "hamsoya"
     }
 }

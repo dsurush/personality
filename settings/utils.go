@@ -3,7 +3,7 @@ package settings
 import (
 	"encoding/json"
 	//"fmt"
-//	log "github.com/sirupsen/logrus"
+	//	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	//"net/http"
 	//"strings"
@@ -12,7 +12,8 @@ import (
 var (
 	// AppSettings app settnigs
 	AppSettings Settings
-	HamsoyaSettings Settings
+
+//	HamsoyaSettings Settings
 )
 
 // ReadSettings to init app settings

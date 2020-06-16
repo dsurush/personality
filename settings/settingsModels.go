@@ -4,6 +4,7 @@ package settings
 type Settings struct {
 	AppParams               Params                  `json:"app"`	
 	PostgresMegafonDbParams PostgresMegafonDbParams `json:"postgresMegafondb"`	
+	PostgresHamsoyaDbParams PostgresHamsoyaDbParams `json:"postgresHamsoyadb"`
 }
 
 
@@ -24,4 +25,11 @@ type PostgresMegafonDbParams struct {
 	Database string `json:"database"`
 }
 
+type PostgresHamsoyaDbParams struct {
+	Server   string `json:"server"`
+	Port     int    `json:"port"`
+	User     string `json:"user"`
+	Password string `json:"password"`
+	Database string `json:"database"`
+}
 

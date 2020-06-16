@@ -77,12 +77,6 @@ func (vendor *Vendor) FindAll() []Vendor {
 	return vendors
 }
 
-func (vendor *Vendor) FindAllVendors() (vendors []Vendor) {
-	postgresDb := db.GetPostgresDb()
-	postgresDb.Table(`tb_vendor`).Select("tb_vendor.*")
-	return vendors
-}
-
 func (Vendor *Vendor) FindAllVendorsByPageSize(page int, size int) (vendors []Vendor) {
 	postgresDb := db.GetPostgresDb()
 	postgresDb.Table(`tb_vendor`).Select("tb_vendor.*").Limit(size).Offset(page * size).Scan(&vendors)

@@ -2,6 +2,7 @@ package models
 
 import (
 	"MF/db"
+	"MF/helperfunc"
 	"encoding/xml"
 	"github.com/sirupsen/logrus"
 	"regexp"
@@ -24,10 +25,10 @@ type ClientInfo struct {
 	Nationality         string    `xml:"nationality,omitempty" gorm:"column:nationality"`
 	Sex                 string    `xml:"sex,omitempty" gorm:"column:sex"`
 	IsActive            bool      `xml:"isActive" gorm:"column:active; default:true"`
+	CreateDate			time.Time	`xml:"-" gorm:"column:create_date; default: CURRENT_TIMESTAMP"`
 	IsIdentified        bool      `xml:"isIdentified" gorm:"column:identify; default:true"`
 	IsBlackList         bool      `gorm:"column:black_list"`
 	SendToCft           bool      `gorm:"column:send_to_cft"`
-	//CreateDate			time.Time	`xml:"-" gorm:"column:create_date; defxault: CURRENT_TIMESTAMP"`
 }
 
 type ClientInfoRequest struct {
@@ -75,22 +76,45 @@ func (clientInfo ClientInfo) TableName() string {
 }
 
 //Get ClientInfo by phone
-func GetClientInfoByPhoneNumber(phone string) (clientInfo ClientInfo) {
-	if err := db.GetPostgresDb().Where("phone = ?", phone).Last(&clientInfo).Error; err != nil {
-		logrus.Println("GetClientInfoByPhoneNumber By Phone ", err)
+func GetClientInfoById(id string) (clientInfo ClientInfo) {
+	if err := db.GetPostgresDb().Where("id = ?", id).First(&clientInfo).Error; err != nil {
+		logrus.Println("GetClientInfoById By Phone ", err)
 	}
 	return clientInfo
 }
-type ResponseClientsInfo struct {
-	Error          error
-	Page           int64
-	TotalPage      int64
-	ClientInfoList []ClientInfo
-}
-//
-func GetClients(client ClientInfo, size, page int64) (clientsSlice ResponseClientsInfo){
 
-	if err := db.GetPostgresDb().Where(&client).Limit(size).Offset(page * size).Find(&clientsSlice.ClientInfoList).Count(&clientsSlice.TotalPage).Error; err != nil{
+type ResponseClientsInfo struct {
+	Error          error        `json:"error"`
+	Page           int64        `json:"page"`
+	TotalPage      int64        `json:"totalPage"`
+	URL            string       `json:"url"`
+	ClientInfoList []ClientInfo `json:"clientInfoList"`
+}
+
+//
+//func GetClients(client ClientInfo, size, page int64) (clientsSlice ResponseClientsInfo) {
+//
+//	if err := db.GetPostgresDb().Where(&client).Limit(size).Offset(page * size).Order("create_date desc").Find(&clientsSlice.ClientInfoList).Error; err != nil {
+//		clientsSlice.Error = err
+//		logrus.Println(" ", err)
+//	}
+//	if err := db.GetPostgresDb().Table("tb_client").Where(&client).Count(&clientsSlice.TotalPage).Error; err != nil {
+//		clientsSlice.Error = err
+//		logrus.Println(" ", err)
+//	}
+//	return
+//}
+func GetClients(client ClientInfo, clientsSlice *ResponseClientsInfo, time helperfunc.TimeInterval, page int64) (clientsSliceOver *ResponseClientsInfo) {
+
+	if err := db.GetPostgresDb().Where(&client).Where(`create_date > ? and create_date < ?`, time.From, time.To).Limit(100).Offset(page * 100).Order("create_date desc").Find(&clientsSlice.ClientInfoList).Error; err != nil {
+		clientsSlice.Error = err
+		logrus.Println(" ", err)
+	}
+	return
+}
+
+func GetClientsCount(client ClientInfo, time helperfunc.TimeInterval) (clientsSlice ResponseClientsInfo) {
+	if err := db.GetPostgresDb().Table("tb_client").Where(&client).Where(`create_date > ? and create_date < ?`, time.From, time.To).Count(&clientsSlice.TotalPage).Error; err != nil {
 		clientsSlice.Error = err
 		logrus.Println(" ", err)
 	}

@@ -2,6 +2,7 @@ package models
 
 import (
 	"MF/db"
+	"MF/helperfunc"
 	"encoding/xml"
 	"fmt"
 	"github.com/sirupsen/logrus"
@@ -109,16 +110,33 @@ type ViewTransaction struct {
 	TimeDiff          time.Time `xml:"time_diff"`
 }
 
+//type ResponseViewTransactions struct {
+//	Count               int64
+//	ViewTransactionList []ViewTransaction
+//}
 type ResponseViewTransactions struct {
-	Count               int64
+	Page           int64        `json:"page"`
+	TotalPage      int64        `json:"totalPage"`
+	URL            string       `json:"url"`
 	ViewTransactionList []ViewTransaction
 }
 
 ////Get From view_transaction
-func GetViewTransactions(transaction ViewTransaction, size, page int64) (Transaction ResponseViewTransactions) {
+func GetViewTransactions(transaction ViewTransaction, transactionSlice *ResponseViewTransactions, time helperfunc.TimeInterval, page int64) (Transaction *ResponseViewTransactions) {
 	postgresDb := db.GetPostgresDb()
-	err := postgresDb.Table(`view_transaction`).Select("view_transaction.*").Where(&transaction).Limit(size).Offset(page * size).Find(&Transaction.ViewTransactionList).Count(&Transaction.Count).Error
+	err := postgresDb.Table(`view_transaction`).Select("view_transaction.*").Where(&transaction).Where(`create_time > ? and create_time < ?`, time.From, time.To).Limit(100).Offset(page * 100).Order("create_time desc").Find(&transactionSlice.ViewTransactionList).Error
 	if err != nil {
+//		transactionSlice.Error = err
+		fmt.Println("can't take from db")
+	}
+	return
+}
+
+func GetViewTransactionsCount(transaction ViewTransaction, time helperfunc.TimeInterval) (Transaction ResponseViewTransactions) {
+	postgresDb := db.GetPostgresDb()
+	err := postgresDb.Table(`view_transaction`).Select("view_transaction.*").Where(&transaction).Where(`create_time > ? and create_time < ?`, time.From, time.To).Count(&Transaction.TotalPage).Error
+	if err != nil {
+		//Transaction.Error = err
 		fmt.Println("can't take from db")
 	}
 	return Transaction

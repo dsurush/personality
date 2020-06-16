@@ -2,6 +2,7 @@ package app
 
 import (
 	"MF/hamsoyamodels"
+	"MF/helperfunc"
 	"MF/models"
 	"MF/token"
 	"encoding/json"
@@ -45,12 +46,12 @@ func (server *MainServer) LoginHandler(writer http.ResponseWriter, request *http
 }
 
 //Get clients By Phone
-func (server *MainServer) GetClientInfoByPhoneNumberHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
+func (server *MainServer) GetClientInfoByIdHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
 	fmt.Println("I am find client By number phone")
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
-	phone := param.ByName(`phone`)
-	fmt.Println(phone)
-	response := models.GetClientInfoByPhoneNumber(phone)
+	id := param.ByName(`id`)
+	fmt.Println(id)
+	response := models.GetClientInfoById(id)
 	if response.ClientID == 0 {
 		writer.WriteHeader(http.StatusBadRequest)
 		return
@@ -65,45 +66,78 @@ func (server *MainServer) GetClientInfoByPhoneNumberHandler(writer http.Response
 
 //Get list clients Handler ::: TODO CHANGE
 func (server *MainServer) GetClientsInfoHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-	fmt.Println("I am get all clients")
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	var clientDefault models.ClientInfo
-	pageInt := 1
-	rowsInt := 100
+	URL := `http://127.0.0.1:8080/api/megafon/clients`
+	PreURL := ``
 	page := request.URL.Query().Get(`page`)
-	rows := request.URL.Query().Get(`rows`)
+	pageInt, errPage := strconv.Atoi(page)
+	if errPage != nil {
+		pageInt = 1
+		URL += `?page=1`
+	}
 	IsActive, err := strconv.ParseBool(request.URL.Query().Get(`IsActive`))
 	if err == nil {
 		clientDefault.IsActive = IsActive
+		PreURL += fmt.Sprintf(`&IsActive=%s`, request.URL.Query().Get(`IsActive`))
 	}
 	IsIdentified, err := strconv.ParseBool(request.URL.Query().Get(`IsIdentified`))
 	if err == nil {
 		clientDefault.IsIdentified = IsIdentified
+		PreURL += fmt.Sprintf(`&IsIdentified=%s`, request.URL.Query().Get(`IsIdentified`))
 	}
 	IsBlackList, err := strconv.ParseBool(request.URL.Query().Get(`IsBlackList`))
 	if err == nil {
 		clientDefault.IsBlackList = IsBlackList
+		PreURL += fmt.Sprintf(`&IsBlackList=%s`, request.URL.Query().Get(`IsBlackList`))
 	}
 	SendToCft, err := strconv.ParseBool(request.URL.Query().Get(`SendToCft`))
 	if err == nil {
 		clientDefault.SendToCft = SendToCft
+		PreURL += fmt.Sprintf(`&SendToCft=%s`, request.URL.Query().Get(`SendToCft`))
 	}
 	Sex := request.URL.Query().Get(`Sex`)
-	clientDefault.Sex = Sex
-
-	pageInt, err = strconv.Atoi(page)
-	if err != nil {
-		pageInt = 1
+	if Sex != ``{
+		if Sex == "W"{
+			clientDefault.Sex = "Ж"
+			PreURL += fmt.Sprintf(`&Sex=%s`, `W`)
+		} else {
+			clientDefault.Sex = "М"
+			PreURL += fmt.Sprintf(`&Sex=%s`, `M`)
+		}
 	}
-	rowsInt, err = strconv.Atoi(rows)
-	if err != nil {
-		rowsInt = 100
+
+	//Default-ные значение времени. типа с начало до конца
+	var interval helperfunc.TimeInterval
+	unix := time.Unix(0, 0)
+	interval.From = unix.Format(time.RFC3339)
+	unixTimeNow := time.Now()
+	interval.To = unixTimeNow.Format(time.RFC3339)
+	from, err := strconv.Atoi(request.URL.Query().Get(`from`))
+	if err == nil {
+		i := time.Unix(int64(from), 0)
+		ans := i.Format(time.RFC3339)
+		interval.From = ans
+		PreURL += `&from=` + request.URL.Query().Get(`from`)
+	}
+	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
+	if err == nil {
+		i := time.Unix(int64(to), 0)
+		ans := i.Format(time.RFC3339)
+		interval.To = ans
+		PreURL += `&to=` + request.URL.Query().Get(`to`)
 	}
 
-	fmt.Println("I am = \n", clientDefault)
-	response := models.GetClients(clientDefault, int64(rowsInt), int64(pageInt-1))
-	response.Page = int64(pageInt)
-	response.TotalPage = int64(math.Ceil(float64(response.TotalPage) / float64(int64(rowsInt))))
+	var response models.ResponseClientsInfo
+	response = models.GetClientsCount(clientDefault, interval)
+	response.TotalPage = int64(math.Ceil(float64(response.TotalPage) / float64(int64(100))))
+	response.Page = helperfunc.MinOftoInt(int64(pageInt), response.TotalPage)
+	if errPage == nil {
+		URL += `?page=` + fmt.Sprintf("%d", response.Page)
+	}
+	response.URL = URL + PreURL
+	fmt.Println(response.URL)
+	models.GetClients(clientDefault, &response, interval, response.Page - 1)
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)
@@ -160,17 +194,6 @@ func (server *MainServer) MainPageHandler(writer http.ResponseWriter, request *h
 	}
 }
 
-//UnUse Handler
-func (server *MainServer) GetVendorCategoryHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-	var vendor models.Vendor
-	vendors := vendor.FindAll()
-	//fmt.Println("Hello I am vendors\n", vendors)
-	err := json.NewEncoder(writer).Encode(&vendors)
-	if err != nil {
-		log.Print(err)
-	}
-}
-
 //GetVendorCategory
 func (server *MainServer) GetVendorCategoryByPageSizeHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -190,54 +213,108 @@ func (server *MainServer) GetVendorCategoryByPageSizeHandler(writer http.Respons
 func (server *MainServer) GetViewTransactionsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	fmt.Println("I am view Transaction")
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
-	pageInt := 1
-	rowsInt := 100
-	page := request.URL.Query().Get(`page`)
-	rows := request.URL.Query().Get(`rows`)
-	pageInt, err := strconv.Atoi(page)
-	if err != nil {
-		pageInt = 1
-	}
-	rowsInt, err = strconv.Atoi(rows)
-	if err != nil {
-		rowsInt = 100
-	}
 	transaction := models.ViewTransaction{}
+	PreURL := ``
 	RequestId, err := strconv.Atoi(request.URL.Query().Get(`RequestId`))
 	if err == nil {
 		transaction.RequestId = int64(RequestId)
+		PreURL += `&RequestId=` +request.URL.Query().Get(`RequestId`)
 	}
 	PaymentID, err := strconv.Atoi(request.URL.Query().Get(`PaymentID`))
 	if err == nil {
 		transaction.PaymentID = int64(PaymentID)
+		PreURL += `&PaymentID=` + request.URL.Query().Get(`PaymentID`)
 	}
 	PreCheckQueueID, err := strconv.Atoi(request.URL.Query().Get(`PreCheckQueueID`))
 	if err == nil {
 		transaction.PreCheckQueueID = int64(PreCheckQueueID)
+		PreURL += `&PreCheckQueueID=` + request.URL.Query().Get(`PreCheckQueueID`)
 	}
 	Vendor, err := strconv.Atoi(request.URL.Query().Get(`Vendor`))
 	if err == nil {
 		transaction.Vendor = Vendor
+		PreURL += `&Vendor=` + request.URL.Query().Get(`Vendor`)
 	}
 	VendorName := request.URL.Query().Get(`VendorName`)
-	transaction.VendorName = VendorName
+	if VendorName != `` {
+		PreURL += `&VendorName=` + request.URL.Query().Get(`VendorName`)
+		transaction.VendorName = VendorName
+	}
 	RequestType := request.URL.Query().Get(`RequestType`)
-	transaction.RequestType = RequestType
+	if RequestType != `` {
+		PreURL += `&RequestType=` + request.URL.Query().Get(`RequestType`)
+		transaction.RequestType = RequestType
+	}
 	AccountPayer := request.URL.Query().Get(`AccountPayer`)
-	transaction.AccountPayer = AccountPayer
+	if AccountPayer != `` {
+		PreURL += `&AccountPayer=` + request.URL.Query().Get(`AccountPayer`)
+		transaction.AccountPayer = AccountPayer
+	}
 	AccountReceiver := request.URL.Query().Get(`AccountReceiver`)
-	transaction.AccountReceiver = AccountReceiver
+	if AccountReceiver != `` {
+		PreURL += `&AccountReceiver=` + request.URL.Query().Get(`AccountReceiver`)
+		transaction.AccountReceiver = AccountReceiver
+	}
 	StateID := request.URL.Query().Get(`StateID`)
-	transaction.StateID = StateID
+	if StateID != `` {
+		PreURL += `&StateID=` + request.URL.Query().Get(`StateID`)
+		transaction.StateID = StateID
+	}
 	Aggregator := request.URL.Query().Get(`Aggregator`)
-	transaction.Aggregator = Aggregator
+	if Aggregator != `` {
+		PreURL += `&Aggregator=` + request.URL.Query().Get(`Aggregator`)
+		transaction.Aggregator = Aggregator
+	}
 	GateWay := request.URL.Query().Get(`GateWay`)
-	transaction.GateWay = GateWay
+	if GateWay != `` {
+		PreURL += `&GateWay=` + request.URL.Query().Get(`GateWay`)
+		transaction.GateWay = GateWay
+	}
+
 	Amount, err := strconv.ParseFloat(request.URL.Query().Get(`Amount`), 64)
 	if err == nil {
+		PreURL += `&Amount=` + request.URL.Query().Get(`Amount`)
 		transaction.Amount = Amount
 	}
-	response := models.GetViewTransactions(transaction, int64(rowsInt), int64(pageInt-1))
+
+	var interval helperfunc.TimeInterval
+	unix := time.Unix(0, 0)
+	interval.From = unix.Format(time.RFC3339)
+	unixTimeNow := time.Now()
+	interval.To = unixTimeNow.Format(time.RFC3339)
+	from, err := strconv.Atoi(request.URL.Query().Get(`from`))
+	if err == nil {
+		i := time.Unix(int64(from), 0)
+		ans := i.Format(time.RFC3339)
+		interval.From = ans
+		PreURL += `&from=` + request.URL.Query().Get(`from`)
+	}
+	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
+	if err == nil {
+		i := time.Unix(int64(to), 0)
+		ans := i.Format(time.RFC3339)
+		interval.To = ans
+		PreURL += `&to=` + request.URL.Query().Get(`to`)
+	}
+
+	var	response models.ResponseViewTransactions
+	page := request.URL.Query().Get(`page`)
+	URL := `http://127.0.0.1:8080/api/megafon/transactions`
+	pageInt, err := strconv.Atoi(page)
+	if err != nil {
+		pageInt = 1
+		URL += `?page=1`
+	}
+	response = models.GetViewTransactionsCount(transaction, interval)
+	response.TotalPage = int64(math.Ceil(float64(response.TotalPage) / float64(int64(100))))
+	response.Page = helperfunc.MinOftoInt(int64(pageInt), response.TotalPage)
+	if err == nil {
+		URL += `?page=` + fmt.Sprintf("%d", response.Page)
+	}
+	URL += PreURL
+	response.URL = URL
+	fmt.Println(URL)
+	models.GetViewTransactions(transaction, &response, interval, response.Page - 1)
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)
@@ -1511,3 +1588,49 @@ func (server *MainServer) GetHamsoyaClientsHandler(writer http.ResponseWriter, r
 	}
 	return
 }
+
+///TODO : DELETE ME
+func (server *MainServer) TESTGetHamsoyaAccountsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	pageInt := 1
+	rowsInt := 100
+	page := request.URL.Query().Get(`page`)
+	pageInt, err := strconv.Atoi(page)
+	if err != nil {
+		pageInt = 1
+	}
+	rows := request.URL.Query().Get(`rows`)
+	rowsInt, err = strconv.Atoi(rows)
+	if err != nil {
+		rowsInt = 100
+	}
+	var newHamsoyaAccount hamsoyamodels.HamsoyaAccount
+	clientId := request.URL.Query().Get(`clientId`)
+	clientIdInt, err := strconv.Atoi(clientId)
+	if err == nil {
+		newHamsoyaAccount.ClientId = int64(clientIdInt)
+	}
+
+//	Accounts := hamsoyamodels.GetHamsoyaAccounts(newHamsoyaAccount, int64(rowsInt), int64(pageInt))
+	myDataString := 1591635497
+	i := time.Unix(int64(myDataString), 0)
+	fmt.Println(time.Now().Unix())
+	ans := i.Format(time.RFC3339)
+	Accounts := hamsoyamodels.GetHamsoyaAccountsTEST(newHamsoyaAccount, int64(rowsInt), int64(pageInt), ans)
+	if Accounts.Error != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		err := json.NewEncoder(writer).Encode(`mismatch_hamsoyaDocuments`)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		return
+	}
+	err = json.NewEncoder(writer).Encode(Accounts)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	return
+}
+////

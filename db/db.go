@@ -20,6 +20,10 @@ func init() {
 //	postgresHamsoyadbParams := settings.HamsoyaSettings.PostgresMegafonDbParams
 
 	postgresMegafondbParams := settings.AppSettings.PostgresMegafonDbParams
+	//test
+	postgresHamsoyadb := settings.AppSettings.PostgresHamsoyaDbParams
+
+	//fmt.Printf("DATABASE = %s\n", postgresHamsoyadb.Database)
 
 	connString := fmt.Sprintf("host=%s port=%d user=%s password=%s database=%s sslmode=disable",
 		postgresMegafondbParams.Server, postgresMegafondbParams.Port,
@@ -27,9 +31,14 @@ func init() {
 		postgresMegafondbParams.Database)
 
 	connHamsoyaString := fmt.Sprintf("host=%s port=%d user=%s password=%s database=%s sslmode=disable",
-		postgresMegafondbParams.Server, postgresMegafondbParams.Port,
-		postgresMegafondbParams.User, postgresMegafondbParams.Password,
-		"hamsoya")
+		postgresHamsoyadb.Server, postgresHamsoyadb.Port,
+		postgresHamsoyadb.User, postgresHamsoyadb.Password,
+		postgresHamsoyadb.Database)
+
+	//connHamsoyaString := fmt.Sprintf("host=%s port=%d user=%s password=%s database=%s sslmode=disable",
+	//	postgresMegafondbParams.Server, postgresMegafondbParams.Port,
+	//	postgresMegafondbParams.User, postgresMegafondbParams.Password,
+	//	"hamsoya")
 
 	fmt.Println(connHamsoyaString, '\n', connString, '\n')
 	// Opening con

@@ -2,6 +2,7 @@ package hamsoyamodels
 
 import (
 	"MF/db"
+	"fmt"
 	"time"
 )
 
@@ -29,6 +30,28 @@ type ResponseHamsoyaAccount struct {
 	Count int64
 	HamsoyaAccountList []HamsoyaAccount
 }
+///TODO: DELETE ME I AM TEST FUNCTION
+func TESTTIME(time string) (HamsoyaAccount ResponseHamsoyaAccount) {
+	postgresDb := db.GetHamsoyaPostgresDb()
+	if err := postgresDb.Where("create_date > ?", time).Offset(0).Find(&HamsoyaAccount.HamsoyaAccountList).Count(&HamsoyaAccount.Count).Error; err != nil{
+		HamsoyaAccount.Error = err
+	}
+	return
+}
+//TODO: DELETE ME TOO, I AM TEST FOR INTERVAL
+func GetHamsoyaAccountsTEST(hamsoyaAccount HamsoyaAccount, rows, pages int64, leftTime string) (HamsoyaAccount ResponseHamsoyaAccount){
+	fmt.Println("TETST")
+	pages--
+	if pages < 0 {
+		pages = 0
+	}
+	postgresDb := db.GetHamsoyaPostgresDb()
+	if err := postgresDb.Where(&hamsoyaAccount).Where("create_date > ?", leftTime).Limit(rows).Offset(rows * pages).Find(&HamsoyaAccount.HamsoyaAccountList).Count(&HamsoyaAccount.Count).Error; err != nil{
+		HamsoyaAccount.Error = err
+	}
+	return
+}
+//
 
 func GetHamsoyaAccountById(id int64) (HamsoyaAccount HamsoyaAccount, err error) {
 	postgresDb := db.GetHamsoyaPostgresDb()

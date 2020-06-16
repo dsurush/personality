@@ -61,6 +61,7 @@ func Logger(prefix string) func(next httprouter.Handle,) httprouter.Handle {
 					return
 				}
 			}
+
 			log.Printf(
 				"%s: [%s] login: %s %s Method: %s, path: %s\n",
 				time.Now().Format("2006-01-02 15:04:05"),
