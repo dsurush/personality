@@ -612,3 +612,25 @@
 2020-06-15 23:36:19: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
 2020-06-15 23:36:25: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
 2020-06-15 23:36:30: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-06-16 14:04:05: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-16 14:04:26: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/megafon/vendors
+2020-06-16 14:05:22: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/megafon/vendors
+2020-06-16 14:05:26: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/megafon/vendors
+2020-06-16 14:05:31: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/megafon/vendors
+2020-06-16 14:05:37: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/megafon/vendors
+2020-06-16 14:05:41: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/megafon/vendors
+2020-06-16 14:05:45: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/megafon/vendors
+2020-06-16 14:05:47: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/megafon/vendors
+2020-06-16 14:05:51: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/megafon/vendors
+2020-06-16 14:05:57: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/megafon/vendors
+2020-06-16 14:06:00: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/megafon/vendors
+2020-06-16 14:06:03: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/megafon/vendors
+2020-06-16 14:06:06: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/megafon/vendors
+2020-06-16 14:06:16: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/megafon/vendors
+2020-06-16 14:07:45: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/megafon/vendors
+2020-06-16 14:08:39: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/megafon/vendors
+2020-06-16 14:08:51: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/megafon/vendors
+2020-06-16 14:09:34: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/megafon/vendors
+2020-06-16 14:09:57: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/megafon/vendors
+2020-06-16 14:10:09: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/megafon/vendors
+2020-06-16 14:52:42: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/megafon/vendors

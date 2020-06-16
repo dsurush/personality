@@ -68,11 +68,12 @@ func (vendor *Vendor) Find(id int) {
 }
 
 // FindAll returns slice of vendors
-func (vendor *Vendor) FindAll() []Vendor {
+func (vendor *Vendor) FindAll(page int) []Vendor {
 	vendors := []Vendor{}
 	db := db.GetPostgresDb()
 	db.Table("tb_vendor").Select("tb_vendor.*, vc.name_rus as category").
 		Joins("inner join tb_vendor_category as vc on vc.id = tb_vendor.category_id").Where("tb_vendor.is_active = true").
+		Limit(100).Offset(page * 100).
 		Order("tb_vendor.category_id").Scan(&vendors)
 	return vendors
 }

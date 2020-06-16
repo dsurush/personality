@@ -45,7 +45,7 @@ func (server *MainServer) LoginHandler(writer http.ResponseWriter, request *http
 	}
 }
 
-//Get clients By Phone
+//Get clients By ID
 func (server *MainServer) GetClientInfoByIdHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
 	fmt.Println("I am find client By number phone")
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -56,7 +56,6 @@ func (server *MainServer) GetClientInfoByIdHandler(writer http.ResponseWriter, r
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
-
 	fmt.Println(response)
 	err := json.NewEncoder(writer).Encode(&response)
 	if err != nil {
@@ -168,9 +167,7 @@ func (server *MainServer) MainPageHandler(writer http.ResponseWriter, request *h
 		log.Print(err)
 		return
 	}
-	//		log.Printf("login = %s, pass = %s\n", requestBody.Username, requestBody.Password)
 	response, err := server.tokenSvc.Generate(request.Context(), &requestBody)
-	//log.Println(response)
 	if err != nil {
 		writer.WriteHeader(http.StatusBadRequest)
 		err := json.NewEncoder(writer).Encode([]string{"err.password_mismatch", err.Error()})
@@ -179,15 +176,6 @@ func (server *MainServer) MainPageHandler(writer http.ResponseWriter, request *h
 		}
 		return
 	}
-	//cookie := http.Cookie{
-	//	//	Name:     "token",
-	//	//	Value:    response.Token,
-	//	//	Expires:  time.Now().Add(time.Hour),
-	//	//	HttpOnly: true,
-	//	//	Path:     "/",
-	//	//	// Domain:   "localhost",
-	//	//}
-	//http.SetCookie(writer, &cookie)
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)
@@ -198,11 +186,9 @@ func (server *MainServer) MainPageHandler(writer http.ResponseWriter, request *h
 func (server *MainServer) GetVendorCategoryByPageSizeHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	page := request.URL.Query().Get(`page`)
-	rows := request.URL.Query().Get(`rows`)
-	pageInt, _ := strconv.Atoi(page)
-	rowsInt, _ := strconv.Atoi(rows)
+	pageInt, err := strconv.Atoi(page)
 	var vendor models.Vendor
-	response := vendor.FindAllVendorsByPageSize(pageInt-1, rowsInt)
+	response := vendor.FindAll(pageInt - 1)
 	err := json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)
