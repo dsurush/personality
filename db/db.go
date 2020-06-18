@@ -41,7 +41,7 @@ func init() {
 	//	postgresMegafondbParams.User, postgresMegafondbParams.Password,
 	//	"hamsoya")
 
-	fmt.Println(connHamsoyaString, '\n', connString, '\n')
+	fmt.Printf("%s\n%s\n", connHamsoyaString, connString)
 	// Opening con
 	//
 	//

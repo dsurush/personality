@@ -147,7 +147,7 @@ func (server *MainServer) GetClientsInfoHandler(writer http.ResponseWriter, requ
 
 //UnUse Handler
 func (server *MainServer) LoginHandler1(writer http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
-	fmt.Println("Login\n")
+	fmt.Printf("Login\n")
 	bytes, err := ioutil.ReadFile("web/templates/mpage.gohtml")
 	if err != nil {
 		log.Fatal("can't read from /web/templates/mgpage.gohtml\nerr: ", err)
@@ -188,7 +188,7 @@ func (server *MainServer) MainPageHandler(writer http.ResponseWriter, request *h
 func (server *MainServer) GetVendorsHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	URL := `http://127.0.0.1:8080/api/megafon/clients`
-//	PreURL := ``
+	//	PreURL := ``
 	page := request.URL.Query().Get(`page`)
 	pageInt, errPage := strconv.Atoi(page)
 	if errPage != nil || pageInt <= 0 {
@@ -412,12 +412,48 @@ func (server *MainServer) GetVendorHandler(writer http.ResponseWriter, request *
 func (server *MainServer) GetMerchantsHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	page := request.URL.Query().Get(`page`)
-	rows := request.URL.Query().Get(`rows`)
-	pageInt, _ := strconv.Atoi(page)
-	rowsInt, _ := strconv.Atoi(rows)
+	PreURL := ``
+	//
+	var interval helperfunc.TimeInterval
+	unix := time.Unix(0, 0)
+	interval.From = unix.Format(time.RFC3339)
+	unixTimeNow := time.Now()
+	interval.To = unixTimeNow.Format(time.RFC3339)
+	from, err := strconv.Atoi(request.URL.Query().Get(`from`))
+	if err == nil {
+		from /= 1000
+		i := time.Unix(int64(from), 0)
+		ans := i.Format(time.RFC3339)
+		interval.From = ans
+		PreURL += `&from=` + request.URL.Query().Get(`from`)
+	}
+	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
+	if err == nil {
+		from /= 1000
+		i := time.Unix(int64(to), 0)
+		ans := i.Format(time.RFC3339)
+		interval.To = ans
+		PreURL += `&to=` + request.URL.Query().Get(`to`)
+	}
+	var response models.ResponseMerchants
+	pageInt, err := strconv.Atoi(page)
+	URL := `http://127.0.0.1:8080/api/megafon/merchants`
+	if err != nil {
+		pageInt = 1
+		URL += `?page=1`
+	}
 	var merchant models.Merchant
-	response := merchant.GetMerchants(int64(rowsInt), int64(pageInt-1))
-	err := json.NewEncoder(writer).Encode(&response)
+	response = models.GetMerchantsCount(merchant, interval)
+	response.TotalPage = int64(math.Ceil(float64(response.TotalPage) / float64(int64(100))))
+	response.Page = helperfunc.MinOftoInt(int64(pageInt), response.TotalPage)
+	if err == nil {
+		URL += `?page=` + fmt.Sprintf("%d", response.Page)
+	}
+	URL += PreURL
+	response.URL = URL
+	fmt.Println(URL)
+	models.GetMerchants(merchant, &response, interval, response.Page-1)
+	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)
 	}

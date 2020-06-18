@@ -4,8 +4,6 @@ import (
 	"MF/middleware/authorized"
 	"MF/middleware/corss"
 	"net/http"
-	"time"
-
 	//"MF/middleware/corss"
 	"MF/middleware/jwt"
 	"MF/middleware/logger"
@@ -96,7 +94,7 @@ func (server *MainServer) InitRoutes() {
 
 	// TODO: DELETE ME
 	server.router.GET(`/api/test`, server.TESTGetHamsoyaAccountsHandler)
-
+	fmt.Println("Server is listening ...")
 	panic(http.ListenAndServe("127.0.0.1:8080", server))
 }
 
@@ -117,5 +115,4 @@ func test() {
 	//ans := i.Format(time.RFC3339)
 	//HamsoyaAccount := hamsoyamodels.TESTTIME(ans)
 	//fmt.Println(HamsoyaAccount)
-	fmt.Println(time.Now().Unix())
 }

@@ -31,5 +31,4 @@ func main() {
 
 	server := app.NewMainServer(router, tokenSvc, usersvc)
 	server.Start()
-
 }

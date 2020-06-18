@@ -2,8 +2,10 @@ package models
 
 import (
 	"MF/db"
+	"MF/helperfunc"
 	"encoding/xml"
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"time"
 )
 
@@ -22,9 +24,11 @@ type Merchant struct {
 }
 
 type ResponseMerchants struct {
-	Error        error
-	Count        int64
-	MerchantList []Merchant
+	Error          error        `json:"error"`
+	Page           int64        `json:"page"`
+	TotalPage      int64        `json:"totalPage"`
+	URL            string       `json:"url"`
+	MerchantList []Merchant `json:"merchant_list"`
 }
 
 //TableName for changing struct name to db name
@@ -32,22 +36,23 @@ func (merchant *Merchant) TableName() string {
 	return "tb_ho_merchant"
 }
 
-//GetList gets list of merchants
-func (merchant *Merchant) GetList() []Merchant {
-	merchants := []Merchant{}
-	db := db.GetPostgresDb()
-	db.Find(&merchants)
-	return merchants
+// Get merchantlist by page and rowssize
+func GetMerchants(merchant Merchant, merchantsSlice *ResponseMerchants, time helperfunc.TimeInterval, page int64) (merchantsSliceOver *ResponseMerchants) {
+	postgresDb := db.GetPostgresDb()
+	if err := postgresDb.Where(&merchant).Where(`create_time > ? and create_time < ?`, time.From, time.To).Limit(100).Offset(page * 100).Order("create_time desc").Find(&merchantsSlice.MerchantList).Error; err != nil {
+		merchantsSlice.Error = err
+		fmt.Println("Can't get Merchats from db")
+	}
+	return
 }
 
-// Get merchantlist by page and rowssize
-func (merchant *Merchant) GetMerchants(size, page int64) (merchants ResponseMerchants) {
-	postgresDb := db.GetPostgresDb()
-	if err := postgresDb.Table(`tb_ho_merchant`).Select("tb_ho_merchant.*").Limit(size).Offset(page * size).Scan(&merchants.MerchantList).Count(&merchants.Count).Error; err != nil {
-		fmt.Println("Can't get Merchats from db")
-		merchants.Error = err
+// Get Merchants Count
+func GetMerchantsCount(merchant Merchant, time helperfunc.TimeInterval) (merchantsSlice ResponseMerchants) {
+	if err := db.GetPostgresDb().Table("tb_ho_merchant").Where(&merchant).Where(`create_time > ? and create_time < ?`, time.From, time.To).Count(&merchantsSlice.TotalPage).Error; err != nil {
+		merchantsSlice.Error = err
+		logrus.Println(" ", err)
 	}
-	return merchants
+	return
 }
 
 //Get merchant by ID
