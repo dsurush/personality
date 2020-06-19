@@ -2,6 +2,7 @@ package models
 
 import (
 	"MF/db"
+	"MF/helperfunc"
 	"log"
 	"time"
 )
@@ -33,18 +34,35 @@ type ViewReport struct {
 	//	NameRus           string    `xml:"name_rus"`
 	//	TimeDiff          time.Time `xml:"time_diff"`
 }
-
 type ResponseViewReports struct {
-	Error          error
-	Count          int64
-	ViewReportList []ViewReport
+	Error          error        `json:"error"`
+	Page           int64        `json:"page"`
+	TotalPage      int64        `json:"totalPage"`
+	URL            string       `json:"url"`
+	ViewReportList []ViewReport `json:"view_report_list"`
 }
 
-func GetViewReport(size, page int64) (Report ResponseViewReports) {
-	postgresDb := db.GetPostgresDb()
-	if err := postgresDb.Table(`view_report`).Select("view_report.*").Limit(size).Offset(page * size).Scan(&Report.ViewReportList).Count(&Report.Count).Error; err != nil {
-		log.Printf("can't get from db view report %e\n", err)
-		Report.Error = err
-	}
-	return Report
+func (viewReport ViewReport) TableName() string {
+	return "view_report"
 }
+
+func GetViewReport(report ViewReport, ViewReportSlice *ResponseViewReports, time helperfunc.TimeInterval, page int64) (ReportSliceOver *ResponseViewReports) {
+	postgresDb := db.GetPostgresDb()
+	if err := postgresDb.Where(&report).Where(`create_time > ? and create_time < ?`, time.From, time.To).Limit(100).Offset(page * 100).Order("create_time desc").Find(&ViewReportSlice.ViewReportList).Error; err != nil {
+		log.Printf("can't get from db view report %e\n", err)
+		ViewReportSlice.Error = err
+	}
+	return
+}
+
+func GetViewReportCount(report ViewReport, time helperfunc.TimeInterval) (ReportSlice ResponseViewReports) {
+	postgresDb := db.GetPostgresDb()
+	if err := postgresDb.Table("view_report").Where(&report).Where(`create_time > ? and create_time < ?`, time.From, time.To).Count(&ReportSlice.TotalPage).Error; err != nil {
+		log.Printf("can't get from db view report %e\n", err)
+		ReportSlice.Error = err
+	}
+	return
+}
+
+
+

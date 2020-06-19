@@ -39,10 +39,10 @@ func (server *MainServer) InitRoutes() {
 	server.router.GET(`/api/megafon/merchants/merchant/:id`, logger.Logger(`Get merchant `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetMerchantHandler)))))
 	server.router.POST(`/api/megafon/merchants/merchant/:id/edit`, logger.Logger(`Change merchant by id `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.UpdateMerchantHandler)))))
 
-	server.router.GET(`/api/megafon/logs`, logger.Logger(`Get Megafon logs `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetViewLogsHandler)))))
-	server.router.GET(`/api/megafon/logs/log/:id`, logger.Logger(`Get by id Megafing log`)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetViewLogHandler)))))
+	//server.router.GET(`/api/megafon/logs`, logger.Logger(`Get Megafon logs `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetViewLogsHandler)))))
+	server.router.GET(`/api/megafon/logs/log/:id`, logger.Logger(`Get by id MegafonFin log`)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetViewLogHandler)))))
 	//This router for not full logs form (DataTransferObject)
-	server.router.GET(`/api/megafon/logs/DTO`, logger.Logger(`Change Megafon logs DTO `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetViewLogsDTOHandler)))))
+	server.router.GET(`/api/megafon/logs`, logger.Logger(`Change Megafon logs DTO `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetViewLogsDTOHandler)))))
 
 	///Hamsoya
 	server.router.GET(`/api/hamsoya/transactionstype`, logger.Logger(`Get Hamsoya TransactionTypeTypes`)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaTransactionTypeHandler)))))
@@ -115,4 +115,17 @@ func test() {
 	//ans := i.Format(time.RFC3339)
 	//HamsoyaAccount := hamsoyamodels.TESTTIME(ans)
 	//fmt.Println(HamsoyaAccount)
+	var m map[string]int
+	m = make(map[string]int)
+	m[`surush`] = 1
+	m[`davlat`] = 2
+
+	for _, value := range m{
+		fmt.Println(value)
+	}
+
+	ma := map[int][]int{}
+	ma[1] = []int{789, 2}
+	ma[2] = []int{4}
+	fmt.Println(ma)
 }

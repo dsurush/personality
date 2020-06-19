@@ -319,24 +319,103 @@ func (server *MainServer) GetViewTransactionsHandler(writer http.ResponseWriter,
 func (server *MainServer) GetViewReportsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	fmt.Println("I am get clients")
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
-	pageInt := 1
-	rowsInt := 100
+	viewReport := models.ViewReport{}
+	PreURL := ``
+	RequestId, err := strconv.Atoi(request.URL.Query().Get(`RequestId`))
+	if err == nil {
+		viewReport.RequestId = int64(RequestId)
+		PreURL += `&RequestId=` + request.URL.Query().Get(`RequestId`)
+	}
+	PaymentID, err := strconv.Atoi(request.URL.Query().Get(`PaymentID`))
+	if err == nil {
+		viewReport.PaymentID = int64(PaymentID)
+		PreURL += `&PaymentID=` + request.URL.Query().Get(`PaymentID`)
+	}
+	VendorID, err := strconv.Atoi(request.URL.Query().Get(`VendorId`))
+	if err == nil {
+		viewReport.VendorID = VendorID
+		PreURL += `&VendorId=` + request.URL.Query().Get(`VendorId`)
+	}
+	VendorName := request.URL.Query().Get(`VendorName`)
+	if VendorName != `` {
+		PreURL += `&VendorName=` + request.URL.Query().Get(`VendorName`)
+		viewReport.VendorName = VendorName
+	}
+	RequestType := request.URL.Query().Get(`RequestType`)
+	if RequestType != `` {
+		PreURL += `&RequestType=` + request.URL.Query().Get(`RequestType`)
+		viewReport.RequestType = RequestType
+	}
+	AccountPayer := request.URL.Query().Get(`AccountPayer`)
+	if AccountPayer != `` {
+		PreURL += `&AccountPayer=` + request.URL.Query().Get(`AccountPayer`)
+		viewReport.AccountPayer = AccountPayer
+	}
+	AccountReceiver := request.URL.Query().Get(`AccountReceiver`)
+	if AccountReceiver != `` {
+		PreURL += `&AccountReceiver=` + request.URL.Query().Get(`AccountReceiver`)
+		viewReport.AccountReceiver = AccountReceiver
+	}
+	StateID := request.URL.Query().Get(`StateID`)
+	if StateID != `` {
+		PreURL += `&StateID=` + request.URL.Query().Get(`StateID`)
+		viewReport.StateID = StateID
+	}
+	Aggregator := request.URL.Query().Get(`Aggregator`)
+	if Aggregator != `` {
+		PreURL += `&Aggregator=` + request.URL.Query().Get(`Aggregator`)
+		viewReport.Aggregator = Aggregator
+	}
+	GateWay := request.URL.Query().Get(`GateWay`)
+	if GateWay != `` {
+		PreURL += `&GateWay=` + request.URL.Query().Get(`GateWay`)
+		viewReport.GateWay = GateWay
+	}
+
+	Amount, err := strconv.ParseFloat(request.URL.Query().Get(`Amount`), 64)
+	if err == nil {
+		PreURL += `&Amount=` + request.URL.Query().Get(`Amount`)
+		viewReport.Amount = Amount
+	}
+
+	var interval helperfunc.TimeInterval
+	unix := time.Unix(0, 0)
+	interval.From = unix.Format(time.RFC3339)
+	unixTimeNow := time.Now()
+	interval.To = unixTimeNow.Format(time.RFC3339)
+	from, err := strconv.Atoi(request.URL.Query().Get(`from`))
+	if err == nil {
+		i := time.Unix(int64(from), 0)
+		ans := i.Format(time.RFC3339)
+		interval.From = ans
+		PreURL += `&from=` + request.URL.Query().Get(`from`)
+	}
+	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
+	if err == nil {
+		i := time.Unix(int64(to), 0)
+		ans := i.Format(time.RFC3339)
+		interval.To = ans
+		PreURL += `&to=` + request.URL.Query().Get(`to`)
+	}
+
+	var response models.ResponseViewReports
 	page := request.URL.Query().Get(`page`)
-	rows := request.URL.Query().Get(`rows`)
+	URL := `http://127.0.0.1:8080/api/megafon/reports`
 	pageInt, err := strconv.Atoi(page)
 	if err != nil {
 		pageInt = 1
+		URL += `?page=1`
 	}
-	rowsInt, err = strconv.Atoi(rows)
-	if err != nil {
-		rowsInt = 100
+	response = models.GetViewReportCount(viewReport, interval)
+	response.TotalPage = int64(math.Ceil(float64(response.TotalPage) / float64(int64(100))))
+	response.Page = helperfunc.MinOftoInt(int64(pageInt), response.TotalPage)
+	if err == nil {
+		URL += `?page=` + fmt.Sprintf("%d", response.Page)
 	}
-	response := models.GetViewReport(int64(rowsInt), int64(pageInt-1))
-	if response.Error != nil {
-		err := json.NewEncoder(writer).Encode([]string{`error mismatch this raport'`})
-		log.Print(err)
-		return
-	}
+	URL += PreURL
+	response.URL = URL
+	fmt.Println(URL)
+	models.GetViewReport(viewReport, &response, interval, response.Page-1)
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)
@@ -531,24 +610,49 @@ func (server *MainServer) GetViewLogsHandler(writer http.ResponseWriter, request
 //GetViewDTO
 func (server *MainServer) GetViewLogsDTOHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
-	pageInt := 1
-	rowsInt := 100
 	page := request.URL.Query().Get(`page`)
-	rows := request.URL.Query().Get(`rows`)
+	PreURL := ``
+	//
+	var interval helperfunc.TimeInterval
+	unix := time.Unix(0, 0)
+	interval.From = unix.Format(time.RFC3339)
+	unixTimeNow := time.Now()
+	interval.To = unixTimeNow.Format(time.RFC3339)
+	from, err := strconv.Atoi(request.URL.Query().Get(`from`))
+	if err == nil {
+		from /= 1000
+		i := time.Unix(int64(from), 0)
+		ans := i.Format(time.RFC3339)
+		interval.From = ans
+		PreURL += `&from=` + request.URL.Query().Get(`from`)
+	}
+	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
+	if err == nil {
+		from /= 1000
+		i := time.Unix(int64(to), 0)
+		ans := i.Format(time.RFC3339)
+		interval.To = ans
+		PreURL += `&to=` + request.URL.Query().Get(`to`)
+	}
+	var response models.ResponseViewLogsList
 	pageInt, err := strconv.Atoi(page)
+	URL := `http://127.0.0.1:8080/api/megafon/logs`
 	if err != nil {
 		pageInt = 1
+		URL += `?page=1`
 	}
-	rowsInt, err = strconv.Atoi(rows)
-	if err != nil {
-		rowsInt = 100
+
+	var ViewLogDTO models.ViewLogDTO
+	response = models.GetViewLogsDTOCount(ViewLogDTO, interval)
+	response.TotalPage = int64(math.Ceil(float64(response.TotalPage) / float64(int64(100))))
+	response.Page = helperfunc.MinOftoInt(int64(pageInt), response.TotalPage)
+	if err == nil {
+		URL += `?page=` + fmt.Sprintf("%d", response.Page)
 	}
-	response, err := models.GetViewLogsDTO(int64(rowsInt), int64(pageInt))
-	if err != nil {
-		err := json.NewEncoder(writer).Encode([]string{`error mismatch this view log'`})
-		log.Print(err)
-		return
-	}
+	URL += PreURL
+	response.URL = URL
+	fmt.Println(URL)
+	models.GetViewLogsDTO(ViewLogDTO, &response, interval, response.Page-1)
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)

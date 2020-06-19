@@ -2,6 +2,8 @@ package models
 
 import (
 	"MF/db"
+	"MF/helperfunc"
+	"github.com/sirupsen/logrus"
 	"log"
 	"time"
 )
@@ -61,16 +63,44 @@ func GetViewLogById(id int64) (viewLog ViewLog, err error) {
 	return viewLog, err
 }
 
-func GetViewLogsDTO(size, page int64) (viewLogs []ViewLogDTO, err error) {
-	postgresDb := db.GetPostgresDb()
-	page--
-	if page < 0 {
-		page = 0
+//func GetViewLogsDTO(size, page int64) (viewLogs []ViewLogDTO, err error) {
+//	postgresDb := db.GetPostgresDb()
+//	page--
+//	if page < 0 {
+//		page = 0
+//	}
+//	err = postgresDb.Table(`view_log`).Select("view_log. id, command, request_type, vendor_id, account_payer, create_time ").Limit(size).Offset(page * size).Scan(&viewLogs).Error
+//	if err != nil {
+//		log.Printf("can't get from db view log %e\n", err)
+//		return nil, err
+//	}
+//	return viewLogs, nil
+//}
+type ResponseViewLogsList struct {
+	Error          error        `json:"error"`
+	Page           int64        `json:"page"`
+	TotalPage      int64        `json:"totalPage"`
+	URL            string       `json:"url"`
+	ViewLogList []ViewLogDTO `json:"logs_list"`
+}
+
+func GetViewLogsDTO(ViewLogDTO ViewLogDTO, ViewLogDTOsSlice *ResponseViewLogsList, time helperfunc.TimeInterval, page int64) (ViewLogsDTOSliceOver *ResponseViewLogsList) {
+
+	if err := db.GetPostgresDb().Where(&ViewLogDTO).Where(`create_time > ? and create_time < ?`, time.From, time.To).Limit(100).Offset(page * 100).Order("create_time desc").Find(&ViewLogDTOsSlice.ViewLogList).Error; err != nil {
+		ViewLogDTOsSlice.Error = err
+		logrus.Println(" ", err)
 	}
-	err = postgresDb.Table(`view_log`).Select("view_log. id, command, request_type, vendor_id, account_payer, create_time ").Limit(size).Offset(page * size).Scan(&viewLogs).Error
-	if err != nil {
-		log.Printf("can't get from db view log %e\n", err)
-		return nil, err
+	return
+}
+
+func GetViewLogsDTOCount(ViewLogDTO ViewLogDTO, time helperfunc.TimeInterval) (ViewLogsDTOSliceOver ResponseViewLogsList) {
+	if err := db.GetPostgresDb().Table("view_log").Where(&ViewLogDTO).Where(`create_time > ? and create_time < ?`, time.From, time.To).Count(&ViewLogsDTOSliceOver.TotalPage).Error; err != nil {
+		ViewLogsDTOSliceOver.Error = err
+		logrus.Println(" ", err)
 	}
-	return viewLogs, nil
+	return
+}
+
+func (*ViewLogDTO) TableName() string {
+	return "view_log"
 }
