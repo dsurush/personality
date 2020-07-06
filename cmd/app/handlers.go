@@ -377,6 +377,7 @@ func (server *MainServer) GetViewReportsHandler(writer http.ResponseWriter, requ
 		PreURL += `&Amount=` + request.URL.Query().Get(`Amount`)
 		viewReport.Amount = Amount
 	}
+	fmt.Println(viewReport)
 
 	var interval helperfunc.TimeInterval
 	unix := time.Unix(0, 0)
@@ -557,16 +558,24 @@ func (server *MainServer) GetMerchantHandler(writer http.ResponseWriter, request
 
 //Update Merchant
 func (server *MainServer) UpdateMerchantHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-	var requestBody models.Merchant
+	var requestBody models.MerchantDTO
+	var reqBody models.Merchant
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
+	reqBody.ID = requestBody.ID
+	reqBody.HumoOnlineID = requestBody.HumoOnlineID
+	reqBody.NameENG = requestBody.NameENG
+	reqBody.NameRUS = requestBody.NameRUS
+	reqBody.QrCode = requestBody.QrCode
+	reqBody.QrCodeNew = requestBody.QrCodeNew
 	if err != nil {
 		writer.WriteHeader(http.StatusBadRequest)
 		err := json.NewEncoder(writer).Encode([]string{"err.json_invalid"})
 		log.Print(err)
 		return
 	}
-	response := requestBody.Update(requestBody)
+	fmt.Println(reqBody)
+	response := reqBody.Update(reqBody)
 	fmt.Println(response)
 	if response.ID <= 0 {
 		writer.WriteHeader(http.StatusNotFound)
@@ -686,61 +695,89 @@ func (server *MainServer) GetViewLogHandler(writer http.ResponseWriter, request 
 	}
 }
 
-// TODO: найти проблему как распарсить время, чтобы парсилась из string в time.time
+//
 func (server *MainServer) GetHamsoyaTransactionsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	fmt.Println("I am view Transaction")
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
-	pageInt := 1
-	rowsInt := 100
-	var transaction hamsoyamodels.HamsoyaTransaction
+	transaction := hamsoyamodels.HamsoyaTransaction{}
+	PreURL := ``
+	Id, err := strconv.Atoi(request.URL.Query().Get(`Id`))
+	if err == nil {
+		transaction.Id = int64(Id)
+		PreURL += `&Id=` + request.URL.Query().Get(`Id`)
+	}
+	PreCheckId, err := strconv.Atoi(request.URL.Query().Get(`PreCheckId`))
+	if err == nil {
+		transaction.PreCheckId = int64(PreCheckId)
+		PreURL += `&PreCheckId=` + request.URL.Query().Get(`PreCheckId`)
+	}
+	StatusId, err := strconv.Atoi(request.URL.Query().Get(`StatusId`))
+	if err == nil {
+		transaction.StatusId = int64(StatusId)
+		PreURL += `&StatusId=` + request.URL.Query().Get(`StatusId`)
+	}
+	TypeId, err := strconv.Atoi(request.URL.Query().Get(`TypeId`))
+	if err == nil {
+		transaction.TypeId = int64(TypeId)
+		PreURL += `&TypeId=` + request.URL.Query().Get(`TypeId`)
+	}
+	ExtStatusId, err := strconv.Atoi(request.URL.Query().Get(`ExtStatusId`))
+	if err == nil {
+		transaction.ExtStatusId = int64(ExtStatusId)
+		PreURL += `&ExtStatusId=` + request.URL.Query().Get(`ExtStatusId`)
+	}
+	ClientPayerId, err := strconv.Atoi(request.URL.Query().Get(`ClientPayerId`))
+	if err == nil {
+		transaction.ClientPayerId = int64(ClientPayerId)
+		PreURL += `&ClientPayerId=` + request.URL.Query().Get(`ClientPayerId`)
+	}
+	ExtTransId := request.URL.Query().Get(`ExtTransId`)
+	if ExtTransId != `` {
+		transaction.ExtTransId = ExtTransId
+		PreURL += `&ExtTransId=` + request.URL.Query().Get(`ExtTransId`)
+	}
+
+	var interval helperfunc.TimeInterval
+	unix := time.Unix(0, 0)
+	interval.From = unix.Format(time.RFC3339)
+	unixTimeNow := time.Now()
+	interval.To = unixTimeNow.Format(time.RFC3339)
+	from, err := strconv.Atoi(request.URL.Query().Get(`from`))
+	if err == nil {
+		i := time.Unix(int64(from), 0)
+		ans := i.Format(time.RFC3339)
+		interval.From = ans
+		PreURL += `&from=` + request.URL.Query().Get(`from`)
+	}
+	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
+	if err == nil {
+		i := time.Unix(int64(to), 0)
+		ans := i.Format(time.RFC3339)
+		interval.To = ans
+		PreURL += `&to=` + request.URL.Query().Get(`to`)
+	}
+
+	var response hamsoyamodels.ResponseHamsoyaTransactions
 	page := request.URL.Query().Get(`page`)
+	URL := `http://127.0.0.1:8080/api/hamsoya/transactions`
 	pageInt, err := strconv.Atoi(page)
 	if err != nil {
 		pageInt = 1
+		URL += `?page=1`
 	}
-
-	rows := request.URL.Query().Get(`rows`)
-	rowsInt, err = strconv.Atoi(rows)
-	if err != nil {
-		rowsInt = 100
-	}
-	id, err := strconv.Atoi(request.URL.Query().Get(`id`))
+	response = hamsoyamodels.GetHamsoyaTransactionsCount(transaction, interval)
+	response.TotalPage = int64(math.Ceil(float64(response.TotalPage) / float64(int64(100))))
+	response.Page = helperfunc.MinOftoInt(int64(pageInt), response.TotalPage)
 	if err == nil {
-		transaction.Id = int64(id)
+		URL += `?page=` + fmt.Sprintf("%d", response.Page)
 	}
-	ClientPayerId, err := strconv.Atoi(request.URL.Query().Get(`clientpayerid`))
-	if err == nil {
-		transaction.ClientPayerId = int64(ClientPayerId)
-		fmt.Println(ClientPayerId)
-	}
-	//PreCheckId    int64     `xml:"pre_check_id"`
-	//StatusId      int64     `xml:"status_id"`
-	//TypeId        int64     `xml:"type_id"`
-	//ExtStatusId   int64     `xml:"ext_status_id"`
-	//ExtTransId    string    `xml:"ext_trans_id"`
-	//CreateDate    time.Time `xml:"create_date"`
-	//LastUpdate    time.Time `xml:"last_update"`
-	//Description   string    `xml:"description"`+
-	//ClientPayerId int64     `xml:"client_payer_id"`
-	//myDateString := "2019-10-30T01:07:39.085082+05:00"
-	//myDateString := request.URL.Query().Get(`createdata`)
-	//fmt.Println("My Starting Date:\t", myDateString)
-	//	myDate, err := time.Parse( "2019-10-30T01:07:39.085082+05:00", myDateString)
-	//if err != nil {
-	//	panic(err)
-	//}
-	//fmt.Println("My Date Reformatted:\t", myDate)
-	//transaction.CreateDate = myDate
-
-	response := hamsoyamodels.GetHamsoyaTransactions(transaction, int64(rowsInt), int64(pageInt))
-
-	if response.Error != nil {
-		err := json.NewEncoder(writer).Encode([]string{`error mismatch this transaction type`})
-		log.Println(err)
-		return
-	}
+	URL += PreURL
+	response.URL = URL
+	fmt.Println(URL)
+	hamsoyamodels.GetHamsoyaTransactions(transaction, &response, interval, response.Page-1)
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
-		log.Println(err)
+		log.Print(err)
 	}
 }
 
@@ -775,25 +812,43 @@ func (server *MainServer) GetHamsoyaTransactionByIdHandler(writer http.ResponseW
 //
 func (server *MainServer) GetHamsoyaTransactionTypeHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
-	pageInt := 1
-	rowsInt := 100
 	page := request.URL.Query().Get(`page`)
-	rows := request.URL.Query().Get(`rows`)
+	PreURL := ``
 	pageInt, err := strconv.Atoi(page)
+	URL := `http://localhost:3000/hamsoya/transactionstype`
 	if err != nil {
 		pageInt = 1
+		PreURL = `?page=1`
+	} else {
+		PreURL = fmt.Sprintf(`?page=%s`, pageInt)
 	}
-	rowsInt, err = strconv.Atoi(rows)
-	if err != nil {
-		rowsInt = 100
+	var transactionTypeDefault hamsoyamodels.HamsoyaTransactionType
+	IsActive, err := strconv.ParseBool(request.URL.Query().Get(`IsActive`))
+	if err == nil {
+		transactionTypeDefault.IsActive = IsActive
+		PreURL += fmt.Sprintf(`&IsActive=%s`, request.URL.Query().Get(`IsActive`))
 	}
-	response := server.userSvc.GetHamsoyaTransactionsType(int64(rowsInt), int64(pageInt))
+	IsForJob, err := strconv.ParseBool(request.URL.Query().Get(`IsForJob`))
+	if err == nil {
+		transactionTypeDefault.IsForJob = IsForJob
+		PreURL += fmt.Sprintf(`&IsForJob=%s`, request.URL.Query().Get(`IsForJob`))
+	}
+	IsPayment, err := strconv.ParseBool(request.URL.Query().Get(`IsPayment`))
+	if err == nil {
+		transactionTypeDefault.IsPayment = IsPayment
+		PreURL += fmt.Sprintf(`&IsPayment=%s`, request.URL.Query().Get(`IsPayment`))
+	}
 
-	if response.Error != nil {
-		err := json.NewEncoder(writer).Encode([]string{`error mismatch this transaction type'`})
-		log.Print(err)
-		return
-	}
+	fmt.Println(transactionTypeDefault)
+
+	var response hamsoyamodels.ResponseHamsoyaTransactionsType
+	response = hamsoyamodels.GetHamsoyaTransactionsTypeCount(transactionTypeDefault)
+	response.TotalPage = int64(math.Ceil(float64(response.TotalPage) / float64(int64(100))))
+	response.Page = helperfunc.MinOftoInt(int64(pageInt), response.TotalPage)
+	response.URL = URL + PreURL
+	fmt.Println(response.URL)
+	hamsoyamodels.GetHamsoyaTransactionsType(transactionTypeDefault, &response, int64(pageInt) - 1)
+
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)
@@ -1166,16 +1221,10 @@ func (server *MainServer) UpdateHamsoyaAccountTypeHandler(writer http.ResponseWr
 func (server *MainServer) GetHamsoyaStatusesHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	pageInt := 1
-	rowsInt := 100
 	page := request.URL.Query().Get(`page`)
 	pageInt, err := strconv.Atoi(page)
 	if err != nil {
 		pageInt = 1
-	}
-	rows := request.URL.Query().Get(`rows`)
-	rowsInt, err = strconv.Atoi(rows)
-	if err != nil {
-		rowsInt = 100
 	}
 	var newHamsoyaStatus hamsoyamodels.HamsoyaStatus
 	id, err := strconv.Atoi(request.URL.Query().Get(`id`))
@@ -1196,7 +1245,17 @@ func (server *MainServer) GetHamsoyaStatusesHandler(writer http.ResponseWriter, 
 		newHamsoyaStatus.ResultCode = int64(resultCode)
 	}
 
-	HamsoyaStatus := hamsoyamodels.GetHamsoyaStatuses(newHamsoyaStatus, int64(rowsInt), int64(pageInt))
+	final, err := strconv.ParseBool(request.URL.Query().Get(`final`))
+	if err == nil {
+		newHamsoyaStatus.Final = final
+	}
+
+	IsAmountHold, err := strconv.ParseBool(request.URL.Query().Get(`is_amount_hold`))
+	if err == nil {
+		newHamsoyaStatus.IsAmountHold = IsAmountHold
+	}
+
+	HamsoyaStatus := hamsoyamodels.GetHamsoyaStatuses(newHamsoyaStatus, int64(pageInt))
 
 	if HamsoyaStatus.Error != nil {
 		writer.WriteHeader(http.StatusNotFound)
@@ -1381,15 +1440,6 @@ func (server *MainServer) GetHamsoyaViewTransactionsHandler(writer http.Response
 
 	HamsoyaViewTransaction := hamsoyamodels.GetHamsoyaViewTransactions(newHamsoyaViewTransaction, int64(rowsInt), int64(pageInt))
 
-	if HamsoyaViewTransaction.Error != nil {
-		writer.WriteHeader(http.StatusNotFound)
-		err := json.NewEncoder(writer).Encode(`mismatch_hamsoyaStatus`)
-		if err != nil {
-			log.Println(err)
-			return
-		}
-		return
-	}
 	err = json.NewEncoder(writer).Encode(HamsoyaViewTransaction)
 	if err != nil {
 		log.Println(err)
@@ -1431,36 +1481,86 @@ func (server *MainServer) GetHamsoyaDocumentByIdHandler(writer http.ResponseWrit
 // Get Hamsoya Documents
 func (server *MainServer) GetHamsoyaDocumentsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
-	pageInt := 1
-	rowsInt := 100
 	page := request.URL.Query().Get(`page`)
+	PreURL := ``
 	pageInt, err := strconv.Atoi(page)
+	URL := `http://localhost:3000/hamsoya/documents`
 	if err != nil {
 		pageInt = 1
+		PreURL = `?page=1`
+	} else {
+		PreURL = fmt.Sprintf(`?page=%s`, pageInt)
 	}
-	rows := request.URL.Query().Get(`rows`)
-	rowsInt, err = strconv.Atoi(rows)
-	if err != nil {
-		rowsInt = 100
+	var documentDefault hamsoyamodels.HamsoyaDocument
+	Id, err := strconv.Atoi(request.URL.Query().Get(`Id`))
+	if err == nil {
+		documentDefault.Id = int64(Id)
+		PreURL += fmt.Sprintf(`&Id=%s`, request.URL.Query().Get(`Id`))
 	}
-	var newHamsoyaDocument hamsoyamodels.HamsoyaDocument
-	Documents := hamsoyamodels.GetHamsoyaDocuments(newHamsoyaDocument, int64(rowsInt), int64(pageInt))
+	AccountDt, err := strconv.Atoi(request.URL.Query().Get(`AccountDt`))
+	if err == nil {
+		documentDefault.AccountDt = int64(AccountDt)
+		PreURL += fmt.Sprintf(`&AccountDt=%s`, request.URL.Query().Get(`AccountDt`))
+	}
+	AccountCt, err := strconv.Atoi(request.URL.Query().Get(`AccountCt`))
+	if err == nil {
+		documentDefault.AccountCt = int64(AccountCt)
+		PreURL += fmt.Sprintf(`&AccountCt=%s`, request.URL.Query().Get(`AccountCt`))
+	}
+	TransId, err := strconv.Atoi(request.URL.Query().Get(`TransId`))
+	if err == nil {
+		documentDefault.TransId = int64(TransId)
+		PreURL += fmt.Sprintf(`&TransId=%s`, request.URL.Query().Get(`TransId`))
+	}
+	StatusId, err := strconv.Atoi(request.URL.Query().Get(`StatusId`))
+	if err == nil {
+		documentDefault.StatusId = int64(StatusId)
+		PreURL += fmt.Sprintf(`&StatusId=%s`, request.URL.Query().Get(`StatusId`))
+	}
+	CancelDocId, err := strconv.Atoi(request.URL.Query().Get(`CancelDocId`))
+	if err == nil {
+		documentDefault.CancelDocId = int64(CancelDocId)
+		PreURL += fmt.Sprintf(`&CancelDocId=%s`, request.URL.Query().Get(`CancelDocId`))
+	}
 
-	if Documents.Error != nil {
-		writer.WriteHeader(http.StatusNotFound)
-		err := json.NewEncoder(writer).Encode(`mismatch_hamsoyaDocuments`)
-		if err != nil {
-			log.Println(err)
-			return
-		}
-		return
+	Amount, err := strconv.ParseFloat(request.URL.Query().Get(`Amount`), 64)
+	if err == nil {
+		documentDefault.Amount = Amount
+		PreURL += fmt.Sprintf(`&Amount=%s`, request.URL.Query().Get(`Amount`))
 	}
-	err = json.NewEncoder(writer).Encode(Documents)
+	var interval helperfunc.TimeInterval
+	unix := time.Unix(0, 0)
+	interval.From = unix.Format(time.RFC3339)
+	unixTimeNow := time.Now()
+	interval.To = unixTimeNow.Format(time.RFC3339)
+	from, err := strconv.Atoi(request.URL.Query().Get(`from`))
+	if err == nil {
+		i := time.Unix(int64(from), 0)
+		ans := i.Format(time.RFC3339)
+		interval.From = ans
+		PreURL += `&from=` + request.URL.Query().Get(`from`)
+	}
+	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
+	if err == nil {
+		i := time.Unix(int64(to), 0)
+		ans := i.Format(time.RFC3339)
+		interval.To = ans
+		PreURL += `&to=` + request.URL.Query().Get(`to`)
+	}
+	fmt.Println(documentDefault)
+
+	var response hamsoyamodels.ResponseHamsoyaDocuments
+	response = hamsoyamodels.GetHamsoyaDocumentsCount(documentDefault, interval)
+	response.TotalPage = int64(math.Ceil(float64(response.TotalPage) / float64(int64(100))))
+	response.Page = helperfunc.MinOftoInt(int64(pageInt), response.TotalPage)
+	response.URL = URL + PreURL
+	fmt.Println(response.URL)
+	hamsoyamodels.GetHamsoyaDocuments(documentDefault, &response, interval, int64(pageInt) - 1)
+
+	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
-		log.Println(err)
-		return
+		log.Print(err)
 	}
-	return
 }
 
 // Get Hamsoya Record
@@ -1496,36 +1596,83 @@ func (server *MainServer) GetHamsoyaRecordByIdHandler(writer http.ResponseWriter
 //Get Hamsoya Records
 func (server *MainServer) GetHamsoyaRecordsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
-	pageInt := 1
-	rowsInt := 100
 	page := request.URL.Query().Get(`page`)
+	PreURL := ``
 	pageInt, err := strconv.Atoi(page)
+	URL := `http://localhost:3000/hamsoya/records`
 	if err != nil {
 		pageInt = 1
+		PreURL = `?page=1`
+	} else {
+		PreURL = fmt.Sprintf(`?page=%s`, pageInt)
 	}
-	rows := request.URL.Query().Get(`rows`)
-	rowsInt, err = strconv.Atoi(rows)
-	if err != nil {
-		rowsInt = 100
+	var recordDefault hamsoyamodels.HamsoyaRecord
+	Id, err := strconv.Atoi(request.URL.Query().Get(`Id`))
+	if err == nil {
+		recordDefault.Id = int64(Id)
+		PreURL += fmt.Sprintf(`&Id=%s`, request.URL.Query().Get(`Id`))
 	}
-	var newHamsoyaRecord hamsoyamodels.HamsoyaRecord
-	Records := hamsoyamodels.GetHamsoyaRecords(newHamsoyaRecord, int64(rowsInt), int64(pageInt))
+	AccountId, err := strconv.Atoi(request.URL.Query().Get(`AccountId`))
+	if err == nil {
+		recordDefault.AccountId = int64(AccountId)
+		PreURL += fmt.Sprintf(`&AccountId=%s`, request.URL.Query().Get(`AccountId`))
+	}
 
-	if Records.Error != nil {
-		writer.WriteHeader(http.StatusNotFound)
-		err := json.NewEncoder(writer).Encode(`mismatch_hamsoyaDocuments`)
-		if err != nil {
-			log.Println(err)
-			return
-		}
-		return
+	DocumentId, err := strconv.Atoi(request.URL.Query().Get(`DocumentId`))
+	if err == nil {
+		recordDefault.DocumentId = int64(DocumentId)
+		PreURL += fmt.Sprintf(`&DocumentId=%s`, request.URL.Query().Get(`DocumentId`))
 	}
-	err = json.NewEncoder(writer).Encode(Records)
+	Amount, err := strconv.ParseFloat(request.URL.Query().Get(`Amount`), 64)
+	if err == nil {
+		recordDefault.Amount = Amount
+		PreURL += fmt.Sprintf(`&Amount=%s`, request.URL.Query().Get(`Amount`))
+	}
+	StartSaldo, err := strconv.ParseFloat(request.URL.Query().Get(`StartSaldo`), 64)
+	if err == nil {
+		recordDefault.StartSaldo = StartSaldo
+		PreURL += fmt.Sprintf(`&StartSaldo=%s`, request.URL.Query().Get(`StartSaldo`))
+	}
+	Type := request.URL.Query().Get(`Type`)
+	if Type != ``{
+		recordDefault.Type = Type
+		PreURL += fmt.Sprintf(`&Type=%s`, request.URL.Query().Get(`Type`))
+
+	}
+
+	var interval helperfunc.TimeInterval
+	unix := time.Unix(0, 0)
+	interval.From = unix.Format(time.RFC3339)
+	unixTimeNow := time.Now()
+	interval.To = unixTimeNow.Format(time.RFC3339)
+	from, err := strconv.Atoi(request.URL.Query().Get(`from`))
+	if err == nil {
+		i := time.Unix(int64(from), 0)
+		ans := i.Format(time.RFC3339)
+		interval.From = ans
+		PreURL += `&from=` + request.URL.Query().Get(`from`)
+	}
+	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
+	if err == nil {
+		i := time.Unix(int64(to), 0)
+		ans := i.Format(time.RFC3339)
+		interval.To = ans
+		PreURL += `&to=` + request.URL.Query().Get(`to`)
+	}
+	fmt.Println(recordDefault)
+
+	var response hamsoyamodels.ResponseHamsoyaRecords
+	response = hamsoyamodels.GetHamsoyaRecordsCount(recordDefault, interval)
+	response.TotalPage = int64(math.Ceil(float64(response.TotalPage) / float64(int64(100))))
+	response.Page = helperfunc.MinOftoInt(int64(pageInt), response.TotalPage)
+	response.URL = URL + PreURL
+	fmt.Println(response.URL)
+	hamsoyamodels.GetHamsoyaRecords(recordDefault, &response, interval, int64(pageInt) - 1)
+
+	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
-		log.Println(err)
-		return
+		log.Print(err)
 	}
-	return
 }
 
 // Get Hamsoya Precheck
@@ -1626,36 +1773,96 @@ func (server *MainServer) GetHamsoyaAccountByIdHandler(writer http.ResponseWrite
 // Get Hamsoya Accounts
 func (server *MainServer) GetHamsoyaAccountsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
-	pageInt := 1
-	rowsInt := 100
 	page := request.URL.Query().Get(`page`)
+	PreURL := ``
 	pageInt, err := strconv.Atoi(page)
+	URL := `http://localhost:3000/hamsoya/accounts`
 	if err != nil {
 		pageInt = 1
+		PreURL = `?page=1`
+	} else {
+		PreURL = fmt.Sprintf(`?page=%s`, pageInt)
 	}
-	rows := request.URL.Query().Get(`rows`)
-	rowsInt, err = strconv.Atoi(rows)
-	if err != nil {
-		rowsInt = 100
+	var accountDefault hamsoyamodels.HamsoyaAccount
+	Id, err := strconv.Atoi(request.URL.Query().Get(`Id`))
+	if err == nil {
+		accountDefault.Id = int64(Id)
+		PreURL += fmt.Sprintf(`&Id=%s`, request.URL.Query().Get(`Id`))
 	}
-	var newHamsoyaAccount hamsoyamodels.HamsoyaAccount
-	Accounts := hamsoyamodels.GetHamsoyaAccounts(newHamsoyaAccount, int64(rowsInt), int64(pageInt))
+	ClientId, err := strconv.Atoi(request.URL.Query().Get(`ClientId`))
+	if err == nil {
+		accountDefault.ClientId = int64(ClientId)
+		PreURL += fmt.Sprintf(`&ClientId=%s`, request.URL.Query().Get(`ClientId`))
+	}
+	Overdraft, err := strconv.ParseFloat(request.URL.Query().Get(`Overdraft`), 64)
+	if err == nil {
+		accountDefault.Overdraft = Overdraft
+		PreURL += fmt.Sprintf(`&Overdraft=%s`, request.URL.Query().Get(`Overdraft`))
+	}
+	CurrencyId, err := strconv.Atoi(request.URL.Query().Get(`CurrencyId`))
+	if err == nil {
+		accountDefault.CurrencyId = int64(CurrencyId)
+		PreURL += fmt.Sprintf(`&CurrencyId=%s`, request.URL.Query().Get(`CurrencyId`))
+	}
+	TypeId, err := strconv.Atoi(request.URL.Query().Get(`TypeId`))
+	if err == nil {
+		accountDefault.TypeId = int64(TypeId)
+		PreURL += fmt.Sprintf(`&TypeId=%s`, request.URL.Query().Get(`TypeId`))
+	}
+	Saldo, err := strconv.ParseFloat(request.URL.Query().Get(`Saldo`), 64)
+	if err == nil {
+		accountDefault.Saldo = Saldo
+		PreURL += fmt.Sprintf(`&Saldo=%s`, request.URL.Query().Get(`Saldo`))
+	}
+	AccNum := request.URL.Query().Get(`AccNum`)
+	if AccNum != ``{
+		accountDefault.AccNum = AccNum
+		PreURL += fmt.Sprintf(`&AccNum=%s`, request.URL.Query().Get(`AccNum`))
+	}
+	IsActive, err := strconv.ParseBool(request.URL.Query().Get(`IsActive`))
+	if err == nil {
+		accountDefault.IsActive = IsActive
+		PreURL += fmt.Sprintf(`&IsActive=%s`, request.URL.Query().Get(`IsActive`))
+	}
+	IsDefault, err := strconv.ParseBool(request.URL.Query().Get(`IsDefault`))
+	if err == nil {
+		accountDefault.IsDefault = IsDefault
+		PreURL += fmt.Sprintf(`&IsDefault=%s`, request.URL.Query().Get(`IsDefault`))
+	}
 
-	if Accounts.Error != nil {
-		writer.WriteHeader(http.StatusNotFound)
-		err := json.NewEncoder(writer).Encode(`mismatch_hamsoyaDocuments`)
-		if err != nil {
-			log.Println(err)
-			return
-		}
-		return
+	var interval helperfunc.TimeInterval
+	unix := time.Unix(0, 0)
+	interval.From = unix.Format(time.RFC3339)
+	unixTimeNow := time.Now()
+	interval.To = unixTimeNow.Format(time.RFC3339)
+	from, err := strconv.Atoi(request.URL.Query().Get(`from`))
+	if err == nil {
+		i := time.Unix(int64(from), 0)
+		ans := i.Format(time.RFC3339)
+		interval.From = ans
+		PreURL += `&from=` + request.URL.Query().Get(`from`)
 	}
-	err = json.NewEncoder(writer).Encode(Accounts)
+	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
+	if err == nil {
+		i := time.Unix(int64(to), 0)
+		ans := i.Format(time.RFC3339)
+		interval.To = ans
+		PreURL += `&to=` + request.URL.Query().Get(`to`)
+	}
+	fmt.Println(accountDefault)
+
+	var response hamsoyamodels.ResponseHamsoyaAccount
+	response = hamsoyamodels.GetHamsoyaAccountsCount(accountDefault, interval)
+	response.TotalPage = int64(math.Ceil(float64(response.TotalPage) / float64(int64(100))))
+	response.Page = helperfunc.MinOftoInt(int64(pageInt), response.TotalPage)
+	response.URL = URL + PreURL
+	fmt.Println(response.URL)
+	hamsoyamodels.GetHamsoyaAccounts(accountDefault, &response, interval, int64(pageInt) - 1)
+
+	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
-		log.Println(err)
-		return
+		log.Print(err)
 	}
-	return
 }
 
 // Get Hamsoya Client
@@ -1692,80 +1899,181 @@ func (server *MainServer) GetHamsoyaClientByIdHandler(writer http.ResponseWriter
 func (server *MainServer) GetHamsoyaClientsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	pageInt := 1
-	rowsInt := 100
 	page := request.URL.Query().Get(`page`)
-	pageInt, err := strconv.Atoi(page)
-	if err != nil {
+	PreURL := ``
+	URL := `http://127.0.0.1:8080/api/hamsoya/clients`
+	pageInt, errPage := strconv.Atoi(page)
+	if errPage != nil {
 		pageInt = 1
+		URL += `?page=1`
 	}
-	rows := request.URL.Query().Get(`rows`)
-	rowsInt, err = strconv.Atoi(rows)
-	if err != nil {
-		rowsInt = 100
-	}
-	var newHamsoyaClient hamsoyamodels.HamsoyaClient
-	Clients := hamsoyamodels.GetHamsoyaClients(newHamsoyaClient, int64(rowsInt), int64(pageInt))
-
-	if Clients.Error != nil {
-		writer.WriteHeader(http.StatusNotFound)
-		err := json.NewEncoder(writer).Encode(`mismatch_hamsoyaDocuments`)
-		if err != nil {
-			log.Println(err)
-			return
-		}
-		return
-	}
-	err = json.NewEncoder(writer).Encode(Clients)
-	if err != nil {
-		log.Println(err)
-		return
-	}
-	return
-}
-
-///TODO : DELETE ME
-func (server *MainServer) TESTGetHamsoyaAccountsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
-	pageInt := 1
-	rowsInt := 100
-	page := request.URL.Query().Get(`page`)
-	pageInt, err := strconv.Atoi(page)
-	if err != nil {
-		pageInt = 1
-	}
-	rows := request.URL.Query().Get(`rows`)
-	rowsInt, err = strconv.Atoi(rows)
-	if err != nil {
-		rowsInt = 100
-	}
-	var newHamsoyaAccount hamsoyamodels.HamsoyaAccount
-	clientId := request.URL.Query().Get(`clientId`)
-	clientIdInt, err := strconv.Atoi(clientId)
+	var clientDefault hamsoyamodels.HamsoyaClient
+	IsActive, err := strconv.ParseBool(request.URL.Query().Get(`IsActive`))
 	if err == nil {
-		newHamsoyaAccount.ClientId = int64(clientIdInt)
+		clientDefault.IsActive = IsActive
+		PreURL += fmt.Sprintf(`&IsActive=%s`, request.URL.Query().Get(`IsActive`))
+	}
+	Identify, err := strconv.ParseBool(request.URL.Query().Get(`Identify`))
+	if err == nil {
+		clientDefault.Identify = Identify
+		PreURL += fmt.Sprintf(`&Identify=%s`, request.URL.Query().Get(`Identify`))
+	}
+	PhoneNum := request.URL.Query().Get(`PhoneNum`)
+	if PhoneNum != `` {
+		clientDefault.PhoneNum = PhoneNum
+		PreURL += `&PhoneNum=` + PhoneNum
+	}
+	Name := request.URL.Query().Get(`Name`)
+	if Name != `` {
+		clientDefault.Name = Name
+		PreURL += `&Name=` + Name
+	}
+	id, err := strconv.Atoi(request.URL.Query().Get(`id`))
+	if err == nil {
+		clientDefault.Id = int64(id)
+		PreURL += fmt.Sprintf(`&id=%s`, request.URL.Query().Get(`id`))
+	}
+	AgentId, err := strconv.Atoi(request.URL.Query().Get(`AgentId`))
+	if err == nil {
+		clientDefault.AgentId = int64(AgentId)
+		PreURL += fmt.Sprintf(`&AgentId=%s`, request.URL.Query().Get(`AgentId`))
+	}
+	TypeId, err := strconv.Atoi(request.URL.Query().Get(`TypeId`))
+	if err == nil {
+		clientDefault.TypeId = int64(TypeId)
+		PreURL += fmt.Sprintf(`&TypeId=%s`, request.URL.Query().Get(`TypeId`))
 	}
 
-	//	Accounts := hamsoyamodels.GetHamsoyaAccounts(newHamsoyaAccount, int64(rowsInt), int64(pageInt))
-	myDataString := 1591635497
-	i := time.Unix(int64(myDataString), 0)
-	fmt.Println(time.Now().Unix())
-	ans := i.Format(time.RFC3339)
-	Accounts := hamsoyamodels.GetHamsoyaAccountsTEST(newHamsoyaAccount, int64(rowsInt), int64(pageInt), ans)
-	if Accounts.Error != nil {
-		writer.WriteHeader(http.StatusNotFound)
-		err := json.NewEncoder(writer).Encode(`mismatch_hamsoyaDocuments`)
-		if err != nil {
-			log.Println(err)
-			return
-		}
-		return
+	//Default-ные значение времени. типа с начало до конца
+	var interval helperfunc.TimeInterval
+	unix := time.Unix(0, 0)
+	interval.From = unix.Format(time.RFC3339)
+	unixTimeNow := time.Now()
+	interval.To = unixTimeNow.Format(time.RFC3339)
+	from, err := strconv.Atoi(request.URL.Query().Get(`from`))
+	if err == nil {
+		from /= 1000
+		i := time.Unix(int64(from), 0)
+		ans := i.Format(time.RFC3339)
+		interval.From = ans
+		PreURL += `&from=` + request.URL.Query().Get(`from`)
 	}
-	err = json.NewEncoder(writer).Encode(Accounts)
+	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
+	if err == nil {
+		from /= 1000
+		i := time.Unix(int64(to), 0)
+		ans := i.Format(time.RFC3339)
+		interval.To = ans
+		PreURL += `&to=` + request.URL.Query().Get(`to`)
+	}
+
+	var response hamsoyamodels.ResponseHamsoyaClients
+	response = hamsoyamodels.GetHamsoyaClientsCount(clientDefault, interval)
+	response.TotalPage = int64(math.Ceil(float64(response.TotalPage) / float64(int64(100))))
+	response.Page = helperfunc.MinOftoInt(int64(pageInt), response.TotalPage)
+	if errPage == nil {
+		URL += `?page=` + fmt.Sprintf("%d", response.Page)
+	}
+	response.URL = URL + PreURL
+	fmt.Println(response.URL)
+	hamsoyamodels.GetHamsoyaClients(clientDefault, &response, interval, response.Page-1)
+	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
-		log.Println(err)
-		return
+		log.Print(err)
 	}
-	return
 }
+func (server *MainServer) GetHamsoyaViewTransesHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	fmt.Println("I am view Trans")
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	transaction := hamsoyamodels.HamsoyaViewTrans{}
+	PreURL := ``
+	Id, err := strconv.Atoi(request.URL.Query().Get(`Id`))
+	if err == nil {
+		transaction.ID = int64(Id)
+		PreURL += `&Id=` + request.URL.Query().Get(`Id`)
+	}
+	VendorID, err := strconv.Atoi(request.URL.Query().Get(`VendorID`))
+	if err == nil {
+		transaction.VendorID = int64(VendorID)
+		PreURL += `&VendorID=` + request.URL.Query().Get(`VendorID`)
+	}
 
-////
+	ExtTransId := request.URL.Query().Get(`ExtTransId`)
+	if ExtTransId != `` {
+		transaction.ExtTransId = ExtTransId
+		PreURL += `&ExtTransId=` + request.URL.Query().Get(`ExtTransId`)
+	}
+	RequestType := request.URL.Query().Get(`RequestType`)
+	if ExtTransId != `` {
+		transaction.RequestType = RequestType
+		PreURL += `&RequestType=` + request.URL.Query().Get(`RequestType`)
+	}
+	PhoneNum := request.URL.Query().Get(`PhoneNum`)
+	if ExtTransId != `` {
+		transaction.PhoneNum = PhoneNum
+		PreURL += `&PhoneNum=` + request.URL.Query().Get(`PhoneNum`)
+	}
+	ClientReceiver := request.URL.Query().Get(`ClientReceiver`)
+	if ExtTransId != `` {
+		transaction.ClientReceiver = ClientReceiver
+		PreURL += `&ClientReceiver=` + request.URL.Query().Get(`ClientReceiver`)
+	}
+	Amount, err := strconv.ParseFloat(request.URL.Query().Get(`Amount`), 64)
+	if err == nil {
+		transaction.Amount = Amount
+		PreURL += `&Amount=` + request.URL.Query().Get(`Amount`)
+	}
+	TotalAmount, err := strconv.ParseFloat(request.URL.Query().Get(`TotalAmount`), 64)
+	if err == nil {
+		transaction.TotalAmount = TotalAmount
+		PreURL += `&TotalAmount=` + request.URL.Query().Get(`TotalAmount`)
+	}
+	ExternalFee, err := strconv.ParseFloat(request.URL.Query().Get(`ExternalFee`), 64)
+	if err == nil {
+		transaction.ExternalFee = ExternalFee
+		PreURL += `&ExternalFee=` + request.URL.Query().Get(`ExternalFee`)
+	}
+
+	var interval helperfunc.TimeInterval
+	unix := time.Unix(0, 0)
+	interval.From = unix.Format(time.RFC3339)
+	unixTimeNow := time.Now()
+	interval.To = unixTimeNow.Format(time.RFC3339)
+	from, err := strconv.Atoi(request.URL.Query().Get(`from`))
+	if err == nil {
+		i := time.Unix(int64(from), 0)
+		ans := i.Format(time.RFC3339)
+		interval.From = ans
+		PreURL += `&from=` + request.URL.Query().Get(`from`)
+	}
+	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
+	if err == nil {
+		i := time.Unix(int64(to), 0)
+		ans := i.Format(time.RFC3339)
+		interval.To = ans
+		PreURL += `&to=` + request.URL.Query().Get(`to`)
+	}
+
+	var response hamsoyamodels.ResponseHamsoyaTranses
+	page := request.URL.Query().Get(`page`)
+	URL := `http://127.0.0.1:8080/api/hamsoya/viewtranses`
+	pageInt, err := strconv.Atoi(page)
+	if err != nil {
+		pageInt = 1
+		URL += `?page=1`
+	}
+	response = hamsoyamodels.GetHamsoyaViewTransesCount(transaction, interval)
+	response.TotalPage = int64(math.Ceil(float64(response.TotalPage) / float64(int64(100))))
+	response.Page = helperfunc.MinOftoInt(int64(pageInt), response.TotalPage)
+	if err == nil {
+		URL += `?page=` + fmt.Sprintf("%d", response.Page)
+	}
+	URL += PreURL
+	response.URL = URL
+	fmt.Println(URL)
+	hamsoyamodels.GetHamsoyaViewTranses(transaction, &response, interval, response.Page-1)
+	err = json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Print(err)
+	}
+}

@@ -21,7 +21,7 @@ func (*HamsoyaConfig) TableName() string {
 type ResponseHamsoyaConfigs struct {
 	Error             error
 	Count             int64
-	HamsoyaConfigList []HamsoyaConfig
+	HamsoyaConfigList []HamsoyaConfig `json:"hamsoya_config_list"`
 }
 
 func GetHamsoyaConfig(config HamsoyaConfig, rows, pages int64) (HamsoyaConfig ResponseHamsoyaConfigs) {

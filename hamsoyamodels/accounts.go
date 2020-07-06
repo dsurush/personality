@@ -2,7 +2,8 @@ package hamsoyamodels
 
 import (
 	"MF/db"
-	"fmt"
+	"MF/helperfunc"
+	"github.com/sirupsen/logrus"
 	"time"
 )
 
@@ -26,35 +27,12 @@ func (*HamsoyaAccount) TableName() string {
 }
 
 type ResponseHamsoyaAccount struct {
-	Error              error
-	Count              int64
-	HamsoyaAccountList []HamsoyaAccount
+	Error          error        `json:"error"`
+	Page           int64        `json:"page"`
+	TotalPage      int64        `json:"totalPage"`
+	URL            string       `json:"url"`
+	HamsoyaAccountList []HamsoyaAccount `json:"hamsoya_account_list"`
 }
-
-///TODO: DELETE ME I AM TEST FUNCTION
-func TESTTIME(time string) (HamsoyaAccount ResponseHamsoyaAccount) {
-	postgresDb := db.GetHamsoyaPostgresDb()
-	if err := postgresDb.Where("create_date > ?", time).Offset(0).Find(&HamsoyaAccount.HamsoyaAccountList).Count(&HamsoyaAccount.Count).Error; err != nil {
-		HamsoyaAccount.Error = err
-	}
-	return
-}
-
-//TODO: DELETE ME TOO, I AM TEST FOR INTERVAL
-func GetHamsoyaAccountsTEST(hamsoyaAccount HamsoyaAccount, rows, pages int64, leftTime string) (HamsoyaAccount ResponseHamsoyaAccount) {
-	fmt.Println("TETST")
-	pages--
-	if pages < 0 {
-		pages = 0
-	}
-	postgresDb := db.GetHamsoyaPostgresDb()
-	if err := postgresDb.Where(&hamsoyaAccount).Where("create_date > ?", leftTime).Limit(rows).Offset(rows * pages).Find(&HamsoyaAccount.HamsoyaAccountList).Count(&HamsoyaAccount.Count).Error; err != nil {
-		HamsoyaAccount.Error = err
-	}
-	return
-}
-
-//
 
 func GetHamsoyaAccountById(id int64) (HamsoyaAccount HamsoyaAccount, err error) {
 	postgresDb := db.GetHamsoyaPostgresDb()
@@ -64,14 +42,20 @@ func GetHamsoyaAccountById(id int64) (HamsoyaAccount HamsoyaAccount, err error) 
 	return HamsoyaAccount, nil
 }
 
-func GetHamsoyaAccounts(hamsoyaAccount HamsoyaAccount, rows, pages int64) (HamsoyaAccount ResponseHamsoyaAccount) {
-	pages--
-	if pages < 0 {
-		pages = 0
+func GetHamsoyaAccounts(account HamsoyaAccount, accountSlice *ResponseHamsoyaAccount, time helperfunc.TimeInterval, page int64) (AccountSliceOver *ResponseHamsoyaAccount) {
+
+	if err := db.GetHamsoyaPostgresDb().Where(&account).Where(`create_date > ? and create_date < ?`, time.From, time.To).Limit(100).Offset(page * 100).Order("create_date desc").Find(&accountSlice.HamsoyaAccountList).Error; err != nil {
+		accountSlice.Error = err
+		logrus.Println(" ", err)
 	}
-	postgresDb := db.GetHamsoyaPostgresDb()
-	if err := postgresDb.Where(&hamsoyaAccount).Limit(rows).Offset(rows * pages).Find(&HamsoyaAccount.HamsoyaAccountList).Count(&HamsoyaAccount.Count).Error; err != nil {
-		HamsoyaAccount.Error = err
+	return
+}
+
+func GetHamsoyaAccountsCount(account HamsoyaAccount, time helperfunc.TimeInterval) (accountsSlice ResponseHamsoyaAccount) {
+
+	if err := db.GetHamsoyaPostgresDb().Table("accounts").Where(&account).Where(`create_date > ? and create_date < ?`, time.From, time.To).Count(&accountsSlice.TotalPage).Error; err != nil {
+		accountsSlice.Error = err
+		logrus.Println(" ", err)
 	}
 	return
 }

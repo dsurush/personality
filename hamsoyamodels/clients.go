@@ -2,6 +2,8 @@ package hamsoyamodels
 
 import (
 	"MF/db"
+	"MF/helperfunc"
+	"github.com/sirupsen/logrus"
 	"time"
 )
 
@@ -22,9 +24,11 @@ func (*HamsoyaClient) TableName() string {
 }
 
 type ResponseHamsoyaClients struct {
-	Error             error
-	Count             int64
-	HamsoyaClientList []HamsoyaClient
+	Error          error        `json:"error"`
+	Page           int64        `json:"page"`
+	TotalPage      int64        `json:"totalPage"`
+	URL            string       `json:"url"`
+	HamsoyaClientList []HamsoyaClient `json:"hamsoya_client_list"`
 }
 
 func GetHamsoyaClientById(id int64) (HamsoyaClient HamsoyaClient, err error) {
@@ -36,14 +40,20 @@ func GetHamsoyaClientById(id int64) (HamsoyaClient HamsoyaClient, err error) {
 	return HamsoyaClient, nil
 }
 
-func GetHamsoyaClients(hamsoyaClient HamsoyaClient, rows, pages int64) (HamsoyaClient ResponseHamsoyaClients) {
-	pages--
-	if pages < 0 {
-		pages = 0
+func GetHamsoyaClients(client HamsoyaClient, clientsSlice *ResponseHamsoyaClients, time helperfunc.TimeInterval, page int64) (clientsSliceOver *ResponseHamsoyaClients) {
+
+	if err := db.GetHamsoyaPostgresDb().Where(&client).Where(`create_date > ? and create_date < ?`, time.From, time.To).Limit(100).Offset(page * 100).Order("create_date desc").Find(&clientsSlice.HamsoyaClientList).Error; err != nil {
+		clientsSlice.Error = err
+		logrus.Println(" ", err)
 	}
-	postgresDb := db.GetHamsoyaPostgresDb()
-	if err := postgresDb.Where(&hamsoyaClient).Limit(rows).Offset(rows * pages).Find(&HamsoyaClient.HamsoyaClientList).Count(&HamsoyaClient.Count).Error; err != nil {
-		HamsoyaClient.Error = err
+	return
+}
+
+func GetHamsoyaClientsCount(client HamsoyaClient, time helperfunc.TimeInterval) (clientsSlice ResponseHamsoyaClients) {
+
+	if err := db.GetHamsoyaPostgresDb().Table("clients").Where(&client).Where(`create_date > ? and create_date < ?`, time.From, time.To).Count(&clientsSlice.TotalPage).Error; err != nil {
+		clientsSlice.Error = err
+		logrus.Println(" ", err)
 	}
 	return
 }

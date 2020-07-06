@@ -2,6 +2,8 @@ package hamsoyamodels
 
 import (
 	"MF/db"
+	"MF/helperfunc"
+	"github.com/sirupsen/logrus"
 	"time"
 )
 
@@ -44,14 +46,18 @@ type HamsoyaTransaction struct {
 }
 
 type ResponseHamsoyaTransactionsType struct {
-	Error                      error
-	Count                      int64
-	HamsoyaTransactionTypeList []HamsoyaTransactionType
+	Error          error        `json:"error"`
+	Page           int64        `json:"page"`
+	TotalPage      int64        `json:"totalPage"`
+	URL            string       `json:"url"`
+	HamsoyaTransactionTypeList []HamsoyaTransactionType `json:"hamsoya_transaction_type_list"`
 }
 type ResponseHamsoyaTransactions struct {
-	Error                  error
-	Count                  int64
-	HamsoyaTransactionList []HamsoyaTransaction
+	Error          error        `json:"error"`
+	Page           int64        `json:"page"`
+	TotalPage      int64        `json:"totalPage"`
+	URL            string       `json:"url"`
+	HamsoyaTransactionList []HamsoyaTransaction `json:"hamsoya_transaction_list"`
 }
 
 func (*HamsoyaTransaction) TableName() string {
@@ -65,13 +71,39 @@ func GetHamsoyaTransactionTypeById(id int64) (HamsoyaTransactionType HamsoyaTran
 	return
 }
 
-func GetHamsoyaTransactions(transaction HamsoyaTransaction, size, page int64) (HamsoyaTransactions ResponseHamsoyaTransactions) {
-	page--
-	if page < 0 {
-		page = 0
-	}
+func GetHamsoyaTransactionsType(transaction HamsoyaTransactionType, transactionSlice *ResponseHamsoyaTransactionsType, page int64) (transactionTypeSliceOver *ResponseHamsoyaTransactionsType) {
 	postgresDb := db.GetHamsoyaPostgresDb()
-	if err := postgresDb.Where(&transaction).Limit(size).Offset(page * size).Find(&HamsoyaTransactions.HamsoyaTransactionList).Count(&HamsoyaTransactions.Count).Error; err != nil {
+
+	if err := postgresDb.Where(&transaction).Limit(100).Offset(100 * page).Order(`id`).Find(&transactionSlice.HamsoyaTransactionTypeList).Error; err != nil {
+		transactionSlice.Error = err
+		logrus.Println(" ", err)
+	}
+	return
+}
+
+func GetHamsoyaTransactionsTypeCount(transaction HamsoyaTransactionType) (transactionTypeSliceOver ResponseHamsoyaTransactionsType) {
+	postgresDb := db.GetHamsoyaPostgresDb()
+
+	if err := postgresDb.Table("transaction_type").Where(&transaction).Count(&transactionTypeSliceOver.TotalPage).Error; err != nil {
+		transactionTypeSliceOver.Error = err
+		logrus.Println(" ", err)
+	}
+	return
+}
+
+func GetHamsoyaTransactions(transaction HamsoyaTransaction, transactionSlice *ResponseHamsoyaTransactions, time helperfunc.TimeInterval, page int64) (HamsoyaTransactions *ResponseHamsoyaTransactions) {
+
+	postgresDb := db.GetHamsoyaPostgresDb()
+	if err := postgresDb.Where(&transaction).Where(`create_date > ? and create_date < ?`, time.From, time.To).Limit(100).Offset(page * 100).Find(&transactionSlice.HamsoyaTransactionList).Error; err != nil {
+		transactionSlice.Error = err
+	}
+	return
+}
+
+func GetHamsoyaTransactionsCount(transaction HamsoyaTransaction, time helperfunc.TimeInterval) (HamsoyaTransactions ResponseHamsoyaTransactions) {
+
+	postgresDb := db.GetHamsoyaPostgresDb()
+	if err := postgresDb.Table("transactions").Where(&transaction).Where(`create_date > ? and create_date < ?`, time.From, time.To).Count(&HamsoyaTransactions.TotalPage).Error; err != nil {
 		HamsoyaTransactions.Error = err
 	}
 	return
@@ -85,12 +117,3 @@ func GetHamsoyaTransactionById(id int64) (HamsoyaTransaction HamsoyaTransaction,
 	return
 }
 
-func GetTEST(timet, size, page int64) (HamsoyaTransactions ResponseHamsoyaTransactions) {
-	//i := time.Unix(timet, 0)
-	//from := i.Format(time.RFC3339)
-	postgresDb := db.GetHamsoyaPostgresDb()
-	if err := postgresDb.Where(`create_date < ?`, "2020-02-14 11:54:14.485335 +00:00").Limit(size).Offset(page * size).Find(&HamsoyaTransactions.HamsoyaTransactionList).Count(&HamsoyaTransactions.Count).Error; err != nil {
-		HamsoyaTransactions.Error = err
-	}
-	return
-}

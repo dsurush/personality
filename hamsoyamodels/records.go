@@ -2,6 +2,8 @@ package hamsoyamodels
 
 import (
 	"MF/db"
+	"MF/helperfunc"
+	"github.com/sirupsen/logrus"
 	"time"
 )
 
@@ -20,9 +22,11 @@ func (*HamsoyaRecord) TableName() string {
 }
 
 type ResponseHamsoyaRecords struct {
-	Error             error
-	Count             int64
-	HamsoyaRecordList []HamsoyaRecord
+	Error             error           `json:"error"`
+	Page              int64           `json:"page"`
+	TotalPage         int64           `json:"totalPage"`
+	URL               string          `json:"url"`
+	HamsoyaRecordList []HamsoyaRecord `json:"hamsoya_record_list"`
 }
 
 func GetHamsoyaRecordById(id int64) (HamsoyaRecord HamsoyaRecord, err error) {
@@ -34,14 +38,21 @@ func GetHamsoyaRecordById(id int64) (HamsoyaRecord HamsoyaRecord, err error) {
 	return HamsoyaRecord, nil
 }
 
-func GetHamsoyaRecords(hamsoyaRecord HamsoyaRecord, rows, pages int64) (HamsoyaRecord ResponseHamsoyaRecords) {
-	pages--
-	if pages < 0 {
-		pages = 0
+
+func GetHamsoyaRecords(record HamsoyaRecord, recordsSlice *ResponseHamsoyaRecords, time helperfunc.TimeInterval, page int64) (recordsSliceOver *ResponseHamsoyaRecords) {
+
+	if err := db.GetHamsoyaPostgresDb().Where(&record).Where(`create_date > ? and create_date < ?`, time.From, time.To).Limit(100).Offset(page * 100).Order("create_date desc").Find(&recordsSlice.HamsoyaRecordList).Error; err != nil {
+		recordsSlice.Error = err
+		logrus.Println(" ", err)
 	}
-	postgresDb := db.GetHamsoyaPostgresDb()
-	if err := postgresDb.Where(&hamsoyaRecord).Limit(rows).Offset(rows * pages).Find(&HamsoyaRecord.HamsoyaRecordList).Count(&HamsoyaRecord.Count).Error; err != nil {
-		HamsoyaRecord.Error = err
+	return
+}
+
+func GetHamsoyaRecordsCount(record HamsoyaRecord, time helperfunc.TimeInterval) (recordsSlice ResponseHamsoyaRecords) {
+
+	if err := db.GetHamsoyaPostgresDb().Table("clients").Where(&record).Where(`create_date > ? and create_date < ?`, time.From, time.To).Count(&recordsSlice.TotalPage).Error; err != nil {
+		recordsSlice.Error = err
+		logrus.Println(" ", err)
 	}
 	return
 }

@@ -2,6 +2,7 @@ package hamsoyamodels
 
 import (
 	"MF/db"
+	"MF/helperfunc"
 	"time"
 )
 
@@ -22,22 +23,31 @@ func (*HamsoyaDocument) TableName() string {
 }
 
 type ResponseHamsoyaDocuments struct {
-	Error     error
-	Count     int64
-	Documents []HamsoyaDocument
+	Error          error        `json:"error"`
+	Page           int64        `json:"page"`
+	TotalPage      int64        `json:"totalPage"`
+	URL            string       `json:"url"`
+	Documents []HamsoyaDocument `json:"Documents"`
 }
 
-func GetHamsoyaDocuments(Document HamsoyaDocument, rows, pages int64) (Documents ResponseHamsoyaDocuments) {
+func GetHamsoyaDocuments(Document HamsoyaDocument, documentSlice *ResponseHamsoyaDocuments, time helperfunc.TimeInterval, page int64) (DocumentsSliceOver *ResponseHamsoyaDocuments) {
 	postgresDb := db.GetHamsoyaPostgresDb()
-	pages--
-	if pages < 0 {
-		pages = 0
-	}
-	if err := postgresDb.Where(&Document).Limit(rows).Offset(rows * pages).Find(&Documents.Documents).Count(&Documents.Count).Error; err != nil {
-		Documents.Error = err
+
+	if err := postgresDb.Where(&Document).Where(`create_date > ? and create_date < ?`, time.From, time.To).Limit(100).Offset(page * 100).Order("create_date desc").Find(&documentSlice.Documents).Error; err != nil {
+		documentSlice.Error = err
 	}
 	return
 }
+
+func GetHamsoyaDocumentsCount(Document HamsoyaDocument, time helperfunc.TimeInterval) (DocumentsSliceOver ResponseHamsoyaDocuments) {
+	postgresDb := db.GetHamsoyaPostgresDb()
+
+	if err := postgresDb.Table("documents").Where(&Document).Where(`create_date > ? and create_date < ?`, time.From, time.To).Count(&DocumentsSliceOver.TotalPage).Error; err != nil {
+		DocumentsSliceOver.Error = err
+	}
+	return
+}
+
 
 func GetHamsoyaDocument(id int64) (Document HamsoyaDocument, err error) {
 	postgresDb := db.GetHamsoyaPostgresDb()

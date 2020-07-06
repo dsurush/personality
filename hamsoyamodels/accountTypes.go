@@ -18,7 +18,7 @@ func (*HamsoyaAccountType) TableName() string {
 type ResponseHamsoyaAccountTypes struct {
 	Error                  error
 	Count                  int64
-	HamsoyaAccountTypeList []HamsoyaAccountType
+	HamsoyaAccountTypeList []HamsoyaAccountType `json:"hamsoya_account_type_list"`
 }
 
 func GetHamsoyaAccountTypeById(id int64) (AccountType HamsoyaAccountType, err error) {

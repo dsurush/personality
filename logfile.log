@@ -1009,3 +1009,352 @@
 2020-06-19 17:51:25: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
 2020-06-19 17:53:44: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
 2020-06-19 17:54:21: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-19 22:55:27: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-19 22:55:27: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-19 22:56:18: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-06-19 22:56:56: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-06-19 22:57:15: [127.0.0.1] login: surush Get merchants  Method: GET, path: /api/megafon/merchants
+2020-06-19 23:02:14: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-06-22 14:11:10: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-22 14:11:16: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-22 14:11:49: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-22 14:33:13: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-22 23:12:21: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-22 23:12:21: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-22 23:12:28: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-06-22 23:12:31: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-22 23:13:20: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-06-22 23:19:26: [127.0.0.1] login: surush Change Megafon logs DTO  Method: GET, path: /api/megafon/logs
+2020-06-22 23:27:56: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-22 23:28:03: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-22 23:28:10: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-06-22 23:28:14: [127.0.0.1] login: surush Get merchants  Method: GET, path: /api/megafon/merchants
+2020-06-22 23:28:16: [127.0.0.1] login: surush Change Megafon logs DTO  Method: GET, path: /api/megafon/logs
+2020-06-22 23:28:22: [127.0.0.1] login: surush Get merchants  Method: GET, path: /api/megafon/merchants
+2020-06-22 23:28:24: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-22 23:35:18: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-22 23:35:23: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-22 23:35:25: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-22 23:47:11: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-06-22 23:59:09: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-23 00:05:47: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-23 00:05:47: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-23 00:05:50: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 00:06:11: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-23 00:06:18: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-23 00:06:18: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-23 00:06:25: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-23 00:06:28: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 00:09:35: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-23 00:09:38: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-23 00:09:44: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-23 00:09:49: [127.0.0.1] login: surush Change Megafon logs DTO  Method: GET, path: /api/megafon/logs
+2020-06-23 00:09:57: [127.0.0.1] login: surush Change Megafon logs DTO  Method: GET, path: /api/megafon/logs
+2020-06-23 00:10:34: [127.0.0.1] login: surush Change Megafon logs DTO  Method: GET, path: /api/megafon/logs
+2020-06-23 00:10:42: [127.0.0.1] login: surush Change Megafon logs DTO  Method: GET, path: /api/megafon/logs
+2020-06-23 00:15:45: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-23 00:15:45: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-23 00:15:51: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-23 00:15:54: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-23 00:15:56: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 00:16:14: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 00:16:20: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 00:16:33: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 00:16:38: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 00:16:50: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 00:17:24: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 00:17:47: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 14:47:34: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-23 14:47:34: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-23 14:47:36: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 14:47:44: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 14:47:51: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 14:52:31: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 14:52:45: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 14:52:46: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-23 14:52:52: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-23 14:52:53: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 14:52:56: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 14:53:44: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 14:57:17: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 14:57:23: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-23 14:57:37: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 14:58:09: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 14:58:24: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 14:58:43: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 14:59:00: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 15:10:21: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-23 15:10:21: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-23 15:10:30: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 15:20:58: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-23 15:20:58: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-23 15:21:01: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 15:21:16: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 15:21:19: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 15:23:18: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-23 15:25:04: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-06-23 15:25:08: [127.0.0.1] login: surush Change Megafon logs DTO  Method: GET, path: /api/megafon/logs
+2020-06-23 15:55:09: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-23 15:57:55: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-23 15:58:52: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-23 16:09:50: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-23 16:10:38: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-23 16:10:52: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-23 16:12:43: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-23 16:13:53: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-23 16:13:59: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-23 16:15:00: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-23 16:16:02: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-23 16:16:20: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-23 16:46:55: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-23 16:46:55: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-23 16:47:18: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-23 16:47:35: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 16:47:39: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-06-23 17:02:59: [127.0.0.1] login: surush Get reports  Method: GET, path: /api/megafon/reports
+2020-06-23 17:03:07: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-23 17:03:08: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-23 17:04:59: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-23 17:05:08: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-23 17:05:10: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-23 17:05:12: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-23 18:02:07: [127.0.0.1] login: surush Get Hamsoya configs Method: GET, path: /api/hamsoya/configs
+2020-06-23 18:03:22: [127.0.0.1] login: surush Get Hamsoya configs Method: GET, path: /api/hamsoya/configs
+2020-06-23 18:27:35: [127.0.0.1] login: surush Get Hamsoya accounttypes Method: GET, path: /api/hamsoya/acoounttypes
+2020-06-23 18:28:16: [127.0.0.1] login: surush Get Hamsoya accounttypes Method: GET, path: /api/hamsoya/acoounttypes
+2020-06-23 18:29:11: [127.0.0.1] login: surush Get Hamsoya accounttypes Method: GET, path: /api/hamsoya/accounttypes
+2020-06-24 10:27:46: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-24 10:27:46: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-24 10:27:50: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-24 10:27:56: [127.0.0.1] login: surush Get Hamsoya configs Method: GET, path: /api/hamsoya/configs
+2020-06-24 10:27:59: [127.0.0.1] login: surush Get Hamsoya accounttypes Method: GET, path: /api/hamsoya/accounttypes
+2020-06-24 10:28:09: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-24 10:28:14: [127.0.0.1] login: surush Get Hamsoya configs Method: GET, path: /api/hamsoya/configs
+2020-06-24 10:28:17: [127.0.0.1] login: surush Get Hamsoya accounttypes Method: GET, path: /api/hamsoya/accounttypes
+2020-06-24 10:28:54: [127.0.0.1] login: surush Get Hamsoya configs Method: GET, path: /api/hamsoya/configs
+2020-06-24 10:29:06: [127.0.0.1] login: surush Get Hamsoya accounttypes Method: GET, path: /api/hamsoya/accounttypes
+2020-06-24 10:29:08: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-24 10:30:04: [127.0.0.1] login: surush Get Hamsoya accounttypes Method: GET, path: /api/hamsoya/accounttypes
+2020-06-24 10:30:09: [127.0.0.1] login: surush Get Hamsoya configs Method: GET, path: /api/hamsoya/configs
+2020-06-24 10:30:16: [127.0.0.1] login: surush Get Hamsoya accounttypes Method: GET, path: /api/hamsoya/accounttypes
+2020-06-24 10:30:58: [127.0.0.1] login: surush Get Hamsoya configs Method: GET, path: /api/hamsoya/configs
+2020-06-24 10:31:00: [127.0.0.1] login: surush Get Hamsoya accounttypes Method: GET, path: /api/hamsoya/accounttypes
+2020-06-24 10:31:22: [127.0.0.1] login: surush Get Hamsoya accounttypes Method: GET, path: /api/hamsoya/accounttypes
+2020-06-24 10:32:55: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-24 10:43:38: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-24 10:43:41: [127.0.0.1] login: surush Get Hamsoya configs Method: GET, path: /api/hamsoya/configs
+2020-06-24 10:43:44: [127.0.0.1] login: surush Get Hamsoya accounttypes Method: GET, path: /api/hamsoya/accounttypes
+2020-06-24 13:15:38: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-24 13:15:38: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-24 13:15:42: [127.0.0.1] login: surush Get Hamsoya accounttypes Method: GET, path: /api/hamsoya/accounttypes
+2020-06-24 13:16:01: [127.0.0.1] login: surush Get Hamsoya configs Method: GET, path: /api/hamsoya/configs
+2020-06-24 13:16:03: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-24 13:18:32: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-24 13:19:06: [127.0.0.1] login: surush Get Hamsoya statuses Method: GET, path: /ap/hamsoya/statuses
+2020-06-24 13:19:31: [127.0.0.1] login: surush Get Hamsoya statuses Method: GET, path: /ap/hamsoya/statuses
+2020-06-24 16:02:07: [127.0.0.1] login: surush Get Hamsoya accounttypes Method: GET, path: /api/hamsoya/accounttypes
+2020-06-24 16:02:11: [127.0.0.1] login: surush Get Hamsoya configs Method: GET, path: /api/hamsoya/configs
+2020-06-24 16:02:17: [127.0.0.1] login: surush Get Hamsoya accounttypes Method: GET, path: /api/hamsoya/accounttypes
+2020-06-24 16:02:20: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-24 16:08:09: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-24 16:08:09: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-24 16:09:21: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-24 16:09:22: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-24 16:09:26: [127.0.0.1] login: surush Get Hamsoya configs Method: GET, path: /api/hamsoya/configs
+2020-06-24 16:09:37: [127.0.0.1] login: surush Get Hamsoya accounttypes Method: GET, path: /api/hamsoya/accounttypes
+2020-06-24 16:10:09: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-24 16:12:47: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-24 16:13:11: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-24 16:18:58: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-24 16:18:58: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-24 16:21:33: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-24 16:21:35: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-06-24 16:23:47: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-24 16:23:47: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-24 16:25:19: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-24 16:25:21: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-24 16:25:23: [127.0.0.1] login: surush Get Hamsoya statuses Method: GET, path: /api/hamsoya/statuses
+2020-06-24 16:25:45: [127.0.0.1] login: surush Get Hamsoya statuses Method: GET, path: /api/hamsoya/statuses
+2020-06-24 16:25:47: [127.0.0.1] login: surush Get Hamsoya statuses Method: GET, path: /api/hamsoya/statuses
+2020-06-24 16:25:55: [127.0.0.1] login: surush Get Hamsoya statuses Method: GET, path: /api/hamsoya/statuses
+2020-06-24 16:26:13: [127.0.0.1] login: surush Get Hamsoya statuses Method: GET, path: /api/hamsoya/statuses
+2020-06-24 16:26:46: [127.0.0.1] login: surush Get Hamsoya statuses Method: GET, path: /api/hamsoya/statuses
+2020-06-24 16:26:49: [127.0.0.1] login: surush Get Hamsoya statuses Method: GET, path: /api/hamsoya/statuses
+2020-06-24 16:26:51: [127.0.0.1] login: surush Get Hamsoya statuses Method: GET, path: /api/hamsoya/statuses
+2020-06-24 16:26:54: [127.0.0.1] login: surush Get Hamsoya statuses Method: GET, path: /api/hamsoya/statuses
+2020-06-24 16:30:25: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-24 16:30:56: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-24 16:44:57: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-24 16:57:15: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-24 16:59:23: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-24 16:59:32: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-24 17:03:10: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-24 17:09:56: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-24 17:09:57: [127.0.0.1] login: surush Get Hamsoya configs Method: GET, path: /api/hamsoya/configs
+2020-06-24 17:09:59: [127.0.0.1] login: surush Get Hamsoya accounttypes Method: GET, path: /api/hamsoya/accounttypes
+2020-06-24 17:10:03: [127.0.0.1] login: surush Get Hamsoya statuses Method: GET, path: /api/hamsoya/statuses
+2020-06-24 17:12:50: [127.0.0.1] login: surush Get Hamsoya Transactions Method: GET, path: /api/hamsoya/transactions
+2020-06-24 19:00:11: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-24 19:00:11: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-24 19:00:17: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-24 19:00:20: [127.0.0.1] login: surush Get Hamsoya configs Method: GET, path: /api/hamsoya/configs
+2020-06-24 19:00:23: [127.0.0.1] login: surush Get Hamsoya statuses Method: GET, path: /api/hamsoya/statuses
+2020-06-24 19:00:28: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-24 19:00:34: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-24 19:00:37: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-24 19:00:39: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-24 19:00:49: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-24 19:00:52: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-24 19:01:02: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-24 19:22:12: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-24 19:22:13: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-24 19:22:21: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-24 19:22:25: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-24 19:22:32: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-24 19:22:34: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-24 19:23:58: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-24 19:24:04: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-24 19:24:12: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-24 19:24:13: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-24 19:25:04: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-24 19:25:06: [127.0.0.1] login: surush Get merchants  Method: GET, path: /api/megafon/merchants
+2020-06-24 19:25:14: [127.0.0.1] login: surush Get merchants  Method: GET, path: /api/megafon/merchants
+2020-06-24 19:25:34: [127.0.0.1] login: surush Get merchants  Method: GET, path: /api/megafon/merchants
+2020-06-24 19:26:07: [127.0.0.1] login: surush Get Hamsoya accounttypes Method: GET, path: /api/hamsoya/accounttypes
+2020-06-25 08:08:24: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-25 08:08:25: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-25 08:08:28: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-25 08:08:30: [127.0.0.1] login: surush Get Hamsoya accounttypes Method: GET, path: /api/hamsoya/accounttypes
+2020-06-25 08:08:46: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-25 08:10:29: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-25 08:11:00: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-25 08:11:10: [127.0.0.1] login: surush Get Hamsoya configs Method: GET, path: /api/hamsoya/configs
+2020-06-25 08:11:13: [127.0.0.1] login: surush Get Hamsoya accounttypes Method: GET, path: /api/hamsoya/accounttypes
+2020-06-25 08:11:16: [127.0.0.1] login: surush Get Hamsoya statuses Method: GET, path: /api/hamsoya/statuses
+2020-06-25 08:34:36: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-25 08:35:02: [127.0.0.1] login: surush Get Hamsoya Transactions Method: GET, path: /api/hamsoya/transactions
+2020-06-25 08:36:05: [127.0.0.1] login: surush Get Hamsoya Transactions Method: GET, path: /api/hamsoya/transactions
+2020-06-25 09:33:08: [127.0.0.1] login: surush Get Hamsoya viewtransactions Method: GET, path: /api/hamsoya/viewtransactions
+2020-06-25 10:45:06: [127.0.0.1] login: surush Get Hamsoya statuses Method: GET, path: /api/hamsoya/statuses
+2020-06-25 10:45:08: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-25 10:46:50: [127.0.0.1] login: surush Get Hamsoya Documents Method: GET, path: /api/hamsoya/documents
+2020-06-25 18:56:52: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-25 18:56:53: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-25 18:56:57: [127.0.0.1] login: surush Get Hamsoya Transactions Method: GET, path: /api/hamsoya/transactions
+2020-06-25 18:57:35: [127.0.0.1] login: surush Get Hamsoya Transactions Method: GET, path: /api/hamsoya/transactions
+2020-06-25 18:58:05: [127.0.0.1] login: surush Get Hamsoya Documents Method: GET, path: /api/hamsoya/documents
+2020-06-25 19:13:19: [127.0.0.1] login: surush Get Hamsoya Documents Method: GET, path: /api/hamsoya/documents
+2020-06-25 19:13:23: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-25 19:13:36: [127.0.0.1] login: surush Get Hamsoya Documents Method: GET, path: /api/hamsoya/documents
+2020-06-25 19:16:23: [127.0.0.1] login: surush Get Hamsoya Transactions Method: GET, path: /api/hamsoya/transactions
+2020-06-26 00:23:09: [127.0.0.1] login: surush Get Hamsoya Documents Method: GET, path: /api/hamsoya/documents
+2020-06-26 00:23:55: [127.0.0.1] login: surush Get Hamsoya Documents Method: GET, path: /api/hamsoya/documents
+2020-06-26 00:25:25: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-26 00:25:25: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-26 00:25:30: [127.0.0.1] login: surush Get Hamsoya Documents Method: GET, path: /api/hamsoya/documents
+2020-06-26 00:25:43: [127.0.0.1] login: surush Get Hamsoya Documents Method: GET, path: /api/hamsoya/documents
+2020-06-26 00:25:47: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-26 00:26:16: [127.0.0.1] login: surush Get Hamsoya accounts Method: GET, path: /api/hamsoya/accounts
+2020-06-26 00:43:26: [127.0.0.1] login: surush Get Hamsoya accounts Method: GET, path: /api/hamsoya/accounts
+2020-06-26 00:46:28: [127.0.0.1] login: surush Get Hamsoya Documents Method: GET, path: /api/hamsoya/documents
+2020-06-26 00:46:37: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-26 00:46:47: [127.0.0.1] login: surush Get Hamsoya Documents Method: GET, path: /api/hamsoya/documents
+2020-06-26 00:46:51: [127.0.0.1] login: surush Get Hamsoya Transactions Method: GET, path: /api/hamsoya/transactions
+2020-06-26 00:52:13: [127.0.0.1] login: surush Get Hamsoya accounts Method: GET, path: /api/hamsoya/accounts
+2020-06-26 00:52:56: [127.0.0.1] login: surush Get Hamsoya records Method: GET, path: /api/hamsoya/records
+2020-06-26 00:57:50: [127.0.0.1] login: surush Get Hamsoya records Method: GET, path: /api/hamsoya/records
+2020-06-26 00:58:23: [127.0.0.1] login: surush Get Hamsoya records Method: GET, path: /api/hamsoya/records
+2020-06-26 00:59:45: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-26 00:59:46: [127.0.0.1] login: surush Get Hamsoya configs Method: GET, path: /api/hamsoya/configs
+2020-06-26 00:59:49: [127.0.0.1] login: surush Get Hamsoya Transactions Method: GET, path: /api/hamsoya/transactions
+2020-06-26 00:59:52: [127.0.0.1] login: surush Get Hamsoya Documents Method: GET, path: /api/hamsoya/documents
+2020-06-29 17:33:11: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-29 17:33:11: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-29 17:33:17: [127.0.0.1] login: surush Get Hamsoya TransactionTypeTypes Method: GET, path: /api/hamsoya/transactionstype
+2020-06-29 17:33:18: [127.0.0.1] login: surush Get Hamsoya configs Method: GET, path: /api/hamsoya/configs
+2020-06-29 17:33:21: [127.0.0.1] login: surush Get Hamsoya accounttypes Method: GET, path: /api/hamsoya/accounttypes
+2020-06-29 17:33:22: [127.0.0.1] login: surush Get Hamsoya Transactions Method: GET, path: /api/hamsoya/transactions
+2020-06-29 17:33:25: [127.0.0.1] login: surush Get Hamsoya statuses Method: GET, path: /api/hamsoya/statuses
+2020-06-29 17:33:29: [127.0.0.1] login: surush Get Hamsoya Documents Method: GET, path: /api/hamsoya/documents
+2020-06-29 17:33:33: [127.0.0.1] login: surush Get Hamsoya records Method: GET, path: /api/hamsoya/records
+2020-06-29 17:33:35: [127.0.0.1] login: surush Get Hamsoya accounts Method: GET, path: /api/hamsoya/accounts
+2020-06-29 17:33:37: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-29 17:33:39: [127.0.0.1] login: surush Get Hamsoya accounts Method: GET, path: /api/hamsoya/accounts
+2020-06-29 17:36:48: [127.0.0.1] login: surush Get Hamsoya prechecks Method: GET, path: /api/hamsoya/prechecks
+2020-06-29 17:36:52: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-29 17:37:06: [127.0.0.1] login: surush Get Hamsoya prechecks Method: GET, path: /api/hamsoya/prechecks
+2020-06-29 17:37:40: [127.0.0.1] login: surush Get Hamsoya prechecks Method: GET, path: /api/hamsoya/prechecks
+2020-06-29 17:39:31: [127.0.0.1] login: surush Get Hamsoya viewtransactions Method: GET, path: /api/hamsoya/viewtransactions
+2020-06-29 17:39:36: [127.0.0.1] login: surush Get Hamsoya viewtransactions Method: GET, path: /api/hamsoya/viewtransactions
+2020-06-29 17:52:55: [127.0.0.1] login: surush Get Hamsoya viewtransactions Method: GET, path: /api/hamsoya/viewtransactions
+2020-06-29 17:53:24: [127.0.0.1] login: surush Get Hamsoya viewtransactions Method: GET, path: /api/hamsoya/viewtransactions
+2020-06-29 18:12:58: [127.0.0.1] login: surush Get Hamsoya viewtrans by id  Method: GET, path: /api/hamsoya/viewtranses
+2020-06-29 21:43:48: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-06-29 21:43:48: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-06-29 21:43:50: [127.0.0.1] login: surush Get Hamsoya accounts Method: GET, path: /api/hamsoya/accounts
+2020-06-29 21:43:52: [127.0.0.1] login: surush Get Hamsoya prechecks Method: GET, path: /api/hamsoya/prechecks
+2020-06-29 21:43:56: [127.0.0.1] login: surush Get Hamsoya records Method: GET, path: /api/hamsoya/records
+2020-06-29 21:43:59: [127.0.0.1] login: surush Get Hamsoya viewtrans by id  Method: GET, path: /api/hamsoya/viewtranses
+2020-06-29 21:44:11: [127.0.0.1] login: surush Get Hamsoya viewtrans by id  Method: GET, path: /api/hamsoya/viewtranses
+2020-06-29 21:44:33: [127.0.0.1] login: surush Get Hamsoya viewtrans by id  Method: GET, path: /api/hamsoya/viewtranses
+2020-06-29 21:44:36: [127.0.0.1] login: surush Get Hamsoya viewtrans by id  Method: GET, path: /api/hamsoya/viewtranses
+2020-06-29 21:44:52: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-29 21:44:54: [127.0.0.1] login: surush Get Hamsoya accounts Method: GET, path: /api/hamsoya/accounts
+2020-06-29 21:44:55: [127.0.0.1] login: surush Get Hamsoya prechecks Method: GET, path: /api/hamsoya/prechecks
+2020-06-29 21:44:57: [127.0.0.1] login: surush Get Hamsoya Documents Method: GET, path: /api/hamsoya/documents
+2020-06-29 21:44:59: [127.0.0.1] login: surush Get Hamsoya Transactions Method: GET, path: /api/hamsoya/transactions
+2020-06-29 21:54:28: [127.0.0.1] login: surush Get Hamsoya statuses Method: GET, path: /api/hamsoya/statuses
+2020-06-29 21:54:30: [127.0.0.1] login: surush Get Hamsoya viewtrans by id  Method: GET, path: /api/hamsoya/viewtranses
+2020-06-29 21:54:32: [127.0.0.1] login: surush Get Hamsoya Documents Method: GET, path: /api/hamsoya/documents
+2020-06-29 21:54:34: [127.0.0.1] login: surush Get Hamsoya prechecks Method: GET, path: /api/hamsoya/prechecks
+2020-06-29 21:54:36: [127.0.0.1] login: surush Get Hamsoya records Method: GET, path: /api/hamsoya/records
+2020-06-29 21:54:38: [127.0.0.1] login: surush Get Hamsoya accounts Method: GET, path: /api/hamsoya/accounts
+2020-06-29 21:54:41: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-06-29 21:54:44: [127.0.0.1] login: surush Get Hamsoya accounts Method: GET, path: /api/hamsoya/accounts
+2020-06-29 22:01:05: [127.0.0.1] login: surush Get Hamsoya prechecks Method: GET, path: /api/hamsoya/prechecks
+2020-06-29 22:01:15: [127.0.0.1] login: surush Get Hamsoya viewtrans by id  Method: GET, path: /api/hamsoya/viewtranses
+2020-06-29 22:01:18: [127.0.0.1] login: surush Get Hamsoya viewtrans by id  Method: GET, path: /api/hamsoya/viewtranses
+2020-06-29 22:02:03: [127.0.0.1] login: surush Get Hamsoya statuses Method: GET, path: /api/hamsoya/statuses
+2020-06-29 22:02:06: [127.0.0.1] login: surush Get Hamsoya Transactions Method: GET, path: /api/hamsoya/transactions
+2020-06-29 22:02:08: [127.0.0.1] login: surush Get Hamsoya accounttypes Method: GET, path: /api/hamsoya/accounttypes
+2020-06-29 22:02:11: [127.0.0.1] login: surush Get Hamsoya configs Method: GET, path: /api/hamsoya/configs
+2020-06-29 22:02:13: [127.0.0.1] login: surush Get Hamsoya Transactions Method: GET, path: /api/hamsoya/transactions
+2020-06-29 22:02:31: [127.0.0.1] login: surush Get Hamsoya configs Method: GET, path: /api/hamsoya/configs
+2020-06-29 22:02:33: [127.0.0.1] login: surush Get Hamsoya accounttypes Method: GET, path: /api/hamsoya/accounttypes
+2020-06-29 22:02:35: [127.0.0.1] login: surush Get Hamsoya Transactions Method: GET, path: /api/hamsoya/transactions
+2020-06-29 22:02:37: [127.0.0.1] login: surush Get Hamsoya statuses Method: GET, path: /api/hamsoya/statuses
+2020-06-29 22:02:39: [127.0.0.1] login: surush Get Hamsoya viewtrans by id  Method: GET, path: /api/hamsoya/viewtranses
+2020-06-29 22:02:42: [127.0.0.1] login: surush Get Hamsoya Documents Method: GET, path: /api/hamsoya/documents
+2020-06-29 22:02:45: [127.0.0.1] login: surush Get Hamsoya records Method: GET, path: /api/hamsoya/records
+2020-06-29 22:02:47: [127.0.0.1] login: surush Get Hamsoya prechecks Method: GET, path: /api/hamsoya/prechecks
+2020-06-29 22:02:50: [127.0.0.1] login: surush Get Hamsoya accounts Method: GET, path: /api/hamsoya/accounts
+2020-06-29 22:02:52: [127.0.0.1] login: surush Get Hamsoya clients Method: GET, path: /api/hamsoya/clients
+2020-07-01 14:22:26: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-07-01 14:23:19: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/megafon/vendors
+2020-07-01 14:23:29: [127.0.0.1] login: surush Get vendors  Method: GET, path: /api/megafon/vendors
+2020-07-01 15:06:01: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-07-01 15:06:01: [127.0.0.1] login: surush Get all clients By Page and Rows Method: GET, path: /api/megafon/clients
+2020-07-01 15:06:41: [127.0.0.1] login: surush Get merchants  Method: GET, path: /api/megafon/merchants
+2020-07-01 15:07:28: [127.0.0.1] login: surush Get merchant  Method: GET, path: /api/megafon/merchants/merchant/1377
+2020-07-01 15:11:08: [127.0.0.1] login: surush Change merchant by id  Method: POST, path: /api/megafon/merchants/merchant/1377/edit
+2020-07-01 15:11:14: [127.0.0.1] login: surush Get merchant  Method: GET, path: /api/megafon/merchants/merchant/1377
+2020-07-01 15:11:38: [127.0.0.1] login: surush Change merchant by id  Method: POST, path: /api/megafon/merchants/merchant/1377/edit
+2020-07-01 15:20:45: [127.0.0.1] login: surush Change merchant by id  Method: POST, path: /api/megafon/merchants/merchant/1377/edit
+2020-07-01 16:19:47: [127.0.0.1] login: surush Change merchant by id  Method: POST, path: /api/megafon/merchants/merchant/1377/edit
+2020-07-01 16:20:02: [127.0.0.1] login: surush Change merchant by id  Method: POST, path: /api/megafon/merchants/merchant/1377/edit
+2020-07-01 16:23:06: [127.0.0.1] login: surush Change merchant by id  Method: POST, path: /api/megafon/merchants/merchant/1377/edit
+2020-07-01 16:23:17: [127.0.0.1] login: surush Change merchant by id  Method: POST, path: /api/megafon/merchants/merchant/1377/edit
+2020-07-01 16:23:21: [127.0.0.1] login: surush Change merchant by id  Method: POST, path: /api/megafon/merchants/merchant/1377/edit
+2020-07-01 16:27:48: [127.0.0.1] login: surush Change merchant by id  Method: POST, path: /api/megafon/merchants/merchant/1377/edit
+2020-07-01 16:40:42: [127.0.0.1] login: surush Change merchant by id  Method: POST, path: /api/megafon/merchants/merchant/1377/edit
+2020-07-01 16:40:53: [127.0.0.1] login: surush Change merchant by id  Method: POST, path: /api/megafon/merchants/merchant/1377/edit
+2020-07-01 16:41:04: [127.0.0.1] login: surush Change merchant by id  Method: POST, path: /api/megafon/merchants/merchant/1377/edit
+2020-07-01 23:47:11: [127.0.0.1] login: surush Get transactions  Method: GET, path: /api/megafon/transactions
+2020-07-02 00:12:41: [127.0.0.1] login: surush Get Hamsoya statuses Method: GET, path: /api/hamsoya/statuses
+2020-07-02 00:12:55: [127.0.0.1] login: surush Get Hamsoya Transactions Method: GET, path: /api/hamsoya/transactions
+2020-07-06 15:16:15: [127.0.0.1] login: surush Change merchant by id  Method: POST, path: /api/megafon/merchants/merchant/1377/edit
+2020-07-06 15:16:19: [127.0.0.1] login:  Create Token for user: Method: POST, path: /api/login
+2020-07-06 15:16:31: [127.0.0.1] login: surush Change merchant by id  Method: POST, path: /api/megafon/merchants/merchant/1377/edit
+2020-07-06 15:22:35: [127.0.0.1] login: surush Change merchant by id  Method: POST, path: /api/megafon/merchants/merchant/1377/edit
+2020-07-06 15:31:07: [127.0.0.1] login: surush Change merchant by id  Method: POST, path: /api/megafon/merchants/merchant/1377/edit
+2020-07-06 15:31:45: [127.0.0.1] login: surush Change merchant by id  Method: POST, path: /api/megafon/merchants/merchant/1377/edit

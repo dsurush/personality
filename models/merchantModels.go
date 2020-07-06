@@ -23,6 +23,17 @@ type Merchant struct {
 	UpdateTime   time.Time `gorm:"column:update_time" xml:"-"`
 }
 
+type MerchantDTO struct {
+	ID           uint      `gorm:"column:id" xml:"id"`
+	HumoOnlineID int64     `gorm:"column:humo_online_id" xml:"-"`
+	NameENG      string    `gorm:"column:name_eng" xml:"latName"`
+	NameRUS      string    `gorm:"column:name_rus" xml:"name"`
+	QrCode       string    `gorm:"column:qr_code" xml:"qr"`
+	QrCodeNew    string    `gorm:"column:qr_code_new" xml:"qr_new"`
+	//CreateTime   time.Time `gorm:"column:create_time" xml:"-"`
+	//UpdateTime   time.Time `gorm:"column:update_time" xml:"-"`
+}
+
 type ResponseMerchants struct {
 	Error          error        `json:"error"`
 	Page           int64        `json:"page"`

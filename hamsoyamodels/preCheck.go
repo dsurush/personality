@@ -33,7 +33,7 @@ func (*HamsoyaPreCheck) TableName() string {
 type ResponseHamsoyaPreChecks struct {
 	Error               error
 	Count               int64
-	HamsoyaPreCheckList []HamsoyaPreCheck
+	HamsoyaPreCheckList []HamsoyaPreCheck `json:"hamsoya_pre_check_list"`
 }
 
 func GetHamsoyaPreCheckById(id int64) (HamsoyaPreCheck HamsoyaPreCheck, err error) {

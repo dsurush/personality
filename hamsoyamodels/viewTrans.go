@@ -2,6 +2,7 @@ package hamsoyamodels
 
 import (
 	"MF/db"
+	"MF/helperfunc"
 	"time"
 )
 
@@ -25,6 +26,31 @@ type HamsoyaViewTrans struct {
 
 func (*HamsoyaViewTrans) TableName() string {
 	return "view_trans"
+}
+
+type ResponseHamsoyaTranses struct {
+	Error          error        `json:"error"`
+	Page           int64        `json:"page"`
+	TotalPage      int64        `json:"totalPage"`
+	URL            string       `json:"url"`
+	HamsoyaViewTransList []HamsoyaViewTrans `json:"hamsoya_view_trans_list"`
+}
+func GetHamsoyaViewTranses(transaction HamsoyaViewTrans, transactionSlice *ResponseHamsoyaTranses, time helperfunc.TimeInterval, page int64) (HamsoyaTransactions *ResponseHamsoyaTranses) {
+
+	postgresDb := db.GetHamsoyaPostgresDb()
+	if err := postgresDb.Where(&transaction).Where(`create_date > ? and create_date < ?`, time.From, time.To).Limit(100).Offset(page * 100).Find(&transactionSlice.HamsoyaViewTransList).Error; err != nil {
+		transactionSlice.Error = err
+	}
+	return
+}
+
+func GetHamsoyaViewTransesCount(transaction HamsoyaViewTrans, time helperfunc.TimeInterval) (HamsoyaTransactions ResponseHamsoyaTranses) {
+
+	postgresDb := db.GetHamsoyaPostgresDb()
+	if err := postgresDb.Table("transactions").Where(&transaction).Where(`create_date > ? and create_date < ?`, time.From, time.To).Count(&HamsoyaTransactions.TotalPage).Error; err != nil {
+		HamsoyaTransactions.Error = err
+	}
+	return
 }
 
 func GetHamsoyaViewTransById(id int64) (HamsoyaViewTrans HamsoyaViewTrans, err error) {

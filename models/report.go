@@ -46,11 +46,11 @@ func (viewReport ViewReport) TableName() string {
 	return "view_report"
 }
 
-func GetViewReport(report ViewReport, ViewReportSlice *ResponseViewReports, time helperfunc.TimeInterval, page int64) (ReportSliceOver *ResponseViewReports) {
+func GetViewReport(report ViewReport, viewReportSlice *ResponseViewReports, time helperfunc.TimeInterval, page int64) (reportSliceOver *ResponseViewReports) {
 	postgresDb := db.GetPostgresDb()
-	if err := postgresDb.Where(&report).Where(`create_time > ? and create_time < ?`, time.From, time.To).Limit(100).Offset(page * 100).Order("create_time desc").Find(&ViewReportSlice.ViewReportList).Error; err != nil {
+	if err := postgresDb.Where(&report).Where(`create_time > ? and create_time < ?`, time.From, time.To).Limit(100).Offset(page * 100).Order("create_time desc").Find(&viewReportSlice.ViewReportList).Error; err != nil {
 		log.Printf("can't get from db view report %e\n", err)
-		ViewReportSlice.Error = err
+		viewReportSlice.Error = err
 	}
 	return
 }
@@ -63,6 +63,3 @@ func GetViewReportCount(report ViewReport, time helperfunc.TimeInterval) (Report
 	}
 	return
 }
-
-
-
