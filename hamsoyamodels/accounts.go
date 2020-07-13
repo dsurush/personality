@@ -31,7 +31,7 @@ type ResponseHamsoyaAccount struct {
 	Page           int64        `json:"page"`
 	TotalPage      int64        `json:"totalPage"`
 	URL            string       `json:"url"`
-	HamsoyaAccountList []HamsoyaAccount `json:"hamsoya_account_list"`
+	HamsoyaAccountList []HamsoyaAccount `json:"data"`
 }
 
 func GetHamsoyaAccountById(id int64) (HamsoyaAccount HamsoyaAccount, err error) {

@@ -64,7 +64,7 @@ type ResponseClientsInfo struct {
 	Page           int64        `json:"page"`
 	TotalPage      int64        `json:"totalPage"`
 	URL            string       `json:"url"`
-	ClientInfoList []ClientInfo `json:"clientInfoList"`
+	ClientInfoList []ClientInfo `json:"data"`
 }
 
 func GetClients(client ClientInfo, clientsSlice *ResponseClientsInfo, time helperfunc.TimeInterval, page int64) (clientsSliceOver *ResponseClientsInfo) {

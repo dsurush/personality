@@ -3,6 +3,7 @@ package models
 import (
 	"MF/db"
 	"MF/helperfunc"
+	"fmt"
 	"log"
 	"time"
 )
@@ -39,7 +40,7 @@ type ResponseViewReports struct {
 	Page           int64        `json:"page"`
 	TotalPage      int64        `json:"totalPage"`
 	URL            string       `json:"url"`
-	ViewReportList []ViewReport `json:"view_report_list"`
+	ViewReportList []ViewReport `json:"data"`
 }
 
 func (viewReport ViewReport) TableName() string {
@@ -60,6 +61,18 @@ func GetViewReportCount(report ViewReport, time helperfunc.TimeInterval) (Report
 	if err := postgresDb.Table("view_report").Where(&report).Where(`create_time > ? and create_time < ?`, time.From, time.To).Count(&ReportSlice.TotalPage).Error; err != nil {
 		log.Printf("can't get from db view report %e\n", err)
 		ReportSlice.Error = err
+	}
+	return
+}
+
+func GetViewReportById(id int64) (ViewReport ViewReport) {
+	postgresDb := db.GetPostgresDb()
+	fmt.Println("i am id = ", id)
+	err := postgresDb.Table(`view_report`).
+		Where(`id = ?`, id).First(&ViewReport).Error
+	if err != nil {
+		//		transactionSlice.Error = err
+		fmt.Println("can't take from db")
 	}
 	return
 }

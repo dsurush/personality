@@ -33,7 +33,7 @@ type ResponseHamsoyaTranses struct {
 	Page           int64        `json:"page"`
 	TotalPage      int64        `json:"totalPage"`
 	URL            string       `json:"url"`
-	HamsoyaViewTransList []HamsoyaViewTrans `json:"hamsoya_view_trans_list"`
+	HamsoyaViewTransList []HamsoyaViewTrans `json:"data"`
 }
 func GetHamsoyaViewTranses(transaction HamsoyaViewTrans, transactionSlice *ResponseHamsoyaTranses, time helperfunc.TimeInterval, page int64) (HamsoyaTransactions *ResponseHamsoyaTranses) {
 
@@ -91,9 +91,11 @@ func (*HamsoyaViewTransaction) TableName() string {
 }
 
 type ResponseHamsoyaViewTransactions struct {
-	Error                       error
-	Count                       int64
-	HamsoyaViewTransactionsList []HamsoyaViewTransaction
+	Error          error        `json:"error"`
+	Page           int64        `json:"page"`
+	TotalPage      int64        `json:"totalPage"`
+	URL            string       `json:"url"`
+	HamsoyaViewTransactionsList []HamsoyaViewTransaction `json:"data"`
 }
 
 func GetHamsoyaViewTransactionById(id int64) (HamsoyaViewTransaction HamsoyaViewTransaction, err error) {
@@ -110,8 +112,10 @@ func GetHamsoyaViewTransactions(transaction HamsoyaViewTransaction, size, page i
 		page = 0
 	}
 	postgresDb := db.GetHamsoyaPostgresDb()
-	if err := postgresDb.Where(&transaction).Limit(size).Offset(page * size).Find(&HamsoyaViewTransaction.HamsoyaViewTransactionsList).Count(&HamsoyaViewTransaction.Count).Error; err != nil {
+	if err := postgresDb.Where(&transaction).Limit(size).Offset(page * size).Find(&HamsoyaViewTransaction.HamsoyaViewTransactionsList).Error; err != nil {
 		HamsoyaViewTransaction.Error = err
 	}
+	HamsoyaViewTransaction.Page = 0
+	HamsoyaViewTransaction.TotalPage = 0
 	return
 }

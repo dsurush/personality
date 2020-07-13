@@ -26,7 +26,7 @@ type ResponseHamsoyaRecords struct {
 	Page              int64           `json:"page"`
 	TotalPage         int64           `json:"totalPage"`
 	URL               string          `json:"url"`
-	HamsoyaRecordList []HamsoyaRecord `json:"hamsoya_record_list"`
+	HamsoyaRecordList []HamsoyaRecord `json:"data"`
 }
 
 func GetHamsoyaRecordById(id int64) (HamsoyaRecord HamsoyaRecord, err error) {

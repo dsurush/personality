@@ -27,7 +27,7 @@ type ResponseHamsoyaDocuments struct {
 	Page           int64        `json:"page"`
 	TotalPage      int64        `json:"totalPage"`
 	URL            string       `json:"url"`
-	Documents []HamsoyaDocument `json:"Documents"`
+	Documents []HamsoyaDocument `json:"data"`
 }
 
 func GetHamsoyaDocuments(Document HamsoyaDocument, documentSlice *ResponseHamsoyaDocuments, time helperfunc.TimeInterval, page int64) (DocumentsSliceOver *ResponseHamsoyaDocuments) {

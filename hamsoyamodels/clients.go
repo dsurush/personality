@@ -28,7 +28,7 @@ type ResponseHamsoyaClients struct {
 	Page           int64        `json:"page"`
 	TotalPage      int64        `json:"totalPage"`
 	URL            string       `json:"url"`
-	HamsoyaClientList []HamsoyaClient `json:"hamsoya_client_list"`
+	HamsoyaClientList []HamsoyaClient `json:"data"`
 }
 
 func GetHamsoyaClientById(id int64) (HamsoyaClient HamsoyaClient, err error) {

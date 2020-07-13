@@ -2,6 +2,7 @@ package models
 
 import (
 	"MF/db"
+	"MF/helperfunc"
 	"encoding/xml"
 	"github.com/sirupsen/logrus"
 	"time"
@@ -63,10 +64,11 @@ func (vendor *Vendor) TableName() string {
 }
 
 type ResponseVendors struct {
+	Error      error    `json:"error"`
 	Page       int64    `json:"page"`
 	TotalPage  int64    `json:"totalPage"`
 	URL        string   `json:"url"`
-	VendorList []Vendor `json:"vendorInfoList"`
+	VendorList []Vendor `json:"data"`
 }
 
 //Find finds vendor by id
@@ -86,11 +88,30 @@ func (vendor *Vendor) FindAll(page int) []Vendor {
 	return vendors
 }
 
-func (Vendor *Vendor) FindAllVendorsByPageSize(page int, size int) (vendors []Vendor) {
+func (Vendor *Vendor) FindAllVendorsByPageSize(page int) (vendors []Vendor) {
 	postgresDb := db.GetPostgresDb()
-	postgresDb.Table(`tb_vendor`).Select("tb_vendor.*").Limit(size).Offset(page * size).Scan(&vendors)
+	postgresDb.Table(`tb_vendor`).Select("tb_vendor.*").Limit(100).Offset(page * 100).Scan(&vendors)
 	return vendors
 }
+//
+func GetVendors(vendor Vendor, vendorsSlice *ResponseVendors, time helperfunc.TimeInterval, page int64) (vendorsSliceOver *ResponseVendors) {
+
+	if err := db.GetPostgresDb().Where(&vendor).Where(`create_time > ? and create_time < ?`, time.From, time.To).Limit(100).Offset(page * 100).Order("create_time desc").Find(&vendorsSlice.VendorList).Error; err != nil {
+		vendorsSlice.Error = err
+		logrus.Println(" ", err)
+	}
+	return
+}
+
+
+func GetVendorsCount(vendor Vendor, time helperfunc.TimeInterval) (vendorsSlice ResponseVendors) {
+	if err := db.GetPostgresDb().Table("tb_vendor").Where(&vendor).Where(`create_time > ? and create_time < ?`, time.From, time.To).Count(&vendorsSlice.TotalPage).Error; err != nil {
+		vendorsSlice.Error = err
+		logrus.Println(" ", err)
+	}
+	return
+}
+//
 
 func (Vendor *Vendor) Save() Vendor {
 	postgresDb := db.GetPostgresDb()

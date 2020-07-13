@@ -16,9 +16,11 @@ func (*HamsoyaAccountType) TableName() string {
 }
 
 type ResponseHamsoyaAccountTypes struct {
-	Error                  error
-	Count                  int64
-	HamsoyaAccountTypeList []HamsoyaAccountType `json:"hamsoya_account_type_list"`
+	Error          error        `json:"error"`
+	Page           int64        `json:"page"`
+	TotalPage      int64        `json:"totalPage"`
+	URL            string       `json:"url"`
+	HamsoyaAccountTypeList []HamsoyaAccountType `json:"data"`
 }
 
 func GetHamsoyaAccountTypeById(id int64) (AccountType HamsoyaAccountType, err error) {
@@ -36,9 +38,11 @@ func GetHamsoyaAccountTypes(accountType HamsoyaAccountType, rows, pages int64) (
 		pages = 0
 	}
 	postgresDb := db.GetHamsoyaPostgresDb()
-	if err := postgresDb.Where(&accountType).Limit(rows).Offset(rows * pages).Find(&AccountTypes.HamsoyaAccountTypeList).Count(&AccountTypes.Count).Error; err != nil {
+	if err := postgresDb.Where(&accountType).Limit(rows).Offset(rows * pages).Find(&AccountTypes.HamsoyaAccountTypeList).Error; err != nil {
 		AccountTypes.Error = err
 	}
+	AccountTypes.Page = 0
+	AccountTypes.TotalPage = 0
 	return
 }
 

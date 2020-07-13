@@ -19,9 +19,11 @@ func (*HamsoyaConfig) TableName() string {
 }
 
 type ResponseHamsoyaConfigs struct {
-	Error             error
-	Count             int64
-	HamsoyaConfigList []HamsoyaConfig `json:"hamsoya_config_list"`
+	Error          error        `json:"error"`
+	Page           int64        `json:"page"`
+	TotalPage      int64        `json:"totalPage"`
+	URL            string       `json:"url"`
+	HamsoyaConfigList []HamsoyaConfig `json:"data"`
 }
 
 func GetHamsoyaConfig(config HamsoyaConfig, rows, pages int64) (HamsoyaConfig ResponseHamsoyaConfigs) {
@@ -30,9 +32,11 @@ func GetHamsoyaConfig(config HamsoyaConfig, rows, pages int64) (HamsoyaConfig Re
 		pages = 0
 	}
 	postgresDb := db.GetHamsoyaPostgresDb()
-	if err := postgresDb.Where(&config).Limit(rows).Offset(pages * rows).Find(&HamsoyaConfig.HamsoyaConfigList).Count(&HamsoyaConfig.Count).Error; err != nil {
+	if err := postgresDb.Where(&config).Limit(rows).Offset(pages * rows).Find(&HamsoyaConfig.HamsoyaConfigList).Error; err != nil {
 		HamsoyaConfig.Error = err
 	}
+	HamsoyaConfig.TotalPage = 0
+	HamsoyaConfig.Page = 0
 	return
 }
 

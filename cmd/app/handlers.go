@@ -187,17 +187,63 @@ func (server *MainServer) MainPageHandler(writer http.ResponseWriter, request *h
 //GetVendorCategory
 func (server *MainServer) GetVendorsHandler(writer http.ResponseWriter, request *http.Request, param httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
-	URL := `http://127.0.0.1:8080/api/megafon/clients`
-	//	PreURL := ``
+	URL := `http://127.0.0.1:8080/api/megafon/vendors`
+	PreURL := ``
+	vendor := models.Vendor{}
+
+	var interval helperfunc.TimeInterval
+	unix := time.Unix(0, 0)
+	interval.From = unix.Format(time.RFC3339)
+	unixTimeNow := time.Now()
+	interval.To = unixTimeNow.Format(time.RFC3339)
+	from, err := strconv.Atoi(request.URL.Query().Get(`from`))
+	if err == nil {
+		i := time.Unix(int64(from), 0)
+		ans := i.Format(time.RFC3339)
+		interval.From = ans
+		PreURL += `&from=` + request.URL.Query().Get(`from`)
+	}
+	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
+	if err == nil {
+		i := time.Unix(int64(to), 0)
+		ans := i.Format(time.RFC3339)
+		interval.To = ans
+		PreURL += `&to=` + request.URL.Query().Get(`to`)
+	}
+
+	var response models.ResponseVendors
 	page := request.URL.Query().Get(`page`)
-	pageInt, errPage := strconv.Atoi(page)
-	if errPage != nil || pageInt <= 0 {
+	pageInt, err := strconv.Atoi(page)
+	if err != nil {
 		pageInt = 1
 		URL += `?page=1`
 	}
-	var vendor models.Vendor
-	response := vendor.FindAll(pageInt - 1)
-	err := json.NewEncoder(writer).Encode(&response)
+	response = models.GetVendorsCount(vendor, interval)
+	response.TotalPage = int64(math.Ceil(float64(response.TotalPage) / float64(int64(100))))
+	response.Page = helperfunc.MinOftoInt(int64(pageInt), response.TotalPage)
+	if err == nil {
+		URL += `?page=` + fmt.Sprintf("%d", response.Page)
+	}
+	URL += PreURL
+	response.URL = URL
+	fmt.Println(URL)
+	models.GetVendors(vendor, &response, interval, response.Page-1)
+	err = json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Print(err)
+	}
+}
+//Get View Transaction By Id Handler
+func (server *MainServer) GetViewTransactionByIdHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	param := params.ByName(`id`)
+	id, err := strconv.Atoi(param)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	response := models.GetViewTransactionsByID(int64(id))
+	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)
 	}
@@ -417,6 +463,21 @@ func (server *MainServer) GetViewReportsHandler(writer http.ResponseWriter, requ
 	response.URL = URL
 	fmt.Println(URL)
 	models.GetViewReport(viewReport, &response, interval, response.Page-1)
+	err = json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Print(err)
+	}
+}
+
+func (server *MainServer) GetViewReportsByIdHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	param := params.ByName(`id`)
+	id, err := strconv.Atoi(param)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	response := models.GetViewReportById(int64(id))
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)

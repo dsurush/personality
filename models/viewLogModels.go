@@ -81,7 +81,7 @@ type ResponseViewLogsList struct {
 	Page           int64        `json:"page"`
 	TotalPage      int64        `json:"totalPage"`
 	URL            string       `json:"url"`
-	ViewLogList []ViewLogDTO `json:"logs_list"`
+	ViewLogList []ViewLogDTO `json:"data"`
 }
 
 func GetViewLogsDTO(ViewLogDTO ViewLogDTO, ViewLogDTOsSlice *ResponseViewLogsList, time helperfunc.TimeInterval, page int64) (ViewLogsDTOSliceOver *ResponseViewLogsList) {

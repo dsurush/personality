@@ -18,9 +18,11 @@ func (*HamsoyaStatus) TableName() string {
 }
 
 type ResponseHamsoyaStatuses struct {
-	Error             error
-	Count             int64
-	HamsoyaStatusList []HamsoyaStatus `json:"hamsoya_status_list"`
+	Error          error        `json:"error"`
+	Page           int64        `json:"page"`
+	TotalPage      int64        `json:"totalPage"`
+	URL            string       `json:"url"`
+	HamsoyaStatusList []HamsoyaStatus `json:"data"`
 }
 
 func GetHamsoyaStatusById(id int64) (HamsoyaStatus HamsoyaStatus, err error) {
@@ -38,9 +40,11 @@ func GetHamsoyaStatuses(hamsoyaStatus HamsoyaStatus, pages int64) (HamsoyaStatus
 		pages = 0
 	}
 	postgresDb := db.GetHamsoyaPostgresDb()
-	if err := postgresDb.Where(&hamsoyaStatus).Limit(100).Offset(100 * pages).Find(&HamsoyaStatus.HamsoyaStatusList).Count(&HamsoyaStatus.Count).Error; err != nil {
+	if err := postgresDb.Where(&hamsoyaStatus).Limit(100).Offset(100 * pages).Find(&HamsoyaStatus.HamsoyaStatusList).Error; err != nil {
 		HamsoyaStatus.Error = err
 	}
+	HamsoyaStatus.TotalPage = 0
+	HamsoyaStatus.Page = 0
 	return
 }
 

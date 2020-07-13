@@ -118,7 +118,20 @@ type ResponseViewTransactions struct {
 	Page                int64  `json:"page"`
 	TotalPage           int64  `json:"totalPage"`
 	URL                 string `json:"url"`
-	ViewTransactionList []ViewTransaction
+	ViewTransactionList []ViewTransaction `json:"data"`
+}
+
+//
+func GetViewTransactionsByID(id int64) (Transaction ViewTransaction) {
+	postgresDb := db.GetPostgresDb()
+	fmt.Println("i am id = ", id)
+	err := postgresDb.Table(`view_transaction`).
+		Where(`id = ?`, id).First(&Transaction).Error
+	if err != nil {
+		//		transactionSlice.Error = err
+		fmt.Println("can't take from db")
+	}
+	return
 }
 
 ////Get From view_transaction

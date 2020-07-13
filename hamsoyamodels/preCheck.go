@@ -31,9 +31,11 @@ func (*HamsoyaPreCheck) TableName() string {
 }
 
 type ResponseHamsoyaPreChecks struct {
-	Error               error
-	Count               int64
-	HamsoyaPreCheckList []HamsoyaPreCheck `json:"hamsoya_pre_check_list"`
+	Error          error        `json:"error"`
+	Page           int64        `json:"page"`
+	TotalPage      int64        `json:"totalPage"`
+	URL            string       `json:"url"`
+	HamsoyaPreCheckList []HamsoyaPreCheck `json:"data"`
 }
 
 func GetHamsoyaPreCheckById(id int64) (HamsoyaPreCheck HamsoyaPreCheck, err error) {
@@ -51,8 +53,10 @@ func GetHamsoyaPreChecks(hamsoyaPreCheck HamsoyaPreCheck, rows, pages int64) (Ha
 		pages = 0
 	}
 	postgresDb := db.GetHamsoyaPostgresDb()
-	if err := postgresDb.Where(&hamsoyaPreCheck).Limit(rows).Offset(rows * pages).Find(&HamsoyaPreCheck.HamsoyaPreCheckList).Count(&HamsoyaPreCheck.Count).Error; err != nil {
+	if err := postgresDb.Where(&hamsoyaPreCheck).Limit(rows).Offset(rows * pages).Find(&HamsoyaPreCheck.HamsoyaPreCheckList).Error; err != nil {
 		HamsoyaPreCheck.Error = err
 	}
+	HamsoyaPreCheck.TotalPage = 0
+	HamsoyaPreCheck.Page = 0
 	return
 }

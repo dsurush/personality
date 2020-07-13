@@ -50,14 +50,14 @@ type ResponseHamsoyaTransactionsType struct {
 	Page           int64        `json:"page"`
 	TotalPage      int64        `json:"totalPage"`
 	URL            string       `json:"url"`
-	HamsoyaTransactionTypeList []HamsoyaTransactionType `json:"hamsoya_transaction_type_list"`
+	HamsoyaTransactionTypeList []HamsoyaTransactionType `json:"data"`
 }
 type ResponseHamsoyaTransactions struct {
 	Error          error        `json:"error"`
 	Page           int64        `json:"page"`
 	TotalPage      int64        `json:"totalPage"`
 	URL            string       `json:"url"`
-	HamsoyaTransactionList []HamsoyaTransaction `json:"hamsoya_transaction_list"`
+	HamsoyaTransactionList []HamsoyaTransaction `json:"data"`
 }
 
 func (*HamsoyaTransaction) TableName() string {

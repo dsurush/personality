@@ -39,7 +39,7 @@ type ResponseMerchants struct {
 	Page           int64        `json:"page"`
 	TotalPage      int64        `json:"totalPage"`
 	URL            string       `json:"url"`
-	MerchantList []Merchant `json:"merchant_list"`
+	MerchantList []Merchant `json:"data"`
 }
 
 //TableName for changing struct name to db name
