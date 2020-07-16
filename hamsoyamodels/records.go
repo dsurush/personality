@@ -50,7 +50,7 @@ func GetHamsoyaRecords(record HamsoyaRecord, recordsSlice *ResponseHamsoyaRecord
 
 func GetHamsoyaRecordsCount(record HamsoyaRecord, time helperfunc.TimeInterval) (recordsSlice ResponseHamsoyaRecords) {
 
-	if err := db.GetHamsoyaPostgresDb().Table("clients").Where(&record).Where(`create_date > ? and create_date < ?`, time.From, time.To).Count(&recordsSlice.TotalPage).Error; err != nil {
+	if err := db.GetHamsoyaPostgresDb().Table("records").Where(&record).Where(`create_date > ? and create_date < ?`, time.From, time.To).Count(&recordsSlice.TotalPage).Error; err != nil {
 		recordsSlice.Error = err
 		logrus.Println(" ", err)
 	}

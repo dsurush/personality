@@ -40,13 +40,13 @@ func GetHamsoyaConfig(config HamsoyaConfig, rows, pages int64) (HamsoyaConfig Re
 	return
 }
 
-func (HamsoyaConfig *HamsoyaConfig) Save() (HamsoyaConfig, error) {
+func (HamsoyaConfig *HamsoyaConfig) Save() (error) {
 	postgresDb := db.GetHamsoyaPostgresDb()
 	err := postgresDb.Create(&HamsoyaConfig).Error
 	if err != nil {
-		return *HamsoyaConfig, err
+		return err
 	}
-	return *HamsoyaConfig, nil
+	return nil
 }
 
 func (HamsoyaConfig *HamsoyaConfig) Update(Config HamsoyaConfig) (HamsoyaConfig, error) {

@@ -76,7 +76,9 @@ func (merchant *Merchant) GetMerchantById(id int64) (merchantsById Merchant) {
 //
 func (Merchant *Merchant) Update(merchant Merchant) Merchant {
 	postgresDb := db.GetPostgresDb()
-	postgresDb.Model(&Merchant).Updates(merchant)
+	if err := postgresDb.Model(&Merchant).Updates(merchant).Error; err != nil {
+		fmt.Println("can't change this pole")
+	}
 	return *Merchant
 }
 

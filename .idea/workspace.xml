@@ -5,25 +5,10 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmd/app/handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/app/handlers.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmd/app/routes.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/app/routes.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hamsoyamodels/accountTypes.go" beforeDir="false" afterPath="$PROJECT_DIR$/hamsoyamodels/accountTypes.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hamsoyamodels/accounts.go" beforeDir="false" afterPath="$PROJECT_DIR$/hamsoyamodels/accounts.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hamsoyamodels/clients.go" beforeDir="false" afterPath="$PROJECT_DIR$/hamsoyamodels/clients.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/hamsoyamodels/configs.go" beforeDir="false" afterPath="$PROJECT_DIR$/hamsoyamodels/configs.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hamsoyamodels/documents.go" beforeDir="false" afterPath="$PROJECT_DIR$/hamsoyamodels/documents.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hamsoyamodels/preCheck.go" beforeDir="false" afterPath="$PROJECT_DIR$/hamsoyamodels/preCheck.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/hamsoyamodels/records.go" beforeDir="false" afterPath="$PROJECT_DIR$/hamsoyamodels/records.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hamsoyamodels/status.go" beforeDir="false" afterPath="$PROJECT_DIR$/hamsoyamodels/status.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hamsoyamodels/transactions.go" beforeDir="false" afterPath="$PROJECT_DIR$/hamsoyamodels/transactions.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hamsoyamodels/viewTrans.go" beforeDir="false" afterPath="$PROJECT_DIR$/hamsoyamodels/viewTrans.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logfile.log" beforeDir="false" afterPath="$PROJECT_DIR$/logfile.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/middleware/corss/corss.go" beforeDir="false" afterPath="$PROJECT_DIR$/middleware/corss/corss.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/clientInfoModels.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/clientInfoModels.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/merchantModels.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/merchantModels.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/paymentModels.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/paymentModels.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/report.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/report.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/vendorModels.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/vendorModels.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/viewLogModels.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/viewLogModels.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -46,6 +31,50 @@
       <path>
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
         <item name="hamsoya@localhost" type="feb32156:DbDataSourceImpl" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="hamsoya@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="databases" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="hamsoya@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="databases" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="hamsoya: database" type="162271b6:PgImplModel$Database" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="hamsoya@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="databases" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="hamsoya: database" type="162271b6:PgImplModel$Database" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="hamsoya@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="databases" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="hamsoya: database" type="162271b6:PgImplModel$Database" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="public: schema" type="983ebcf7:PgImplModel$Schema" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="hamsoya@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="databases" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="hamsoya: database" type="162271b6:PgImplModel$Database" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="public: schema" type="983ebcf7:PgImplModel$Schema" />
+        <item name="tables" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="hamsoya@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="databases" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="hamsoya: database" type="162271b6:PgImplModel$Database" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="public: schema" type="983ebcf7:PgImplModel$Schema" />
+        <item name="views" type="d4e8921:DatabaseStructure$FamilyGroup" />
       </path>
       <path>
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />

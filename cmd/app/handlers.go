@@ -519,6 +519,7 @@ func (server *MainServer) UpdateVendorHandler(writer http.ResponseWriter, reques
 		log.Print(err)
 		return
 	}
+	//fmt.Println(requestBody.CatID + 10000000000)
 	response := requestBody.Update(requestBody)
 	fmt.Println(response)
 	if response.ID <= 0 {
@@ -619,25 +620,19 @@ func (server *MainServer) GetMerchantHandler(writer http.ResponseWriter, request
 
 //Update Merchant
 func (server *MainServer) UpdateMerchantHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-	var requestBody models.MerchantDTO
-	var reqBody models.Merchant
+	var requestBody models.Merchant
+	//var reqBody models.Merchant
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
-	reqBody.ID = requestBody.ID
-	reqBody.HumoOnlineID = requestBody.HumoOnlineID
-	reqBody.NameENG = requestBody.NameENG
-	reqBody.NameRUS = requestBody.NameRUS
-	reqBody.QrCode = requestBody.QrCode
-	reqBody.QrCodeNew = requestBody.QrCodeNew
 	if err != nil {
 		writer.WriteHeader(http.StatusBadRequest)
 		err := json.NewEncoder(writer).Encode([]string{"err.json_invalid"})
 		log.Print(err)
 		return
 	}
-	fmt.Println(reqBody)
-	response := reqBody.Update(reqBody)
-	fmt.Println(response)
+	//fmt.Println(reqBody)
+	response := requestBody.Update(requestBody)
+	///fmt.Println(response)
 	if response.ID <= 0 {
 		writer.WriteHeader(http.StatusNotFound)
 		err := json.NewEncoder(writer).Encode([]string{"err.json_invalid"})
@@ -1059,7 +1054,7 @@ func (server *MainServer) SaveHamsoyaConfigHandler(writer http.ResponseWriter, r
 		return
 	}
 	requestBody.CreateDate = time.Now()
-	response, err := requestBody.Save()
+	err = requestBody.Save()
 	if err != nil {
 		writer.WriteHeader(http.StatusNotFound)
 		err := json.NewEncoder(writer).Encode("wrong_date")
@@ -1068,7 +1063,19 @@ func (server *MainServer) SaveHamsoyaConfigHandler(writer http.ResponseWriter, r
 			return
 		}
 	}
-	err = json.NewEncoder(writer).Encode(&response)
+	var newHamsoyaConfig hamsoyamodels.HamsoyaConfig
+	HamsoyaConfig := hamsoyamodels.GetHamsoyaConfig(newHamsoyaConfig, int64(100), int64(1))
+	if HamsoyaConfig.Error != nil {
+		writer.WriteHeader(http.StatusNotFound)
+		err := json.NewEncoder(writer).Encode(`mismatch_hamsoyaConfig`)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		return
+	}
+	HamsoyaConfig.URL = `http://localhost:3000/hamsoya/configs?page=1`
+	err = json.NewEncoder(writer).Encode(HamsoyaConfig)
 	if err != nil {
 		log.Println(err)
 		return
@@ -1665,7 +1672,7 @@ func (server *MainServer) GetHamsoyaRecordsHandler(writer http.ResponseWriter, r
 		pageInt = 1
 		PreURL = `?page=1`
 	} else {
-		PreURL = fmt.Sprintf(`?page=%s`, pageInt)
+		PreURL = fmt.Sprintf(`?page=%s`, page)
 	}
 	var recordDefault hamsoyamodels.HamsoyaRecord
 	Id, err := strconv.Atoi(request.URL.Query().Get(`Id`))
@@ -1728,6 +1735,7 @@ func (server *MainServer) GetHamsoyaRecordsHandler(writer http.ResponseWriter, r
 	response.Page = helperfunc.MinOftoInt(int64(pageInt), response.TotalPage)
 	response.URL = URL + PreURL
 	fmt.Println(response.URL)
+	fmt.Println(response.TotalPage, pageInt, response.Page)
 	hamsoyamodels.GetHamsoyaRecords(recordDefault, &response, interval, int64(pageInt) - 1)
 
 	err = json.NewEncoder(writer).Encode(&response)
