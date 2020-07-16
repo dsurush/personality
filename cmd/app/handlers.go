@@ -489,16 +489,22 @@ func (server *MainServer) SaveNewVendorHandler(writer http.ResponseWriter, reque
 	var requestBody models.Vendor
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
+	fmt.Println("OWIBKA = ", err)
 	if err != nil {
 		writer.WriteHeader(http.StatusBadRequest)
+		//fmt.Println("Сучка")
+		//fmt.Println("Сучка")
 		err := json.NewEncoder(writer).Encode([]string{"err.json_invalid"})
 		log.Print(err)
 		return
 	}
+
+	fmt.Println(requestBody)
+	requestBody.CreateTime = time.Now()
 	response := requestBody.Save()
 	if response.ID <= 0 {
-		writer.WriteHeader(http.StatusNotFound)
-		err := json.NewEncoder(writer).Encode([]string{"err.json_invalid"})
+		writer.WriteHeader(http.StatusBadRequest)
+		err := json.NewEncoder(writer).Encode([]string{"err.db"})
 		log.Print(err)
 		return
 	}
@@ -523,7 +529,7 @@ func (server *MainServer) UpdateVendorHandler(writer http.ResponseWriter, reques
 	response := requestBody.Update(requestBody)
 	fmt.Println(response)
 	if response.ID <= 0 {
-		writer.WriteHeader(http.StatusNotFound)
+		writer.WriteHeader(http.StatusConflict)
 		err := json.NewEncoder(writer).Encode([]string{"err.json_invalid"})
 		log.Print(err)
 		return
@@ -634,7 +640,7 @@ func (server *MainServer) UpdateMerchantHandler(writer http.ResponseWriter, requ
 	response := requestBody.Update(requestBody)
 	///fmt.Println(response)
 	if response.ID <= 0 {
-		writer.WriteHeader(http.StatusNotFound)
+		writer.WriteHeader(http.StatusConflict)
 		err := json.NewEncoder(writer).Encode([]string{"err.json_invalid"})
 		log.Print(err)
 		return
@@ -953,7 +959,7 @@ func (server *MainServer) SaveHamsoyaTransactionType(writer http.ResponseWriter,
 	fmt.Println(requestBody)
 	response := requestBody.Save()
 	if response.Id <= 0 {
-		writer.WriteHeader(http.StatusNotFound)
+		writer.WriteHeader(http.StatusConflict)
 		err := json.NewEncoder(writer).Encode([]string{"err.json_invalid"})
 		log.Print(err)
 		return
@@ -979,7 +985,7 @@ func (server *MainServer) UpdateHamsoyaTransactionTypeHandler(writer http.Respon
 	response := requestBody.Update(requestBody)
 	fmt.Println(response)
 	if response.Id <= 0 {
-		writer.WriteHeader(http.StatusNotFound)
+		writer.WriteHeader(http.StatusConflict)
 		err := json.NewEncoder(writer).Encode([]string{"err.json_invalid"})
 		log.Print(err)
 		return
@@ -1056,7 +1062,7 @@ func (server *MainServer) SaveHamsoyaConfigHandler(writer http.ResponseWriter, r
 	requestBody.CreateDate = time.Now()
 	err = requestBody.Save()
 	if err != nil {
-		writer.WriteHeader(http.StatusNotFound)
+		writer.WriteHeader(http.StatusConflict)
 		err := json.NewEncoder(writer).Encode("wrong_date")
 		if err != nil {
 			log.Println(err)
@@ -1066,7 +1072,7 @@ func (server *MainServer) SaveHamsoyaConfigHandler(writer http.ResponseWriter, r
 	var newHamsoyaConfig hamsoyamodels.HamsoyaConfig
 	HamsoyaConfig := hamsoyamodels.GetHamsoyaConfig(newHamsoyaConfig, int64(100), int64(1))
 	if HamsoyaConfig.Error != nil {
-		writer.WriteHeader(http.StatusNotFound)
+		writer.WriteHeader(http.StatusBadRequest)
 		err := json.NewEncoder(writer).Encode(`mismatch_hamsoyaConfig`)
 		if err != nil {
 			log.Println(err)
@@ -1099,7 +1105,7 @@ func (server *MainServer) UpdateHamsoyaConfigHandler(writer http.ResponseWriter,
 	}
 	response, err := requestBody.Update(requestBody)
 	if err != nil {
-		writer.WriteHeader(http.StatusNotFound)
+		writer.WriteHeader(http.StatusConflict)
 		err := json.NewEncoder(writer).Encode("wrong_date")
 		if err != nil {
 			log.Println(err)
@@ -1239,7 +1245,7 @@ func (server *MainServer) SaveHamsoyaAccountTypeHandler(writer http.ResponseWrit
 	//	requestBody.CreateDate = time.Now()
 	response, err := requestBody.Save()
 	if err != nil {
-		writer.WriteHeader(http.StatusNotFound)
+		writer.WriteHeader(http.StatusConflict)
 		err := json.NewEncoder(writer).Encode("wrong_date")
 		if err != nil {
 			log.Println(err)
@@ -1270,7 +1276,7 @@ func (server *MainServer) UpdateHamsoyaAccountTypeHandler(writer http.ResponseWr
 	}
 	response, err := requestBody.Update(requestBody)
 	if err != nil {
-		writer.WriteHeader(http.StatusNotFound)
+		writer.WriteHeader(http.StatusConflict)
 		err := json.NewEncoder(writer).Encode("wrong_date")
 		if err != nil {
 			log.Println(err)
@@ -1386,7 +1392,7 @@ func (server *MainServer) SaveHamsoyaStatusHandler(writer http.ResponseWriter, r
 	//	requestBody.CreateDate = time.Now()
 	response, err := requestBody.Save()
 	if err != nil {
-		writer.WriteHeader(http.StatusNotFound)
+		writer.WriteHeader(http.StatusConflict)
 		err := json.NewEncoder(writer).Encode("wrong_date")
 		if err != nil {
 			log.Println(err)
@@ -1416,7 +1422,7 @@ func (server *MainServer) UpdateHamsoyaStatusHandler(writer http.ResponseWriter,
 	}
 	response, err := requestBody.Update(requestBody)
 	if err != nil {
-		writer.WriteHeader(http.StatusNotFound)
+		writer.WriteHeader(http.StatusConflict)
 		err := json.NewEncoder(writer).Encode("wrong_date")
 		if err != nil {
 			log.Println(err)
@@ -1531,7 +1537,7 @@ func (server *MainServer) GetHamsoyaDocumentByIdHandler(writer http.ResponseWrit
 	}
 	Document, err := hamsoyamodels.GetHamsoyaDocument(int64(id))
 	if err != nil {
-		writer.WriteHeader(http.StatusNotFound)
+		writer.WriteHeader(http.StatusConflict)
 		err := json.NewEncoder(writer).Encode("server wrong")
 		if err != nil {
 			log.Print(err)
@@ -1646,7 +1652,7 @@ func (server *MainServer) GetHamsoyaRecordByIdHandler(writer http.ResponseWriter
 	}
 	Record, err := hamsoyamodels.GetHamsoyaRecordById(int64(id))
 	if err != nil {
-		writer.WriteHeader(http.StatusNotFound)
+		writer.WriteHeader(http.StatusConflict)
 		err := json.NewEncoder(writer).Encode("server wrong")
 		if err != nil {
 			log.Print(err)
@@ -1759,7 +1765,7 @@ func (server *MainServer) GetHamsoyaPrecheckByIdHandler(writer http.ResponseWrit
 	}
 	Precheck, err := hamsoyamodels.GetHamsoyaPreCheckById(int64(id))
 	if err != nil {
-		writer.WriteHeader(http.StatusNotFound)
+		writer.WriteHeader(http.StatusConflict)
 		err := json.NewEncoder(writer).Encode("server wrong")
 		if err != nil {
 			log.Print(err)
@@ -1824,7 +1830,7 @@ func (server *MainServer) GetHamsoyaAccountByIdHandler(writer http.ResponseWrite
 	}
 	Account, err := hamsoyamodels.GetHamsoyaAccountById(int64(id))
 	if err != nil {
-		writer.WriteHeader(http.StatusNotFound)
+		writer.WriteHeader(http.StatusConflict)
 		err := json.NewEncoder(writer).Encode("server wrong")
 		if err != nil {
 			log.Print(err)
@@ -1949,7 +1955,7 @@ func (server *MainServer) GetHamsoyaClientByIdHandler(writer http.ResponseWriter
 	}
 	Client, err := hamsoyamodels.GetHamsoyaClientById(int64(id))
 	if err != nil {
-		writer.WriteHeader(http.StatusNotFound)
+		writer.WriteHeader(http.StatusConflict)
 		err := json.NewEncoder(writer).Encode("server wrong")
 		if err != nil {
 			log.Print(err)

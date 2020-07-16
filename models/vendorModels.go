@@ -53,7 +53,7 @@ type Vendor struct {
 	HumoPayNewID int       `xml:"-" gorm:"column:humopay_new_id"`
 	Route        int       `xml:"-" gorm:"column:route"`
 	MinSum       float64   `xml:"minSum" gorm:"column:min_sum"`
-	CreateTime   time.Time `xml:"-" gorm:"column:create_time"`
+	CreateTime   time.Time `xml:"-" gorm:"column:create_time" json:"CreateDate"`
 	//	Type         string    `xml:"type,omitempty"`
 	IsActive bool `xml:"-" gorm:"column:is_active"`
 }

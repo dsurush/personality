@@ -3,7 +3,6 @@ package app
 import (
 	"MF/middleware/authorized"
 	"MF/middleware/corss"
-	"MF/models"
 	"net/http"
 	//"MF/middleware/corss"
 	"MF/middleware/jwt"
@@ -135,5 +134,5 @@ func test() {
 	//ReportSlice := models.GetViewReportCount(report, interval)
 	//models.GetViewReport(report, &ReportSlice, interval, 1)
 	//fmt.Println(ReportSlice)
-	fmt.Println("hello its me", models.GetViewTransactionsByID(104011))
+
 }
