@@ -489,11 +489,10 @@ func (server *MainServer) SaveNewVendorHandler(writer http.ResponseWriter, reque
 	var requestBody models.Vendor
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	err := json.NewDecoder(request.Body).Decode(&requestBody)
-	fmt.Println("OWIBKA = ", err)
+
 	if err != nil {
+		fmt.Println("HERE = ", err)
 		writer.WriteHeader(http.StatusBadRequest)
-		//fmt.Println("Сучка")
-		//fmt.Println("Сучка")
 		err := json.NewEncoder(writer).Encode([]string{"err.json_invalid"})
 		log.Print(err)
 		return
@@ -501,13 +500,55 @@ func (server *MainServer) SaveNewVendorHandler(writer http.ResponseWriter, reque
 
 	fmt.Println(requestBody)
 	requestBody.CreateTime = time.Now()
-	response := requestBody.Save()
-	if response.ID <= 0 {
-		writer.WriteHeader(http.StatusBadRequest)
+	_, err = requestBody.Save()
+	if err != nil {
+		writer.WriteHeader(http.StatusConflict)
+		fmt.Println("Here")
 		err := json.NewEncoder(writer).Encode([]string{"err.db"})
 		log.Print(err)
 		return
 	}
+	URL := `http://127.0.0.1:8080/api/megafon/vendors`
+	PreURL := ``
+	vendor := models.Vendor{}
+
+	var interval helperfunc.TimeInterval
+	unix := time.Unix(0, 0)
+	interval.From = unix.Format(time.RFC3339)
+	unixTimeNow := time.Now()
+	interval.To = unixTimeNow.Format(time.RFC3339)
+	from, err := strconv.Atoi(request.URL.Query().Get(`from`))
+	if err == nil {
+		i := time.Unix(int64(from), 0)
+		ans := i.Format(time.RFC3339)
+		interval.From = ans
+		PreURL += `&from=` + request.URL.Query().Get(`from`)
+	}
+	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
+	if err == nil {
+		i := time.Unix(int64(to), 0)
+		ans := i.Format(time.RFC3339)
+		interval.To = ans
+		PreURL += `&to=` + request.URL.Query().Get(`to`)
+	}
+
+	var response models.ResponseVendors
+	page := request.URL.Query().Get(`page`)
+	pageInt, err := strconv.Atoi(page)
+	if err != nil {
+		pageInt = 1
+		URL += `?page=1`
+	}
+	response = models.GetVendorsCount(vendor, interval)
+	response.TotalPage = int64(math.Ceil(float64(response.TotalPage) / float64(int64(100))))
+	response.Page = helperfunc.MinOftoInt(int64(pageInt), response.TotalPage)
+	if err == nil {
+		URL += `?page=` + fmt.Sprintf("%d", response.Page)
+	}
+	URL += PreURL
+	response.URL = URL
+	fmt.Println(URL)
+	models.GetVendors(vendor, &response, interval, response.Page-1)
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)
@@ -957,13 +998,22 @@ func (server *MainServer) SaveHamsoyaTransactionType(writer http.ResponseWriter,
 		return
 	}
 	fmt.Println(requestBody)
-	response := requestBody.Save()
-	if response.Id <= 0 {
+	savedElement := requestBody.Save()
+	if savedElement.Id <= 0 {
 		writer.WriteHeader(http.StatusConflict)
 		err := json.NewEncoder(writer).Encode([]string{"err.json_invalid"})
 		log.Print(err)
 		return
 	}
+	var transactionTypeDefault hamsoyamodels.HamsoyaTransactionType
+	var response hamsoyamodels.ResponseHamsoyaTransactionsType
+	response = hamsoyamodels.GetHamsoyaTransactionsTypeCount(transactionTypeDefault)
+	response.TotalPage = int64(math.Ceil(float64(response.TotalPage) / float64(int64(100))))
+	response.Page = helperfunc.MinOftoInt(int64(1), response.TotalPage)
+	response.URL = `http://localhost:3000/hamsoya/transactionstype?page=1`
+	fmt.Println(response.URL)
+	hamsoyamodels.GetHamsoyaTransactionsType(transactionTypeDefault, &response, 1)
+
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)
@@ -2147,6 +2197,41 @@ func (server *MainServer) GetHamsoyaViewTransesHandler(writer http.ResponseWrite
 	response.URL = URL
 	fmt.Println(URL)
 	hamsoyamodels.GetHamsoyaViewTranses(transaction, &response, interval, response.Page-1)
+	err = json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Print(err)
+	}
+}
+
+func (server *MainServer) GetStaticHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	fmt.Println("I am view Static")
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	PreURL := ``
+
+	var interval helperfunc.TimeInterval
+	unix := time.Unix(0, 0)
+	interval.From = unix.Format(time.RFC3339)
+	unixTimeNow := time.Now()
+	interval.To = unixTimeNow.Format(time.RFC3339)
+	from, err := strconv.Atoi(request.URL.Query().Get(`from`))
+	if err == nil {
+		i := time.Unix(int64(from), 0)
+		ans := i.Format(time.RFC3339)
+		interval.From = ans
+		PreURL += `&from=` + request.URL.Query().Get(`from`)
+	}
+	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
+	if err == nil {
+		i := time.Unix(int64(to), 0)
+		ans := i.Format(time.RFC3339)
+		interval.To = ans
+		PreURL += `&to=` + request.URL.Query().Get(`to`)
+	}
+
+	URL := `http://127.0.0.1:8080/api/static`
+
+	response := models.GetMegafonStatic()
+	fmt.Println(URL)
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)

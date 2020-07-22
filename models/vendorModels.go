@@ -41,7 +41,7 @@ type VendorListResXML struct {
 //Vendor ...
 type Vendor struct {
 	ID           int       `xml:"id" gorm:"column:id"`
-	LatName      string    `xml:"latName" gorm:"column:name_eng"`
+	LastName      string    `xml:"latName" gorm:"column:name_eng"`
 	Name         string    `xml:"name" gorm:"column:name_rus"`
 	CatID        int       `xml:"catID" gorm:"column:category_id"`
 	Feept        float64   `xml:"feept" gorm:"column:feept"`
@@ -113,10 +113,12 @@ func GetVendorsCount(vendor Vendor, time helperfunc.TimeInterval) (vendorsSlice 
 }
 //
 
-func (Vendor *Vendor) Save() Vendor {
+func (Vendor *Vendor) Save() (Vendor, error) {
 	postgresDb := db.GetPostgresDb()
-	postgresDb.Create(&Vendor)
-	return *Vendor
+	if err := postgresDb.Create(&Vendor).Error; err != nil {
+		return *Vendor, err
+	}
+	return *Vendor, nil
 }
 
 // Create Method for update
