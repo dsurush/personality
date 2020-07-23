@@ -23,10 +23,10 @@ func (*HamsoyaDocument) TableName() string {
 }
 
 type ResponseHamsoyaDocuments struct {
-	Error          error        `json:"error"`
-	Page           int64        `json:"page"`
-	TotalPage      int64        `json:"totalPage"`
-	URL            string       `json:"url"`
+	Error     error             `json:"error"`
+	Page      int64             `json:"page"`
+	TotalPage int64             `json:"totalPage"`
+	URL       string            `json:"url"`
 	Documents []HamsoyaDocument `json:"data"`
 }
 
@@ -47,7 +47,6 @@ func GetHamsoyaDocumentsCount(Document HamsoyaDocument, time helperfunc.TimeInte
 	}
 	return
 }
-
 
 func GetHamsoyaDocument(id int64) (Document HamsoyaDocument, err error) {
 	postgresDb := db.GetHamsoyaPostgresDb()

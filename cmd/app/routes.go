@@ -3,7 +3,6 @@ package app
 import (
 	"MF/middleware/authorized"
 	"MF/middleware/corss"
-	"MF/models"
 	"net/http"
 	//"MF/middleware/corss"
 	"MF/middleware/jwt"
@@ -101,7 +100,7 @@ func (server *MainServer) InitRoutes() {
 	server.router.GET(`/api/hamsoya/clients/:id`, logger.Logger(`Get Hamsoya client by id`)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaClientByIdHandler)))))
 
 	//Static
-	server.router.GET(`/api/static`, logger.Logger(`Get static`)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetStaticHandler)))))
+	server.router.GET(`/api/megafon`, logger.Logger(`Get static`)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetMegafonStaticHandler)))))
 
 	//handler := cors.Default().Handler(server)
 	//panic(http.ListenAndServe("127.0.0.1:8080", handler))
@@ -139,6 +138,6 @@ func test() {
 	//ReportSlice := models.GetViewReportCount(report, interval)
 	//models.GetViewReport(report, &ReportSlice, interval, 1)
 	//fmt.Println(ReportSlice)
-	MegafonStatic := models.GetMegafonStatic()
-	fmt.Println(MegafonStatic.ByAggregator)
+	//MegafonStatic := models.GetMegafonStatic()
+	//fmt.Println(MegafonStatic.ByAggregator)
 }

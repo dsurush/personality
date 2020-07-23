@@ -38,7 +38,6 @@ func GetHamsoyaRecordById(id int64) (HamsoyaRecord HamsoyaRecord, err error) {
 	return HamsoyaRecord, nil
 }
 
-
 func GetHamsoyaRecords(record HamsoyaRecord, recordsSlice *ResponseHamsoyaRecords, time helperfunc.TimeInterval, page int64) (recordsSliceOver *ResponseHamsoyaRecords) {
 
 	if err := db.GetHamsoyaPostgresDb().Where(&record).Where(`create_date > ? and create_date < ?`, time.From, time.To).Limit(100).Offset(page * 100).Order("create_date desc").Find(&recordsSlice.HamsoyaRecordList).Error; err != nil {

@@ -29,12 +29,13 @@ func (*HamsoyaViewTrans) TableName() string {
 }
 
 type ResponseHamsoyaTranses struct {
-	Error          error        `json:"error"`
-	Page           int64        `json:"page"`
-	TotalPage      int64        `json:"totalPage"`
-	URL            string       `json:"url"`
+	Error                error              `json:"error"`
+	Page                 int64              `json:"page"`
+	TotalPage            int64              `json:"totalPage"`
+	URL                  string             `json:"url"`
 	HamsoyaViewTransList []HamsoyaViewTrans `json:"data"`
 }
+
 func GetHamsoyaViewTranses(transaction HamsoyaViewTrans, transactionSlice *ResponseHamsoyaTranses, time helperfunc.TimeInterval, page int64) (HamsoyaTransactions *ResponseHamsoyaTranses) {
 
 	postgresDb := db.GetHamsoyaPostgresDb()
@@ -91,10 +92,10 @@ func (*HamsoyaViewTransaction) TableName() string {
 }
 
 type ResponseHamsoyaViewTransactions struct {
-	Error          error        `json:"error"`
-	Page           int64        `json:"page"`
-	TotalPage      int64        `json:"totalPage"`
-	URL            string       `json:"url"`
+	Error                       error                    `json:"error"`
+	Page                        int64                    `json:"page"`
+	TotalPage                   int64                    `json:"totalPage"`
+	URL                         string                   `json:"url"`
 	HamsoyaViewTransactionsList []HamsoyaViewTransaction `json:"data"`
 }
 

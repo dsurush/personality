@@ -24,10 +24,10 @@ func (*HamsoyaClient) TableName() string {
 }
 
 type ResponseHamsoyaClients struct {
-	Error          error        `json:"error"`
-	Page           int64        `json:"page"`
-	TotalPage      int64        `json:"totalPage"`
-	URL            string       `json:"url"`
+	Error             error           `json:"error"`
+	Page              int64           `json:"page"`
+	TotalPage         int64           `json:"totalPage"`
+	URL               string          `json:"url"`
 	HamsoyaClientList []HamsoyaClient `json:"data"`
 }
 

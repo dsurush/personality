@@ -233,6 +233,7 @@ func (server *MainServer) GetVendorsHandler(writer http.ResponseWriter, request 
 		log.Print(err)
 	}
 }
+
 //Get View Transaction By Id Handler
 func (server *MainServer) GetViewTransactionByIdHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -950,7 +951,7 @@ func (server *MainServer) GetHamsoyaTransactionTypeHandler(writer http.ResponseW
 	response.Page = helperfunc.MinOftoInt(int64(pageInt), response.TotalPage)
 	response.URL = URL + PreURL
 	fmt.Println(response.URL)
-	hamsoyamodels.GetHamsoyaTransactionsType(transactionTypeDefault, &response, int64(pageInt) - 1)
+	hamsoyamodels.GetHamsoyaTransactionsType(transactionTypeDefault, &response, int64(pageInt)-1)
 
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
@@ -1679,7 +1680,7 @@ func (server *MainServer) GetHamsoyaDocumentsHandler(writer http.ResponseWriter,
 	response.Page = helperfunc.MinOftoInt(int64(pageInt), response.TotalPage)
 	response.URL = URL + PreURL
 	fmt.Println(response.URL)
-	hamsoyamodels.GetHamsoyaDocuments(documentDefault, &response, interval, int64(pageInt) - 1)
+	hamsoyamodels.GetHamsoyaDocuments(documentDefault, &response, interval, int64(pageInt)-1)
 
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
@@ -1758,7 +1759,7 @@ func (server *MainServer) GetHamsoyaRecordsHandler(writer http.ResponseWriter, r
 		PreURL += fmt.Sprintf(`&StartSaldo=%s`, request.URL.Query().Get(`StartSaldo`))
 	}
 	Type := request.URL.Query().Get(`Type`)
-	if Type != ``{
+	if Type != `` {
 		recordDefault.Type = Type
 		PreURL += fmt.Sprintf(`&Type=%s`, request.URL.Query().Get(`Type`))
 
@@ -1792,7 +1793,7 @@ func (server *MainServer) GetHamsoyaRecordsHandler(writer http.ResponseWriter, r
 	response.URL = URL + PreURL
 	fmt.Println(response.URL)
 	fmt.Println(response.TotalPage, pageInt, response.Page)
-	hamsoyamodels.GetHamsoyaRecords(recordDefault, &response, interval, int64(pageInt) - 1)
+	hamsoyamodels.GetHamsoyaRecords(recordDefault, &response, interval, int64(pageInt)-1)
 
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
@@ -1940,7 +1941,7 @@ func (server *MainServer) GetHamsoyaAccountsHandler(writer http.ResponseWriter, 
 		PreURL += fmt.Sprintf(`&Saldo=%s`, request.URL.Query().Get(`Saldo`))
 	}
 	AccNum := request.URL.Query().Get(`AccNum`)
-	if AccNum != ``{
+	if AccNum != `` {
 		accountDefault.AccNum = AccNum
 		PreURL += fmt.Sprintf(`&AccNum=%s`, request.URL.Query().Get(`AccNum`))
 	}
@@ -1982,7 +1983,7 @@ func (server *MainServer) GetHamsoyaAccountsHandler(writer http.ResponseWriter, 
 	response.Page = helperfunc.MinOftoInt(int64(pageInt), response.TotalPage)
 	response.URL = URL + PreURL
 	fmt.Println(response.URL)
-	hamsoyamodels.GetHamsoyaAccounts(accountDefault, &response, interval, int64(pageInt) - 1)
+	hamsoyamodels.GetHamsoyaAccounts(accountDefault, &response, interval, int64(pageInt)-1)
 
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
@@ -2203,7 +2204,7 @@ func (server *MainServer) GetHamsoyaViewTransesHandler(writer http.ResponseWrite
 	}
 }
 
-func (server *MainServer) GetStaticHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+func (server *MainServer) GetMegafonStaticHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	fmt.Println("I am view Static")
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	PreURL := ``

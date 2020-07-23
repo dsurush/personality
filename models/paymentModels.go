@@ -115,9 +115,9 @@ type ViewTransaction struct {
 //	ViewTransactionList []ViewTransaction
 //}
 type ResponseViewTransactions struct {
-	Page                int64  `json:"page"`
-	TotalPage           int64  `json:"totalPage"`
-	URL                 string `json:"url"`
+	Page                int64             `json:"page"`
+	TotalPage           int64             `json:"totalPage"`
+	URL                 string            `json:"url"`
 	ViewTransactionList []ViewTransaction `json:"data"`
 }
 

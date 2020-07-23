@@ -19,10 +19,10 @@ func (*HamsoyaConfig) TableName() string {
 }
 
 type ResponseHamsoyaConfigs struct {
-	Error          error        `json:"error"`
-	Page           int64        `json:"page"`
-	TotalPage      int64        `json:"totalPage"`
-	URL            string       `json:"url"`
+	Error             error           `json:"error"`
+	Page              int64           `json:"page"`
+	TotalPage         int64           `json:"totalPage"`
+	URL               string          `json:"url"`
 	HamsoyaConfigList []HamsoyaConfig `json:"data"`
 }
 
@@ -40,7 +40,7 @@ func GetHamsoyaConfig(config HamsoyaConfig, rows, pages int64) (HamsoyaConfig Re
 	return
 }
 
-func (HamsoyaConfig *HamsoyaConfig) Save() (error) {
+func (HamsoyaConfig *HamsoyaConfig) Save() error {
 	postgresDb := db.GetHamsoyaPostgresDb()
 	err := postgresDb.Create(&HamsoyaConfig).Error
 	if err != nil {

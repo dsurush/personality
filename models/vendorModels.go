@@ -41,7 +41,7 @@ type VendorListResXML struct {
 //Vendor ...
 type Vendor struct {
 	ID           int       `xml:"id" gorm:"column:id"`
-	LastName      string    `xml:"latName" gorm:"column:name_eng"`
+	LastName     string    `xml:"latName" gorm:"column:name_eng"`
 	Name         string    `xml:"name" gorm:"column:name_rus"`
 	CatID        int       `xml:"catID" gorm:"column:category_id"`
 	Feept        float64   `xml:"feept" gorm:"column:feept"`
@@ -93,6 +93,7 @@ func (Vendor *Vendor) FindAllVendorsByPageSize(page int) (vendors []Vendor) {
 	postgresDb.Table(`tb_vendor`).Select("tb_vendor.*").Limit(100).Offset(page * 100).Scan(&vendors)
 	return vendors
 }
+
 //
 func GetVendors(vendor Vendor, vendorsSlice *ResponseVendors, time helperfunc.TimeInterval, page int64) (vendorsSliceOver *ResponseVendors) {
 
@@ -103,7 +104,6 @@ func GetVendors(vendor Vendor, vendorsSlice *ResponseVendors, time helperfunc.Ti
 	return
 }
 
-
 func GetVendorsCount(vendor Vendor, time helperfunc.TimeInterval) (vendorsSlice ResponseVendors) {
 	if err := db.GetPostgresDb().Table("tb_vendor").Where(&vendor).Where(`create_time > ? and create_time < ?`, time.From, time.To).Count(&vendorsSlice.TotalPage).Error; err != nil {
 		vendorsSlice.Error = err
@@ -111,6 +111,7 @@ func GetVendorsCount(vendor Vendor, time helperfunc.TimeInterval) (vendorsSlice 
 	}
 	return
 }
+
 //
 
 func (Vendor *Vendor) Save() (Vendor, error) {

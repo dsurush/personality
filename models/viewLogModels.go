@@ -77,10 +77,10 @@ func GetViewLogById(id int64) (viewLog ViewLog, err error) {
 //	return viewLogs, nil
 //}
 type ResponseViewLogsList struct {
-	Error          error        `json:"error"`
-	Page           int64        `json:"page"`
-	TotalPage      int64        `json:"totalPage"`
-	URL            string       `json:"url"`
+	Error       error        `json:"error"`
+	Page        int64        `json:"page"`
+	TotalPage   int64        `json:"totalPage"`
+	URL         string       `json:"url"`
 	ViewLogList []ViewLogDTO `json:"data"`
 }
 

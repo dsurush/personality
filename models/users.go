@@ -46,4 +46,3 @@ func (receiver *Usersvc) GetClientsInfo() (clientsInfo []ClientInfo) {
 	}
 	return clientsInfo
 }
-

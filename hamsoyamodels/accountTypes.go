@@ -16,10 +16,10 @@ func (*HamsoyaAccountType) TableName() string {
 }
 
 type ResponseHamsoyaAccountTypes struct {
-	Error          error        `json:"error"`
-	Page           int64        `json:"page"`
-	TotalPage      int64        `json:"totalPage"`
-	URL            string       `json:"url"`
+	Error                  error                `json:"error"`
+	Page                   int64                `json:"page"`
+	TotalPage              int64                `json:"totalPage"`
+	URL                    string               `json:"url"`
 	HamsoyaAccountTypeList []HamsoyaAccountType `json:"data"`
 }
 
