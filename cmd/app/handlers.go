@@ -1106,7 +1106,7 @@ func (server *MainServer) SaveHamsoyaTransactionType(writer http.ResponseWriter,
 	response.Page = helperfunc.MinOftoInt(int64(1), response.TotalPage)
 	response.URL = `http://localhost:3000/hamsoya/transactionstype?page=1`
 	fmt.Println(response.URL)
-	hamsoyamodels.GetHamsoyaTransactionsType(transactionTypeDefault, &response, 1)
+	hamsoyamodels.GetHamsoyaTransactionsType(transactionTypeDefault, &response, 0)
 
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
@@ -1534,7 +1534,7 @@ func (server *MainServer) SaveHamsoyaStatusHandler(writer http.ResponseWriter, r
 		return
 	}
 	//	requestBody.CreateDate = time.Now()
-	response, err := requestBody.Save()
+	_, err = requestBody.Save()
 	if err != nil {
 		writer.WriteHeader(http.StatusConflict)
 		err := json.NewEncoder(writer).Encode("wrong_date")
@@ -1543,6 +1543,8 @@ func (server *MainServer) SaveHamsoyaStatusHandler(writer http.ResponseWriter, r
 			return
 		}
 	}
+	newHamsoyaStatus := hamsoyamodels.HamsoyaStatus{}
+	response := hamsoyamodels.GetHamsoyaStatuses(newHamsoyaStatus, 1)
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Println(err)

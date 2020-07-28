@@ -67,7 +67,7 @@ type PaymentResXML struct {
 // TableTransaction model for saving information about transactions to db table
 type TableTransaction struct {
 	ID                  int              `gorm:"column:id"`
-	Request             PaymentReqRawXML `gorm:"foreignkey:RequestID"`
+//	Request             PaymentReqRawXML `gorm:"foreignkey:RequestID"`
 	RequestID           uint             `gorm:"column:request_id"`
 	Vendor              int              `gorm:"column:vendor_id"`
 	Qr                  string           `gorm:"column:qr_code"`
