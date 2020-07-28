@@ -121,6 +121,38 @@ type ResponseViewTransactions struct {
 	ViewTransactionList []ViewTransaction `json:"data"`
 }
 
+type ResponseTransactions struct {
+	Page            int64              `json:"page"`
+	TotalPage       int64              `json:"totalPage"`
+	URL             string             `json:"url"`
+	TransactionList []TableTransaction `json:"data"`
+}
+
+//
+func GetTableTransactionsCount(transaction TableTransaction, time helperfunc.TimeInterval) (Transaction ResponseTransactions) {
+	postgresDb := db.GetPostgresDb()
+	err := postgresDb.Table(`tb_transaction`).Select("tb_transaction.*").
+		Where(&transaction).Where(`create_time > ? and create_time < ?`, time.From, time.To).
+		Count(&Transaction.TotalPage).Error
+	if err != nil {
+		//Transaction.Error = err
+		fmt.Println("can't take from db")
+	}
+	return Transaction
+}
+
+func GetTableTransactions(transaction TableTransaction, transactionSlice *ResponseTransactions, time helperfunc.TimeInterval, page int64) (Transaction *ResponseTransactions) {
+	postgresDb := db.GetPostgresDb()
+	err := postgresDb.Table(`tb_transaction`).Select("tb_transaction.*").
+		Where(&transaction).Where(`create_time > ? and create_time < ?`, time.From, time.To).
+		Limit(100).Offset(page * 100).Order("create_time desc").Find(&transactionSlice.TransactionList).Error
+	if err != nil {
+		//		transactionSlice.Error = err
+		fmt.Println("can't take from db")
+	}
+	return
+}
+
 //
 func GetViewTransactionsByID(id int64) (Transaction ViewTransaction) {
 	postgresDb := db.GetPostgresDb()

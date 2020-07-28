@@ -21,6 +21,9 @@ func (server *MainServer) InitRoutes() {
 
 	//test
 	server.router.GET(`/api/surush`, server.LoginHandler1)
+	//Static
+	server.router.GET(`/api/megafon`, logger.Logger(`Get static`)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetMegafonStaticHandler)))))
+
 
 	server.router.GET("/api/megafon/clients/:id", logger.Logger(`Get client by id: `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetClientInfoByIdHandler)))))
 	//server.router.GET("/api/megafon/clients", logger.Logger(`Get all clients By Page and Rows`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetClientsInfoHandler)))))
@@ -33,8 +36,12 @@ func (server *MainServer) InitRoutes() {
 	server.router.GET(`/api/megafon/vendors/:id/edit`, logger.Logger(`Get vendor for edit `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetVendorHandler)))))
 	server.router.POST(`/api/megafon/vendors/:id/add`, logger.Logger(`Save vendor `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.SaveNewVendorHandler)))))
 
-	server.router.GET(`/api/megafon/transactions`, logger.Logger(`Get transactions `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetViewTransactionsHandler)))))
-	server.router.GET(`/api/megafon/transactions/:id`, logger.Logger(`Get transactions by id `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetViewTransactionByIdHandler)))))
+	server.router.GET(`/api/megafon/view-transactions`, logger.Logger(`Get view - transactions `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetViewTransactionsHandler)))))
+	server.router.GET(`/api/megafon/view-transactions/:id`, logger.Logger(`Get view - transactions by id `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetViewTransactionByIdHandler)))))
+
+	server.router.GET(`/api/megafon/transactions`, logger.Logger(`Get transactions `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetTableTransactionsHandler)))))
+	//server.router.GET(`/api/megafon/transactions/:id`, logger.Logger(`Get transactions by id `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetViewTransactionByIdHandler)))))
+
 
 	server.router.GET(`/api/megafon/reports`, logger.Logger(`Get reports `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetViewReportsHandler)))))
 	server.router.GET(`/api/megafon/reports/:id`, logger.Logger(`Get reports by id `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetViewReportsByIdHandler)))))
@@ -98,9 +105,6 @@ func (server *MainServer) InitRoutes() {
 
 	server.router.GET(`/api/hamsoya/clients`, logger.Logger(`Get Hamsoya clients`)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaClientsHandler)))))
 	server.router.GET(`/api/hamsoya/clients/:id`, logger.Logger(`Get Hamsoya client by id`)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetHamsoyaClientByIdHandler)))))
-
-	//Static
-	server.router.GET(`/api/megafon`, logger.Logger(`Get static`)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetMegafonStaticHandler)))))
 
 	//handler := cors.Default().Handler(server)
 	//panic(http.ListenAndServe("127.0.0.1:8080", handler))

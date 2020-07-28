@@ -122,7 +122,7 @@ func (server *MainServer) GetClientsInfoHandler(writer http.ResponseWriter, requ
 	}
 	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
 	if err == nil {
-		from /= 1000
+		to /= 1000
 		i := time.Unix(int64(to), 0)
 		ans := i.Format(time.RFC3339)
 		interval.To = ans
@@ -198,6 +198,7 @@ func (server *MainServer) GetVendorsHandler(writer http.ResponseWriter, request 
 	interval.To = unixTimeNow.Format(time.RFC3339)
 	from, err := strconv.Atoi(request.URL.Query().Get(`from`))
 	if err == nil {
+		from /= 1000
 		i := time.Unix(int64(from), 0)
 		ans := i.Format(time.RFC3339)
 		interval.From = ans
@@ -205,6 +206,7 @@ func (server *MainServer) GetVendorsHandler(writer http.ResponseWriter, request 
 	}
 	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
 	if err == nil {
+		to /= 1000
 		i := time.Unix(int64(to), 0)
 		ans := i.Format(time.RFC3339)
 		interval.To = ans
@@ -325,6 +327,7 @@ func (server *MainServer) GetViewTransactionsHandler(writer http.ResponseWriter,
 	interval.To = unixTimeNow.Format(time.RFC3339)
 	from, err := strconv.Atoi(request.URL.Query().Get(`from`))
 	if err == nil {
+		from /= 1000
 		i := time.Unix(int64(from), 0)
 		ans := i.Format(time.RFC3339)
 		interval.From = ans
@@ -332,6 +335,7 @@ func (server *MainServer) GetViewTransactionsHandler(writer http.ResponseWriter,
 	}
 	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
 	if err == nil {
+		to /= 1000
 		i := time.Unix(int64(to), 0)
 		ans := i.Format(time.RFC3339)
 		interval.To = ans
@@ -340,7 +344,7 @@ func (server *MainServer) GetViewTransactionsHandler(writer http.ResponseWriter,
 
 	var response models.ResponseViewTransactions
 	page := request.URL.Query().Get(`page`)
-	URL := `http://127.0.0.1:8080/api/megafon/transactions`
+	URL := `http://127.0.0.1:8080/api/megafon/view-transactions`
 	pageInt, err := strconv.Atoi(page)
 	if err != nil {
 		pageInt = 1
@@ -356,6 +360,89 @@ func (server *MainServer) GetViewTransactionsHandler(writer http.ResponseWriter,
 	response.URL = URL
 	fmt.Println(URL)
 	models.GetViewTransactions(transaction, &response, interval, response.Page-1)
+	err = json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Print(err)
+	}
+}
+
+// Get view Trans for report
+func (server *MainServer) GetTableTransactionsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	fmt.Println("I am view Transaction")
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	transaction := models.TableTransaction{}
+	PreURL := ``
+	RequestId, err := strconv.Atoi(request.URL.Query().Get(`RequestId`))
+	if err == nil {
+		transaction.RequestID = uint(RequestId)
+		PreURL += `&RequestId=` + request.URL.Query().Get(`RequestId`)
+	}
+	PaymentID, err := strconv.Atoi(request.URL.Query().Get(`PaymentID`))
+	if err == nil {
+		transaction.PaymentID = int64(PaymentID)
+		PreURL += `&PaymentID=` + request.URL.Query().Get(`PaymentID`)
+	}
+	Vendor, err := strconv.Atoi(request.URL.Query().Get(`Vendor`))
+	if err == nil {
+		transaction.Vendor = Vendor
+		PreURL += `&Vendor=` + request.URL.Query().Get(`Vendor`)
+	}
+	AccountPayer := request.URL.Query().Get(`AccountPayer`)
+	if AccountPayer != `` {
+		PreURL += `&AccountPayer=` + request.URL.Query().Get(`AccountPayer`)
+		transaction.AccountPayer = AccountPayer
+	}
+	AccountReceiver := request.URL.Query().Get(`AccountReceiver`)
+	if AccountReceiver != `` {
+		PreURL += `&AccountReceiver=` + request.URL.Query().Get(`AccountReceiver`)
+		transaction.AccountReceiver = AccountReceiver
+	}
+	StateID := request.URL.Query().Get(`StateID`)
+	if StateID != `` {
+		PreURL += `&StateID=` + request.URL.Query().Get(`StateID`)
+		transaction.StateID = StateID
+	}
+
+	var interval helperfunc.TimeInterval
+	unix := time.Unix(0, 0)
+	interval.From = unix.Format(time.RFC3339)
+	unixTimeNow := time.Now()
+	interval.To = unixTimeNow.Format(time.RFC3339)
+	from, err := strconv.Atoi(request.URL.Query().Get(`from`))
+	if err == nil {
+		from /= 1000
+		i := time.Unix(int64(from), 0)
+		ans := i.Format(time.RFC3339)
+		interval.From = ans
+		PreURL += `&from=` + request.URL.Query().Get(`from`)
+	}
+	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
+	if err == nil {
+		to /= 1000
+		i := time.Unix(int64(to), 0)
+		ans := i.Format(time.RFC3339)
+		interval.To = ans
+		PreURL += `&to=` + request.URL.Query().Get(`to`)
+	}
+
+	var response models.ResponseTransactions
+	page := request.URL.Query().Get(`page`)
+	URL := `http://127.0.0.1:8080/api/megafon/transactions`
+	pageInt, err := strconv.Atoi(page)
+	if err != nil {
+		pageInt = 1
+		URL += `?page=1`
+	}
+	response = models.GetTableTransactionsCount(transaction, interval)
+	response.TotalPage = int64(math.Ceil(float64(response.TotalPage) / float64(int64(100))))
+	response.Page = helperfunc.MinOftoInt(int64(pageInt), response.TotalPage)
+	if err == nil {
+		URL += `?page=` + fmt.Sprintf("%d", response.Page)
+	}
+	URL += PreURL
+	response.URL = URL
+	fmt.Println(URL)
+	models.GetTableTransactions(transaction, &response, interval, response.Page-1)
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)
@@ -433,6 +520,7 @@ func (server *MainServer) GetViewReportsHandler(writer http.ResponseWriter, requ
 	interval.To = unixTimeNow.Format(time.RFC3339)
 	from, err := strconv.Atoi(request.URL.Query().Get(`from`))
 	if err == nil {
+		from /= 1000
 		i := time.Unix(int64(from), 0)
 		ans := i.Format(time.RFC3339)
 		interval.From = ans
@@ -440,6 +528,7 @@ func (server *MainServer) GetViewReportsHandler(writer http.ResponseWriter, requ
 	}
 	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
 	if err == nil {
+		to /= 1000
 		i := time.Unix(int64(to), 0)
 		ans := i.Format(time.RFC3339)
 		interval.To = ans
@@ -520,6 +609,7 @@ func (server *MainServer) SaveNewVendorHandler(writer http.ResponseWriter, reque
 	interval.To = unixTimeNow.Format(time.RFC3339)
 	from, err := strconv.Atoi(request.URL.Query().Get(`from`))
 	if err == nil {
+		from /= 1000
 		i := time.Unix(int64(from), 0)
 		ans := i.Format(time.RFC3339)
 		interval.From = ans
@@ -527,6 +617,7 @@ func (server *MainServer) SaveNewVendorHandler(writer http.ResponseWriter, reque
 	}
 	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
 	if err == nil {
+		to /= 1000
 		i := time.Unix(int64(to), 0)
 		ans := i.Format(time.RFC3339)
 		interval.To = ans
@@ -848,6 +939,7 @@ func (server *MainServer) GetHamsoyaTransactionsHandler(writer http.ResponseWrit
 	interval.To = unixTimeNow.Format(time.RFC3339)
 	from, err := strconv.Atoi(request.URL.Query().Get(`from`))
 	if err == nil {
+		from /= 1000
 		i := time.Unix(int64(from), 0)
 		ans := i.Format(time.RFC3339)
 		interval.From = ans
@@ -855,6 +947,7 @@ func (server *MainServer) GetHamsoyaTransactionsHandler(writer http.ResponseWrit
 	}
 	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
 	if err == nil {
+		to /= 1000
 		i := time.Unix(int64(to), 0)
 		ans := i.Format(time.RFC3339)
 		interval.To = ans
@@ -1660,6 +1753,7 @@ func (server *MainServer) GetHamsoyaDocumentsHandler(writer http.ResponseWriter,
 	interval.To = unixTimeNow.Format(time.RFC3339)
 	from, err := strconv.Atoi(request.URL.Query().Get(`from`))
 	if err == nil {
+		from /= 1000
 		i := time.Unix(int64(from), 0)
 		ans := i.Format(time.RFC3339)
 		interval.From = ans
@@ -1667,6 +1761,7 @@ func (server *MainServer) GetHamsoyaDocumentsHandler(writer http.ResponseWriter,
 	}
 	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
 	if err == nil {
+		to /= 1000
 		i := time.Unix(int64(to), 0)
 		ans := i.Format(time.RFC3339)
 		interval.To = ans
@@ -1772,6 +1867,7 @@ func (server *MainServer) GetHamsoyaRecordsHandler(writer http.ResponseWriter, r
 	interval.To = unixTimeNow.Format(time.RFC3339)
 	from, err := strconv.Atoi(request.URL.Query().Get(`from`))
 	if err == nil {
+		from /= 1000
 		i := time.Unix(int64(from), 0)
 		ans := i.Format(time.RFC3339)
 		interval.From = ans
@@ -1779,6 +1875,7 @@ func (server *MainServer) GetHamsoyaRecordsHandler(writer http.ResponseWriter, r
 	}
 	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
 	if err == nil {
+		to /= 1000
 		i := time.Unix(int64(to), 0)
 		ans := i.Format(time.RFC3339)
 		interval.To = ans
@@ -1963,6 +2060,7 @@ func (server *MainServer) GetHamsoyaAccountsHandler(writer http.ResponseWriter, 
 	interval.To = unixTimeNow.Format(time.RFC3339)
 	from, err := strconv.Atoi(request.URL.Query().Get(`from`))
 	if err == nil {
+		from /= 1000
 		i := time.Unix(int64(from), 0)
 		ans := i.Format(time.RFC3339)
 		interval.From = ans
@@ -1970,6 +2068,7 @@ func (server *MainServer) GetHamsoyaAccountsHandler(writer http.ResponseWriter, 
 	}
 	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
 	if err == nil {
+		to /= 1000
 		i := time.Unix(int64(to), 0)
 		ans := i.Format(time.RFC3339)
 		interval.To = ans
@@ -2167,6 +2266,7 @@ func (server *MainServer) GetHamsoyaViewTransesHandler(writer http.ResponseWrite
 	interval.To = unixTimeNow.Format(time.RFC3339)
 	from, err := strconv.Atoi(request.URL.Query().Get(`from`))
 	if err == nil {
+		from /= 1000
 		i := time.Unix(int64(from), 0)
 		ans := i.Format(time.RFC3339)
 		interval.From = ans
@@ -2174,6 +2274,7 @@ func (server *MainServer) GetHamsoyaViewTransesHandler(writer http.ResponseWrite
 	}
 	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
 	if err == nil {
+		to /= 1000
 		i := time.Unix(int64(to), 0)
 		ans := i.Format(time.RFC3339)
 		interval.To = ans
@@ -2216,6 +2317,7 @@ func (server *MainServer) GetMegafonStaticHandler(writer http.ResponseWriter, re
 	interval.To = unixTimeNow.Format(time.RFC3339)
 	from, err := strconv.Atoi(request.URL.Query().Get(`from`))
 	if err == nil {
+		from /= 1000
 		i := time.Unix(int64(from), 0)
 		ans := i.Format(time.RFC3339)
 		interval.From = ans
@@ -2223,6 +2325,7 @@ func (server *MainServer) GetMegafonStaticHandler(writer http.ResponseWriter, re
 	}
 	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
 	if err == nil {
+		to /= 1000
 		i := time.Unix(int64(to), 0)
 		ans := i.Format(time.RFC3339)
 		interval.To = ans
@@ -2231,7 +2334,7 @@ func (server *MainServer) GetMegafonStaticHandler(writer http.ResponseWriter, re
 
 	URL := `http://127.0.0.1:8080/api/static`
 
-	response := models.GetMegafonStatic()
+	response := models.GetMegafonStatic(interval)
 	fmt.Println(URL)
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {

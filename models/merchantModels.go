@@ -59,7 +59,8 @@ func GetMerchants(merchant Merchant, merchantsSlice *ResponseMerchants, time hel
 
 // Get Merchants Count
 func GetMerchantsCount(merchant Merchant, time helperfunc.TimeInterval) (merchantsSlice ResponseMerchants) {
-	if err := db.GetPostgresDb().Table("tb_ho_merchant").Where(&merchant).Where(`create_time > ? and create_time < ?`, time.From, time.To).Count(&merchantsSlice.TotalPage).Error; err != nil {
+	if err := db.GetPostgresDb().Table("tb_ho_merchant").Where(&merchant).
+		Where(`create_time > ? and create_time < ?`, time.From, time.To).Count(&merchantsSlice.TotalPage).Error; err != nil {
 		merchantsSlice.Error = err
 		logrus.Println(" ", err)
 	}
