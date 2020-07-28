@@ -153,6 +153,18 @@ func GetTableTransactions(transaction TableTransaction, transactionSlice *Respon
 	return
 }
 
+func GetTableTransactionsByID(id int64) (Transaction TableTransaction) {
+	postgresDb := db.GetPostgresDb()
+	fmt.Println("i am id = ", id)
+	err := postgresDb.Table(`tb_transaction`).
+		Where(`id = ?`, id).First(&Transaction).Error
+	if err != nil {
+		//		transactionSlice.Error = err
+		fmt.Println("can't take from db")
+	}
+	return
+}
+
 //
 func GetViewTransactionsByID(id int64) (Transaction ViewTransaction) {
 	postgresDb := db.GetPostgresDb()

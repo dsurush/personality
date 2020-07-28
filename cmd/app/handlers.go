@@ -365,6 +365,21 @@ func (server *MainServer) GetViewTransactionsHandler(writer http.ResponseWriter,
 		log.Print(err)
 	}
 }
+//
+func (server *MainServer) GetTableTransactionByIdHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	param := params.ByName(`id`)
+	id, err := strconv.Atoi(param)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	response := models.GetTableTransactionsByID(int64(id))
+	err = json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Print(err)
+	}
+}
 
 // Get view Trans for report
 func (server *MainServer) GetTableTransactionsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
