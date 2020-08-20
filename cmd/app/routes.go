@@ -16,19 +16,14 @@ func (server *MainServer) InitRoutes() {
 	fmt.Println("Init routes")
 	test()
 
-	//server.router.POST("/api/login", logger.Logger(`Create Token for user:`)(server.LoginHandler))
 	server.router.POST("/api/login", logger.Logger(`Create Token for user:`)(corss.Middleware(server.LoginHandler)))
 
-	//test
-	server.router.GET(`/api/surush`, server.LoginHandler1)
 	//Static
 	server.router.GET(`/api/megafon`, logger.Logger(`Get static`)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetMegafonStaticHandler)))))
-
 
 	server.router.GET("/api/megafon/clients/:id", logger.Logger(`Get client by id: `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetClientInfoByIdHandler)))))
 	//server.router.GET("/api/megafon/clients", logger.Logger(`Get all clients By Page and Rows`)(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))((authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetClientsInfoHandler)))))
 	server.router.GET("/api/megafon/clients", logger.Logger(`Get all clients By Page and Rows`)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetClientsInfoHandler)))))
-	//	server.router.GET("/api/megafon/clients", corss.Middleware(server.GetClientsInfoHandler))
 
 	server.router.GET("/api/megafon/vendors", logger.Logger(`Get vendors `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetVendorsHandler)))))
 	server.router.GET(`/api/megafon/vendors/:id`, logger.Logger(`Get vendor by id `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetVendorHandler)))))
@@ -41,6 +36,9 @@ func (server *MainServer) InitRoutes() {
 
 	server.router.GET(`/api/megafon/transactions`, logger.Logger(`Get transactions `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetTableTransactionsHandler)))))
 	server.router.GET(`/api/megafon/transactions/:id`, logger.Logger(`Get transactions by id `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetTableTransactionByIdHandler)))))
+	server.router.GET(`/api/megafon/transactions/:id/edit`, logger.Logger(`Get transactions by id for edit`)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetTableTransactionByIdStatusHandler)))))
+	server.router.POST(`/api/megafon/transactions/:id/edit`, logger.Logger(`Set transactions by id for edit`)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.SetNewTransactionStatus)))))
+	server.router.POST(`/api/megafon/transactions/:id/cancel`, logger.Logger(`Cancel Transaction`)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.CancelMegafonTransactionHandler)))))
 
 
 	server.router.GET(`/api/megafon/reports`, logger.Logger(`Get reports `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetViewReportsHandler)))))
@@ -114,34 +112,5 @@ func (server *MainServer) InitRoutes() {
 }
 
 func test() {
-	//	var a hamsoyamodels.HamsoyaClientType
-	//	myDataString := 1591635497
-	//	unix := time.Now().Unix()
-	//	fmt.Println(unix)
-	//	i := time.Unix(unix, 0)
-	//	fmt.Println(i.Format(time.RFC3339))
 
-	//myDate, err := time.Parse(time.RFC3339, myDataString)
-	//if err != nil {
-	//	panic(err)
-	//}
-	//myDataString := 1591635497
-	//i := time.Unix(int64(myDataString), 0)
-	//ans := i.Format(time.RFC3339)
-	//HamsoyaAccount := hamsoyamodels.TESTTIME(ans)
-	//fmt.Println(HamsoyaAccount)
-	//var report models.ViewReport
-	//var interval helperfunc.TimeInterval
-	//
-	//unix := time.Unix(0, 0)
-	//From := unix.Format(time.RFC3339)
-	//fmt.Println(From)
-	//unixTimeNow := time.Now()
-	//interval.To = unixTimeNow.Format(time.RFC3339)
-	//report.AccountPayer = `123456789`
-	//ReportSlice := models.GetViewReportCount(report, interval)
-	//models.GetViewReport(report, &ReportSlice, interval, 1)
-	//fmt.Println(ReportSlice)
-	//MegafonStatic := models.GetMegafonStatic()
-	//fmt.Println(MegafonStatic.ByAggregator)
 }

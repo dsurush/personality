@@ -25,7 +25,7 @@ package logger
 //	data := make([]byte, 64)
 //	str := ""
 //	for{
-//		n, err := file.Read(data)
+//		n, err := file.Read(d\ata)
 //		if err == io.EOF{   // если конец файла
 //			break           // выходим из цикла
 //		}

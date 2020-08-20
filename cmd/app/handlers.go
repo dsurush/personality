@@ -4,6 +4,7 @@ import (
 	"MF/hamsoyamodels"
 	"MF/helperfunc"
 	"MF/models"
+	"MF/settings"
 	"MF/token"
 	"encoding/json"
 	"fmt"
@@ -63,7 +64,7 @@ func (server *MainServer) GetClientInfoByIdHandler(writer http.ResponseWriter, r
 	}
 }
 
-//Get list clients Handler ::: TODO CHANGE
+//Get list clients Handler :
 func (server *MainServer) GetClientsInfoHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	var clientDefault models.ClientInfo
@@ -252,6 +253,32 @@ func (server *MainServer) GetViewTransactionByIdHandler(writer http.ResponseWrit
 	}
 }
 
+//Edit status
+func (server *MainServer) EditTransactionByIdHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	param := params.ByName(`id`)
+	id, err := strconv.Atoi(param)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	var requestBody models.TableTransaction
+	err = json.NewDecoder(request.Body).Decode(&requestBody)
+	if err != nil {
+		fmt.Println("HERE = ", err)
+		writer.WriteHeader(http.StatusBadRequest)
+		err := json.NewEncoder(writer).Encode([]string{"err.json_invalid"})
+		log.Print(err)
+		return
+	}
+//	here
+	response := models.GetViewTransactionsByID(int64(id))
+	err = json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Print(err)
+	}
+}
+
 // Get view Trans for report
 func (server *MainServer) GetViewTransactionsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	fmt.Println("I am view Transaction")
@@ -380,6 +407,55 @@ func (server *MainServer) GetTableTransactionByIdHandler(writer http.ResponseWri
 		log.Print(err)
 	}
 }
+
+//
+func (server *MainServer) GetTableTransactionByIdStatusHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	param := params.ByName(`id`)
+	id, err := strconv.Atoi(param)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	response := models.GetTableTransactionsByID(int64(id))
+	type inter struct {
+		ID int `json:"id"`
+		StateID string `json:"state_id"`
+	}
+	var TransInfo inter
+	TransInfo.ID = response.ID
+	TransInfo.StateID = response.StateID
+	err = json.NewEncoder(writer).Encode(&TransInfo)
+	if err != nil {
+		log.Print(err)
+	}
+}
+
+func (server *MainServer) SetNewTransactionStatus(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	type inter struct {
+		ID int `json:"id"`
+		StateID string `json:"state_id"`
+	}
+	var requestBody inter
+	err := json.NewDecoder(request.Body).Decode(&requestBody)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		//fmt.Println("Nawud")
+		return
+	}
+	err, transaction := models.ChangeNewStateID(requestBody.ID, requestBody.StateID)
+	if err != nil {
+		writer.WriteHeader(http.StatusNotFound)
+//		fmt.Println("Nawud")
+		return
+	}
+	err = json.NewEncoder(writer).Encode(&transaction)
+	if err != nil {
+		log.Print(err)
+	}
+}
+
 
 // Get view Trans for report
 func (server *MainServer) GetTableTransactionsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
@@ -1032,7 +1108,7 @@ func (server *MainServer) GetHamsoyaTransactionTypeHandler(writer http.ResponseW
 		pageInt = 1
 		PreURL = `?page=1`
 	} else {
-		PreURL = fmt.Sprintf(`?page=%s`, pageInt)
+		PreURL = fmt.Sprintf(`?page=%d`, pageInt)
 	}
 	var transactionTypeDefault hamsoyamodels.HamsoyaTransactionType
 	IsActive, err := strconv.ParseBool(request.URL.Query().Get(`IsActive`))
@@ -1248,7 +1324,7 @@ func (server *MainServer) SaveHamsoyaConfigHandler(writer http.ResponseWriter, r
 	return
 }
 
-// TODO: Edit Configs check for id and configs.id
+//
 func (server *MainServer) UpdateHamsoyaConfigHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	//	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -1656,7 +1732,7 @@ func (server *MainServer) GetHamsoyaViewTransactionHandler(writer http.ResponseW
 	}
 }
 
-// Get Hamsoya view Transactions TODO: check this route
+// Get Hamsoya view Transactions
 func (server *MainServer) GetHamsoyaViewTransactionsHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	pageInt := 1
@@ -1724,7 +1800,7 @@ func (server *MainServer) GetHamsoyaDocumentsHandler(writer http.ResponseWriter,
 		pageInt = 1
 		PreURL = `?page=1`
 	} else {
-		PreURL = fmt.Sprintf(`?page=%s`, pageInt)
+		PreURL = fmt.Sprintf(`?page=%d`, pageInt)
 	}
 	var documentDefault hamsoyamodels.HamsoyaDocument
 	Id, err := strconv.Atoi(request.URL.Query().Get(`Id`))
@@ -2021,7 +2097,7 @@ func (server *MainServer) GetHamsoyaAccountsHandler(writer http.ResponseWriter, 
 		pageInt = 1
 		PreURL = `?page=1`
 	} else {
-		PreURL = fmt.Sprintf(`?page=%s`, pageInt)
+		PreURL = fmt.Sprintf(`?page=%d`, pageInt)
 	}
 	var accountDefault hamsoyamodels.HamsoyaAccount
 	Id, err := strconv.Atoi(request.URL.Query().Get(`Id`))
@@ -2357,4 +2433,20 @@ func (server *MainServer) GetMegafonStaticHandler(writer http.ResponseWriter, re
 	if err != nil {
 		log.Print(err)
 	}
+}
+
+///Cancel Megafon Transaction
+
+func (server *MainServer) CancelMegafonTransactionHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	id := params.ByName(`id`)
+	link := settings.AppSettings.LinkForCancelTransaction.Link + id
+	ok := models.CancelMegafonTransaction(settings.AppSettings.LinkForCancelTransaction.Link)
+	fmt.Println(link)
+	if !ok {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	writer.WriteHeader(http.StatusOK)
+	return
 }

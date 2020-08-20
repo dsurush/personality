@@ -6,6 +6,7 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	log "github.com/sirupsen/logrus"
+	"time"
 )
 
 var postgresDbCon *gorm.DB
@@ -46,20 +47,25 @@ func init() {
 	//
 	//
 	// nection
+	//	fmt.Println("I am here = ", settings.AppSettings.LinkForCancelTransaction)
 	postgresDbCon, err = gorm.Open("postgres", connString)
 
 	postgresDbCon.LogMode(true)
 	// Error
 	if err != nil {
-		//fmt.Println("error ошибка - ", err)
+		fmt.Println("error ошибка  obj - ", err)
+		fmt.Println("error ошибка - ", err.Error())
+		time.Sleep(time.Second * 10)
 		log.Warn("Database init error", err.Error())
 		panic(err)
 	}
 	postgresHamsoyaDbCon, err = gorm.Open("postgres", connHamsoyaString)
 	postgresHamsoyaDbCon.LogMode(true)
+
 	if err != nil {
 		//fmt.Println("error ошибка - ", err)
 		//log.Warn("Database init error", err.Error())
+		//time.Sleep(time.Second * 10)
 		log.Fatalf("Can't connect to Hamsoya DB %e", err)
 		//panic(err)
 	}

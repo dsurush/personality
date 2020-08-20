@@ -6,6 +6,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"github.com/sirupsen/logrus"
+	"net/http"
 	"time"
 )
 
@@ -165,6 +166,18 @@ func GetTableTransactionsByID(id int64) (Transaction TableTransaction) {
 	return
 }
 
+func ChangeNewStateID(Id int, StateID string) (error, TableTransaction){
+	postgresDb := db.GetPostgresDb()
+	Transaction := GetTableTransactionsByID(int64(Id))
+	var newtrans TableTransaction
+	newtrans.StateID = StateID
+	err := postgresDb.Model(&Transaction).Update(newtrans).Error
+	if err != nil {
+		return err, newtrans
+	}
+	return nil, newtrans
+}
+
 //
 func GetViewTransactionsByID(id int64) (Transaction ViewTransaction) {
 	postgresDb := db.GetPostgresDb()
@@ -296,4 +309,16 @@ func (tableTransaction TableTransaction) TableName() string {
 }
 func (*ViewTransaction) TableName() string {
 	return "view_transaction"
+}
+
+// Request For Cancel transaction
+func CancelMegafonTransaction(link string) bool {
+	resp, err := http.Get(link)
+	if err != nil {
+		return false
+	}
+	if resp.StatusCode == http.StatusOK {
+		return true
+	}
+	return false
 }

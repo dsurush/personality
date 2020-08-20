@@ -5,6 +5,7 @@ type Settings struct {
 	AppParams               Params                  `json:"app"`
 	PostgresMegafonDbParams PostgresMegafonDbParams `json:"postgresMegafondb"`
 	PostgresHamsoyaDbParams PostgresHamsoyaDbParams `json:"postgresHamsoyadb"`
+	LinkForCancelTransaction LinkForCancelTransaction `json:"linkForCancelTransaction"`
 }
 
 // Params contains params of server meta data
@@ -29,4 +30,8 @@ type PostgresHamsoyaDbParams struct {
 	User     string `json:"user"`
 	Password string `json:"password"`
 	Database string `json:"database"`
+}
+
+type LinkForCancelTransaction struct {
+	Link string `json:"link"`
 }

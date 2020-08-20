@@ -19,5 +19,9 @@
         "user": "dsurush",
         "password": "dsurush",
         "database": "hamsoya"
+    },
+
+    "linkForCancelTransaction" : {
+        "link" : "Ваша ссылка ....... =(тут id я сам выставляю в конце из респонса))"
     }
 }
