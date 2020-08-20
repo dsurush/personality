@@ -3,6 +3,7 @@ package app
 import (
 	"MF/middleware/authorized"
 	"MF/middleware/corss"
+	"MF/settings"
 	"net/http"
 	//"MF/middleware/corss"
 	"MF/middleware/jwt"
@@ -106,9 +107,9 @@ func (server *MainServer) InitRoutes() {
 
 	//handler := cors.Default().Handler(server)
 	//panic(http.ListenAndServe("127.0.0.1:8080", handler))
-
-	fmt.Println("Server is listening ...")
-	panic(http.ListenAndServe(":8080", server))
+	port := fmt.Sprintf(":%d", settings.AppSettings.AppParams.PortRun)
+	fmt.Printf("Server is listening in port %s ...", port)
+	panic(http.ListenAndServe(port, server))
 }
 
 func test() {
