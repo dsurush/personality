@@ -1,2 +1,13 @@
 2020-08-19 20:32:39: [[] login:  Create Token for user: Method: POST, path: /api/login
 2020-08-19 20:49:35: [[] login:  Create Token for user: Method: POST, path: /api/login
+2020-08-28 10:25:39: [[] login:  Create Token for user: Method: POST, path: /api/login
+2020-08-28 10:26:22: [[] login:  Create Token for user: Method: POST, path: /api/login
+2020-08-28 10:26:53: [[] login:  Create Token for user: Method: POST, path: /api/login
+2020-08-28 10:41:24: [[] login:  Create Token for user: Method: POST, path: /api/login
+2020-08-28 10:44:17: [[] login: surush Get static Method: GET, path: /api/megafon
+2020-09-02 11:05:31: [[] login:  Create Token for user: Method: POST, path: /api/login
+2020-09-02 11:06:28: [[] login: surush Get reports to excel file Method: GET, path: /api/megafon/downloads-reports
+2020-09-02 11:07:34: [[] login: surush Get reports to excel file Method: GET, path: /api/megafon/downloads-reports
+2020-09-02 11:08:24: [[] login: surush Get reports to excel file Method: GET, path: /api/megafon/downloads-reports
+2020-09-02 11:09:09: [[] login: surush Get reports to excel file Method: GET, path: /api/megafon/downloads-reports
+2020-09-02 11:10:06: [[] login: surush Get reports to excel file Method: GET, path: /api/megafon/downloads-reports

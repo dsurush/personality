@@ -61,6 +61,11 @@ func Logger(prefix string) func(next httprouter.Handle) httprouter.Handle {
 					return
 				}
 			}
+				//if request.URL.Path ==  `/api/login` {
+				//	request.Header.Set(`ID`, string(PayloadFields.Id))
+				//}
+			//get := request.Header.Get(`ID`)
+			///	fmt.Println("\nPayloads field = ", PayloadFields.Id)
 
 			log.Printf(
 				"%s: [%s] login: %s %s Method: %s, path: %s\n",

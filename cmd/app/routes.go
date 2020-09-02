@@ -44,6 +44,7 @@ func (server *MainServer) InitRoutes() {
 
 	server.router.GET(`/api/megafon/reports`, logger.Logger(`Get reports `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetViewReportsHandler)))))
 	server.router.GET(`/api/megafon/reports/:id`, logger.Logger(`Get reports by id `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetViewReportsByIdHandler)))))
+	server.router.GET(`/api/megafon/downloads-reports`, logger.Logger(`Get reports to excel file`)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetViewReportsForExcelHandler)))))
 
 	server.router.GET(`/api/megafon/merchants`, logger.Logger(`Get merchants `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetMerchantsHandler)))))
 	server.router.GET(`/api/megafon/merchants/:id`, logger.Logger(`Get merchant `)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`}, jwt.FromContext)(server.GetMerchantHandler)))))
@@ -108,7 +109,7 @@ func (server *MainServer) InitRoutes() {
 	//handler := cors.Default().Handler(server)
 	//panic(http.ListenAndServe("127.0.0.1:8080", handler))
 	port := fmt.Sprintf(":%d", settings.AppSettings.AppParams.PortRun)
-	fmt.Printf("Server is listening in port %s ...", port)
+	fmt.Printf("Server is listening in port %s%s ...", settings.AppSettings.AppParams.ServerName, port)
 	panic(http.ListenAndServe(port, server))
 }
 

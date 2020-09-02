@@ -40,6 +40,19 @@ func (server *MainServer) LoginHandler(writer http.ResponseWriter, request *http
 		}
 		return
 	}
+	user, err := models.FindUserByLogin(requestBody.Username)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		err := json.NewEncoder(writer).Encode([]string{"err.password_mismatch", err.Error()})
+		if err != nil {
+			log.Print(err)
+		}
+		return
+	}
+	response.ID = user.Id
+	response.Name = user.Name
+	response.Surname = user.Surname
+	response.Role = user.Role
 	err = json.NewEncoder(writer).Encode(&response)
 	if err != nil {
 		log.Print(err)
@@ -649,7 +662,118 @@ func (server *MainServer) GetViewReportsHandler(writer http.ResponseWriter, requ
 		log.Print(err)
 	}
 }
+// test for excel
+// Get view report for report
+func (server *MainServer) GetViewReportsForExcelHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	fmt.Println("I am get clients")
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	viewReport := models.ViewReport{}
+	PreURL := ``
+	RequestId, err := strconv.Atoi(request.URL.Query().Get(`RequestId`))
+	if err == nil {
+		viewReport.RequestId = int64(RequestId)
+		PreURL += `&RequestId=` + request.URL.Query().Get(`RequestId`)
+	}
+	PaymentID, err := strconv.Atoi(request.URL.Query().Get(`PaymentID`))
+	if err == nil {
+		viewReport.PaymentID = int64(PaymentID)
+		PreURL += `&PaymentID=` + request.URL.Query().Get(`PaymentID`)
+	}
+	VendorID, err := strconv.Atoi(request.URL.Query().Get(`VendorId`))
+	if err == nil {
+		viewReport.VendorID = VendorID
+		PreURL += `&VendorId=` + request.URL.Query().Get(`VendorId`)
+	}
+	VendorName := request.URL.Query().Get(`VendorName`)
+	if VendorName != `` {
+		PreURL += `&VendorName=` + request.URL.Query().Get(`VendorName`)
+		viewReport.VendorName = VendorName
+	}
+	RequestType := request.URL.Query().Get(`RequestType`)
+	if RequestType != `` {
+		PreURL += `&RequestType=` + request.URL.Query().Get(`RequestType`)
+		viewReport.RequestType = RequestType
+	}
+	AccountPayer := request.URL.Query().Get(`AccountPayer`)
+	if AccountPayer != `` {
+		PreURL += `&AccountPayer=` + request.URL.Query().Get(`AccountPayer`)
+		viewReport.AccountPayer = AccountPayer
+	}
+	AccountReceiver := request.URL.Query().Get(`AccountReceiver`)
+	if AccountReceiver != `` {
+		PreURL += `&AccountReceiver=` + request.URL.Query().Get(`AccountReceiver`)
+		viewReport.AccountReceiver = AccountReceiver
+	}
+	StateID := request.URL.Query().Get(`StateID`)
+	if StateID != `` {
+		PreURL += `&StateID=` + request.URL.Query().Get(`StateID`)
+		viewReport.StateID = StateID
+	}
+	Aggregator := request.URL.Query().Get(`Aggregator`)
+	if Aggregator != `` {
+		PreURL += `&Aggregator=` + request.URL.Query().Get(`Aggregator`)
+		viewReport.Aggregator = Aggregator
+	}
+	GateWay := request.URL.Query().Get(`GateWay`)
+	if GateWay != `` {
+		PreURL += `&GateWay=` + request.URL.Query().Get(`GateWay`)
+		viewReport.GateWay = GateWay
+	}
 
+	Amount, err := strconv.ParseFloat(request.URL.Query().Get(`Amount`), 64)
+	if err == nil {
+		PreURL += `&Amount=` + request.URL.Query().Get(`Amount`)
+		viewReport.Amount = Amount
+	}
+	fmt.Println(viewReport)
+
+	var interval helperfunc.TimeInterval
+	unix := time.Unix(0, 0)
+	interval.From = unix.Format(time.RFC3339)
+	unixTimeNow := time.Now()
+	interval.To = unixTimeNow.Format(time.RFC3339)
+	from, err := strconv.Atoi(request.URL.Query().Get(`from`))
+	if err == nil {
+		from /= 1000
+		i := time.Unix(int64(from), 0)
+		ans := i.Format(time.RFC3339)
+		interval.From = ans
+		PreURL += `&from=` + request.URL.Query().Get(`from`)
+	}
+	to, err := strconv.Atoi(request.URL.Query().Get(`to`))
+	if err == nil {
+		to /= 1000
+		i := time.Unix(int64(to), 0)
+		ans := i.Format(time.RFC3339)
+		interval.To = ans
+		PreURL += `&to=` + request.URL.Query().Get(`to`)
+	}
+
+	var response models.ResponseViewReports
+//	page := request.URL.Query().Get(`page`)
+	URL := `http://127.0.0.1:8080/api/megafon/download-reports`
+	//pageInt, err := strconv.Atoi(page)
+	//if err != nil {
+	//	pageInt = 1
+	//	URL += `?page=1`
+	//}
+	response = models.GetViewReportCount(viewReport, interval)
+	response.TotalPage = 0
+	//response.TotalPage = int64(math.Ceil(float64(response.TotalPage) / float64(int64(200))))
+//	response.Page = helperfunc.MinOftoInt(int64(pageInt), response.TotalPage)
+	if err == nil {
+		URL += `?page=` + fmt.Sprintf("%d", response.Page)
+	}
+	URL += PreURL
+	response.URL = URL
+	fmt.Println(URL)
+	models.GetViewReportForExcel(viewReport, &response, interval)
+	err = json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Print(err)
+	}
+}
+//
 func (server *MainServer) GetViewReportsByIdHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	param := params.ByName(`id`)

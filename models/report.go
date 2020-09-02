@@ -56,6 +56,15 @@ func GetViewReport(report ViewReport, viewReportSlice *ResponseViewReports, time
 	return
 }
 
+func GetViewReportForExcel(report ViewReport, viewReportSlice *ResponseViewReports, time helperfunc.TimeInterval) (reportSliceOver *ResponseViewReports) {
+	postgresDb := db.GetPostgresDb()
+	if err := postgresDb.Where(&report).Where(`create_time > ? and create_time < ?`, time.From, time.To).Limit(200).Order("create_time desc").Find(&viewReportSlice.ViewReportList).Error; err != nil {
+		log.Printf("can't get from db view report %e\n", err)
+		viewReportSlice.Error = err
+	}
+	return
+}
+
 func GetViewReportCount(report ViewReport, time helperfunc.TimeInterval) (ReportSlice ResponseViewReports) {
 	postgresDb := db.GetPostgresDb()
 	if err := postgresDb.Table("view_report").Where(&report).Where(`create_time > ? and create_time < ?`, time.From, time.To).Count(&ReportSlice.TotalPage).Error; err != nil {
