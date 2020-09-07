@@ -11,3 +11,4 @@
 2020-09-02 11:08:24: [[] login: surush Get reports to excel file Method: GET, path: /api/megafon/downloads-reports
 2020-09-02 11:09:09: [[] login: surush Get reports to excel file Method: GET, path: /api/megafon/downloads-reports
 2020-09-02 11:10:06: [[] login: surush Get reports to excel file Method: GET, path: /api/megafon/downloads-reports
+2020-09-07 15:17:40: [[] login:  Create Token for user: Method: POST, path: /api/login

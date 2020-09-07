@@ -31,7 +31,7 @@ type RequestDTO struct {
 
 type ResponseDTO struct {
 	Token string `json:"token"`
-	Name string `json:"name"`
+	Name string `json:"userName"`
 	Surname string `json:"surname"`
 	Role string `json:"role"`
 	ID int64 `json:"id"`
