@@ -114,5 +114,5 @@ func (server *MainServer) InitRoutes() {
 }
 
 func test() {
-
+	// test for check
 }
