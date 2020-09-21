@@ -3,14 +3,14 @@ package hamsoyamodels
 import "MF/db"
 
 type HamsoyaStatus struct {
-	Id           int64  `xml:"id"`
-	Name         string `xml:"name"`
-	Code         string `xml:"code"`
-	ExtCode      string `xml:"ext_code"`
-	Description  string `xml:"description"`
-	ResultCode   int64  `xml:"result_code"`
-	Final        bool   `xml:"final"`
-	IsAmountHold bool   `xml:"is_amount_hold"`
+	Id           int64  `xml:"id" gorm:"column:id"`
+	Name         string `xml:"name" gorm:"column:name"`
+	Code         string `xml:"code" gorm:"column:code"`
+	ExtCode      string `xml:"ext_code" gorm:"column:ext_code"`
+	Description  string `xml:"description" gorm:"column:description"`
+	ResultCode   int64  `xml:"result_code" gorm:"column:result_code"`
+	Final        bool   `xml:"final" gorm:"column:final"`
+	IsAmountHold bool   `xml:"is_amount_hold" gorm:"column:is_amount_hold"`
 }
 
 func (*HamsoyaStatus) TableName() string {
@@ -59,7 +59,7 @@ func (HamsoyaStatus *HamsoyaStatus) Save() (HamsoyaStatus, error) {
 
 func (HamsoyaStatus *HamsoyaStatus) Update(Status HamsoyaStatus) (HamsoyaStatus, error) {
 	postgresDb := db.GetHamsoyaPostgresDb()
-	err := postgresDb.Model(&HamsoyaStatus).Update(Status).Error
+	err := postgresDb.Model(&HamsoyaStatus).Update(Status).Update(Status.IsAmountHold).Error
 	if err != nil {
 		return *HamsoyaStatus, err
 	}

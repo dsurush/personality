@@ -666,6 +666,7 @@ func (server *MainServer) GetViewReportsHandler(writer http.ResponseWriter, requ
 // Get view report for report
 func (server *MainServer) GetViewReportsForExcelHandler(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	fmt.Println("I am get clients")
+	fmt.Println("id = ", request.Header.Get("ID"))
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	viewReport := models.ViewReport{}
 	PreURL := ``
@@ -2572,5 +2573,31 @@ func (server *MainServer) CancelMegafonTransactionHandler(writer http.ResponseWr
 		return
 	}
 	writer.WriteHeader(http.StatusOK)
+	return
+}
+
+func (server *MainServer) ChangePasswordHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	id := request.Header.Get("ID")
+	fmt.Println("id = ", id)
+
+	var requestBody helperfunc.PasswordChange
+
+	err := json.NewDecoder(request.Body).Decode(&requestBody)
+	fmt.Println(requestBody)
+
+	if err != nil {
+		log.Println(err)
+		writer.WriteHeader(http.StatusBadRequest)
+		err := json.NewEncoder(writer).Encode("err.json_invalid")
+		log.Println(err)
+		return
+	}
+	err = server.userSvc.ChangeUserPass(id, requestBody.Pass, requestBody.NewPass)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
 	return
 }

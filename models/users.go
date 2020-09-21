@@ -2,7 +2,9 @@ package models
 
 import (
 	"MF/db"
+	"MF/helperfunc"
 	"github.com/sirupsen/logrus"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
@@ -32,6 +34,15 @@ func FindUserByLogin(login string) (user User, err error) {
 	return user, nil
 }
 
+func FindUserByID(id string) (user User, err error) {
+	if err := db.GetPostgresDb().Where("id = ?", id).First(&user).Error; err != nil {
+		logrus.Warn("Find User By id ", err.Error())
+		return user, err
+	}
+	//	fmt.Println("I AM = ", user)
+	return user, nil
+}
+
 type Usersvc struct {
 }
 
@@ -45,4 +56,33 @@ func (receiver *Usersvc) GetClientsInfo() (clientsInfo []ClientInfo) {
 		return nil
 	}
 	return clientsInfo
+}
+
+func (receiver *Usersvc) ChangeUserPass(id string, pass string, newPass string) (err error) {
+	//Находим пользователя по ID
+	user, err := FindUserByID(id)
+	if err != nil {
+	//	err = token.ErrInvalidPasswordOrLogin
+		return
+	}
+	//Проверяем сопадают ли пароли
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(pass))
+	if err != nil {
+	//	err = token.ErrInvalidPasswordOrLogin
+		return
+	}
+	//Обновляем пароль
+	postgresDb := db.GetPostgresDb()
+	HashNewPass, err := helperfunc.HashPassword(newPass)
+	if err != nil {
+		//err = token.ErrInvalidPasswordOrLogin
+		return
+	}
+	user.Password = HashNewPass
+	err = postgresDb.Model(&user).Update(user).Error
+	if err != nil {
+	//	err = token.ErrInvalidPasswordOrLogin
+		return
+	}
+	return
 }

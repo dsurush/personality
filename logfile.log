@@ -12,3 +12,15 @@
 2020-09-02 11:09:09: [[] login: surush Get reports to excel file Method: GET, path: /api/megafon/downloads-reports
 2020-09-02 11:10:06: [[] login: surush Get reports to excel file Method: GET, path: /api/megafon/downloads-reports
 2020-09-07 15:17:40: [[] login:  Create Token for user: Method: POST, path: /api/login
+2020-09-08 11:28:26: [[] login:  Create Token for user: Method: POST, path: /api/login
+2020-09-21 19:52:05: [[] login:  Create Token for user: Method: POST, path: /api/login
+2020-09-21 19:52:59: [[] login:  Create Token for user: Method: POST, path: /api/login
+2020-09-21 19:53:13: [[] login: surush Get reports to excel file Method: GET, path: /api/megafon/downloads-reports
+2020-09-21 19:53:26: [[] login: surush Get reports to excel file Method: GET, path: /api/megafon/downloads-reports
+2020-09-21 19:56:51: [[] login: surush Get reports to excel file Method: GET, path: /api/megafon/downloads-reports
+2020-09-21 20:01:33: [[] login: surush Get Hamsoya client by id Method: POST, path: /api/me/change-pass
+2020-09-21 20:10:19: [[] login:  Create Token for user: Method: POST, path: /api/login
+2020-09-21 20:10:53: [[] login:  Create Token for user: Method: POST, path: /api/login
+2020-09-21 20:11:55: [[] login: muha Get Hamsoya client by id Method: POST, path: /api/me/change-pass
+2020-09-21 20:13:05: [[] login: muha Get Hamsoya client by id Method: POST, path: /api/me/change-pass
+2020-09-21 20:13:29: [[] login: muha Get Hamsoya client by id Method: POST, path: /api/me/change-pass

@@ -104,8 +104,21 @@ func (server *MainServer) InitRoutes() {
 	server.router.GET(`/api/hamsoya/accounts/:id`, logger.Logger(`Get Hamsoya account by id`)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`, `user`}, jwt.FromContext)(server.GetHamsoyaAccountByIdHandler)))))
 
 	server.router.GET(`/api/hamsoya/clients`, logger.Logger(`Get Hamsoya clients`)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`, `user`}, jwt.FromContext)(server.GetHamsoyaClientsHandler)))))
-	server.router.GET(`/api/hamsoya/clients/:id`, logger.Logger(`Get Hamsoya client by id`)(corss.Middleware(jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(authorized.Authorized([]string{`admin`, `user`}, jwt.FromContext)(server.GetHamsoyaClientByIdHandler)))))
 
+	server.router.GET(`/api/hamsoya/clients/:id`,
+		logger.Logger(`Get Hamsoya client by id`)(
+		corss.Middleware(
+		jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(
+		authorized.Authorized([]string{`admin`, `user`}, jwt.FromContext)(
+		server.GetHamsoyaClientByIdHandler)))))
+
+
+	//TODO::
+	server.router.POST(`/api/me/change-pass`, logger.Logger(`Get Hamsoya client by id`)(
+		corss.Middleware(
+		jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(
+		authorized.Authorized([]string{`admin`, `user`}, jwt.FromContext)(
+		server.ChangePasswordHandler)))))
 	//handler := cors.Default().Handler(server)
 	//panic(http.ListenAndServe("127.0.0.1:8080", handler))
 	port := fmt.Sprintf(":%d", settings.AppSettings.AppParams.PortRun)
