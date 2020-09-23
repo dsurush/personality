@@ -50,12 +50,12 @@ func NewUsersvc() *Usersvc {
 	return &Usersvc{}
 }
 
-func (receiver *Usersvc) GetClientsInfo() (clientsInfo []ClientInfo) {
-	if err := db.GetPostgresDb().Limit(100).Offset(0).Find(&clientsInfo).Error; err != nil {
-		logrus.Warn("GetClientsInfo:", err.Error())
-		return nil
+func (receiver *Usersvc) GetUsers() (Users []User, err error) {
+	if err := db.GetPostgresDb().Limit(100).Offset(0).Find(&Users).Error; err != nil {
+		logrus.Warn("GetUsers:", err.Error())
+		return nil, err
 	}
-	return clientsInfo
+	return Users, nil
 }
 
 func (receiver *Usersvc) ChangeUserPass(id string, pass string, newPass string) (err error) {

@@ -113,12 +113,20 @@ func (server *MainServer) InitRoutes() {
 		server.GetHamsoyaClientByIdHandler)))))
 
 
-	//TODO::
+
 	server.router.POST(`/api/me/change-pass`, logger.Logger(`Get Hamsoya client by id`)(
 		corss.Middleware(
 		jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(
 		authorized.Authorized([]string{`admin`, `user`}, jwt.FromContext)(
 		server.ChangePasswordHandler)))))
+
+	server.router.GET(`/api/users`, logger.Logger(`Get user list`)(
+		corss.Middleware(
+		jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(
+		authorized.Authorized([]string{`admin`}, jwt.FromContext)(
+		server.GetUsersHandler)))))
+
+	//	server.router.
 	//handler := cors.Default().Handler(server)
 	//panic(http.ListenAndServe("127.0.0.1:8080", handler))
 	port := fmt.Sprintf(":%d", settings.AppSettings.AppParams.PortRun)

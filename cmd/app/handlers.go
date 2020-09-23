@@ -2598,6 +2598,24 @@ func (server *MainServer) ChangePasswordHandler(writer http.ResponseWriter, requ
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
+	return
+}
 
+
+func (server *MainServer) GetUsersHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+
+	response, err := server.userSvc.GetUsers()
+	if err != nil {
+		log.Print(err)
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	err = json.NewEncoder(writer).Encode(&response)
+	if err != nil {
+		log.Print(err)
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
 	return
 }
