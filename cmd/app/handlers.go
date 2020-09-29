@@ -2619,3 +2619,24 @@ func (server *MainServer) GetUsersHandler(writer http.ResponseWriter, request *h
 	}
 	return
 }
+
+func (server *MainServer) AddUserHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	var requestBody models.User
+	err := json.NewDecoder(request.Body).Decode(&requestBody)
+	if err != nil {
+		log.Println(err)
+		writer.WriteHeader(http.StatusBadRequest)
+		err := json.NewEncoder(writer).Encode("err.json_invalid")
+		log.Println(err)
+		return
+	}
+	err = server.userSvc.AddNewUser(requestBody)
+	if err != nil {
+		log.Print(err)
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	return
+}

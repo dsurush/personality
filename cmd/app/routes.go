@@ -15,7 +15,7 @@ import (
 
 func (server *MainServer) InitRoutes() {
 	fmt.Println("Init routes")
-	test()
+	test(server)
 
 	server.router.POST("/api/login", logger.Logger(`Create Token for user:`)(corss.Middleware(server.LoginHandler)))
 
@@ -113,7 +113,6 @@ func (server *MainServer) InitRoutes() {
 		server.GetHamsoyaClientByIdHandler)))))
 
 
-
 	server.router.POST(`/api/me/change-pass`, logger.Logger(`Get Hamsoya client by id`)(
 		corss.Middleware(
 		jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(
@@ -126,6 +125,14 @@ func (server *MainServer) InitRoutes() {
 		authorized.Authorized([]string{`admin`}, jwt.FromContext)(
 		server.GetUsersHandler)))))
 
+	server.router.POST(`/api/users/add`, logger.Logger(`add new user`)(
+		corss.Middleware(
+		jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(
+		authorized.Authorized([]string{`admin`}, jwt.FromContext)(
+		server.AddUserHandler)))))
+
+//	server.router.POST(``)
+
 	//	server.router.
 	//handler := cors.Default().Handler(server)
 	//panic(http.ListenAndServe("127.0.0.1:8080", handler))
@@ -134,6 +141,24 @@ func (server *MainServer) InitRoutes() {
 	panic(http.ListenAndServe(port, server))
 }
 
-func test() {
-	// test for check
+func test(server *MainServer) {
+	//user := models.User{
+	//	Id:       0,
+	//	Name:     "tim",
+	//	Surname:  "tim",
+	//	Sex:      "tim",
+	//	Login:    "tim",
+	//	Password: "tim",
+	//	Address:  "tim",
+	//	Phone:    "tim",
+	//	Team:     "tim",
+	//	Role:     "admin",
+	//	Remove:   false,
+	//}
+	//err := server.userSvc.AddNewUser(user)
+	//if err != nil {
+	//	fmt.Println("pizda")
+	//} else{
+	//	fmt.Println("anus")
+	//}
 }
