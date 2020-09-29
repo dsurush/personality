@@ -53,3 +53,7 @@
 2020-09-29 14:29:44: [[] login:  Create Token for user: Method: POST, path: /api/login
 2020-09-29 14:29:59: [[] login:  Create Token for user: Method: POST, path: /api/login
 2020-09-29 14:30:08: [[] login:  Create Token for user: Method: POST, path: /api/login
+2020-09-29 14:38:55: [[] login: surush Get user list Method: GET, path: /api/users
+2020-09-29 14:38:59: [[] login:  Create Token for user: Method: POST, path: /api/login
+2020-09-29 14:39:11: [[] login: surush Get user list Method: GET, path: /api/users
+2020-09-29 14:39:31: [[] login: surush Get user list Method: GET, path: /api/users

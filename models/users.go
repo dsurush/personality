@@ -73,7 +73,7 @@ func (receiver *Usersvc) GetUsers() (Users []UserDTO, err error) {
 	//db.Select("name", "age").Find(&users)
 	// SELECT name, age FROM users;
 	postgresDb := db.GetPostgresDb()
-	if err := postgresDb.Select("id , name, surname, sex, login, address, phone, team, role, remove").
+	if err := postgresDb.Select("id , name, surname, sex, login, address, phone, team, role, remove").Where("remove = ?", false).
 		Limit(100).Offset(0).Find(&Users).Error; err != nil {
 		logrus.Warn("GetUsers:", err.Error())
 		return nil, err
