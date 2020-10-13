@@ -43,7 +43,7 @@ func (server *MainServer) LoginHandler(writer http.ResponseWriter, request *http
 	user, err := models.FindUserByLogin(requestBody.Username)
 	if err != nil {
 		writer.WriteHeader(http.StatusBadRequest)
-		err := json.NewEncoder(writer).Encode([]string{"err.password_mismatch", err.Error()})
+		err := json.NewEncoder(writer).Encode([]string{"err.user_mismatch", err.Error()})
 		if err != nil {
 			log.Print(err)
 		}
@@ -2596,6 +2596,13 @@ func (server *MainServer) ChangePasswordHandler(writer http.ResponseWriter, requ
 	err = server.userSvc.ChangeUserPass(id, requestBody.Pass, requestBody.NewPass)
 	if err != nil {
 		writer.WriteHeader(http.StatusBadRequest)
+		log.Println(err)
+		return
+	}
+	err = json.NewEncoder(writer).Encode("success")
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		log.Println(err)
 		return
 	}
 	return
@@ -2637,6 +2644,78 @@ func (server *MainServer) AddUserHandler(writer http.ResponseWriter, request *ht
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
-
+	err = json.NewEncoder(writer).Encode("success")
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		log.Println(err)
+		return
+	}
 	return
 }
+
+
+func (server *MainServer) RemoveUserHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+//	fmt.Println("id = ", id)
+	type id struct {
+		ID string `json:"id"`
+	}
+	var requestBody id
+
+	err := json.NewDecoder(request.Body).Decode(&requestBody)
+	fmt.Println(requestBody)
+
+	if err != nil {
+		log.Println(err)
+		writer.WriteHeader(http.StatusBadRequest)
+		err := json.NewEncoder(writer).Encode("err.json_invalid")
+		log.Println(err)
+		return
+	}
+	err = server.userSvc.RemoveUser(requestBody.ID)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		log.Println(err)
+		return
+	}
+	err = json.NewEncoder(writer).Encode("success")
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		log.Println(err)
+		return
+	}
+	return
+}
+//
+//func (server *MainServer) EditHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+//	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+//	//	fmt.Println("id = ", id)
+//	type id struct {
+//		ID string `json:"id"`
+//	}
+//	var requestBody id
+//
+//	err := json.NewDecoder(request.Body).Decode(&requestBody)
+//	fmt.Println(requestBody)
+//
+//	if err != nil {
+//		log.Println(err)
+//		writer.WriteHeader(http.StatusBadRequest)
+//		err := json.NewEncoder(writer).Encode("err.json_invalid")
+//		log.Println(err)
+//		return
+//	}
+//	err = server.userSvc.RemoveUser(requestBody.ID)
+//	if err != nil {
+//		writer.WriteHeader(http.StatusBadRequest)
+//		log.Println(err)
+//		return
+//	}
+//	err = json.NewEncoder(writer).Encode("success")
+//	if err != nil {
+//		writer.WriteHeader(http.StatusBadRequest)
+//		log.Println(err)
+//		return
+//	}
+//	return
+//}

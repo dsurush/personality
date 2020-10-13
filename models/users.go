@@ -131,3 +131,43 @@ func (receiver *Usersvc) AddNewUser(User User) (err error){
 	}
 	return nil
 }
+
+func (receiver *Usersvc) RemoveUser(id string) (err error) {
+	//Находим пользователя по ID
+	user, err := FindUserByID(id)
+	if err != nil {
+		//	err = token.ErrInvalidPasswordOrLogin
+		return
+	}
+
+	postgresDb := db.GetPostgresDb()
+
+	user.Remove = true
+	err = postgresDb.Model(&user).Update(user).Error
+	if err != nil {
+		//	err = token.ErrInvalidPasswordOrLogin
+		return
+	}
+	return
+}
+
+func (receiver *Usersvc) ChangeUser(id string, User User, newPass string) (err error) {
+	//Находим пользователя по ID
+	user, err := FindUserByID(id)
+	if err != nil {
+		//	err = token.ErrInvalidPasswordOrLogin
+		return
+	}
+	//Проверяем сопадают ли пароли
+
+	//Обновляем пароль
+	postgresDb := db.GetPostgresDb()
+
+	user = User
+	err = postgresDb.Model(&user).Update(user).Error
+	if err != nil {
+		//	err = token.ErrInvalidPasswordOrLogin
+		return
+	}
+	return
+}
