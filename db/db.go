@@ -50,17 +50,18 @@ func init() {
 	//	fmt.Println("I am here = ", settings.AppSettings.LinkForCancelTransaction)
 	postgresDbCon, err = gorm.Open("postgres", connString)
 
-	postgresDbCon.LogMode(true)
+	//postgresDbCon.LogMode(true)
 	// Error
 	if err != nil {
 		fmt.Println("error ошибка  obj - ", err)
 		fmt.Println("error ошибка - ", err.Error())
 		time.Sleep(time.Second * 10)
 		log.Warn("Database init error", err.Error())
+		fmt.Println(err)
 		panic(err)
 	}
 	postgresHamsoyaDbCon, err = gorm.Open("postgres", connHamsoyaString)
-	postgresHamsoyaDbCon.LogMode(true)
+	//postgresHamsoyaDbCon.LogMode(true)
 
 	if err != nil {
 		//fmt.Println("error ошибка - ", err)

@@ -75,3 +75,16 @@
 2020-10-09 15:20:40: [[] login:  Create Token for user: Method: POST, path: /api/login
 2020-10-09 15:22:35: [[] login: surush remove user Method: DELETE, path: /api/users/remove
 2020-10-09 15:25:32: [[] login: surush remove user Method: DELETE, path: /api/users/remove
+2020-10-13 13:30:16: [[] login:  Create Token for user: Method: POST, path: /api/login
+2020-10-13 13:30:41: [[] login: surush remove user Method: DELETE, path: /api/users/remove
+2020-10-13 13:32:47: [[] login: surush edit user Method: POST, path: /api/users/edit
+2020-10-13 13:33:55: [[] login: surush edit user Method: POST, path: /api/users/edit
+2020-10-14 16:21:02: [192.168.100.47] login: surush Get merchants  Method: GET, path: /api/megafon/merchants
+2020-10-14 16:21:08: [192.168.100.47] login: surush Get merchants  Method: GET, path: /api/megafon/merchants
+2020-10-14 16:21:17: [192.168.100.47] login: surush Get static Method: GET, path: /api/megafon
+2020-10-14 16:21:45: [192.168.100.47] login: surush Get user list Method: GET, path: /api/users
+2020-10-14 16:21:50: [192.168.100.47] login: surush remove user Method: DELETE, path: /api/users/remove
+2020-10-14 16:21:50: [192.168.100.47] login: surush Get user list Method: GET, path: /api/users
+2020-10-14 16:22:04: [192.168.100.47] login: surush add new user Method: POST, path: /api/users/add
+2020-10-14 16:22:05: [192.168.100.47] login: surush Get user list Method: GET, path: /api/users
+2020-10-14 16:22:09: [192.168.100.47] login: surush Get merchants  Method: GET, path: /api/megafon/merchants

@@ -138,7 +138,11 @@ func (server *MainServer) InitRoutes() {
 		authorized.Authorized([]string{`admin`, `superAdmin`}, jwt.FromContext)(
 		server.RemoveUserHandler)))))
 
-//	server.router.POST(``)
+	server.router.POST(`/api/users/edit`, logger.Logger(`edit user`)(
+		corss.Middleware(
+		jwt.JWT(reflect.TypeOf((*token.Payload)(nil)).Elem(), []byte(`surush`))(
+		authorized.Authorized([]string{`admin`, `superAdmin`}, jwt.FromContext)(
+		server.EditUserHandler)))))
 
 	//	server.router.
 	//handler := cors.Default().Handler(server)

@@ -151,9 +151,9 @@ func (receiver *Usersvc) RemoveUser(id string) (err error) {
 	return
 }
 
-func (receiver *Usersvc) ChangeUser(id string, User User, newPass string) (err error) {
+func (receiver *Usersvc) ChangeUser(User User) (err error) {
 	//Находим пользователя по ID
-	user, err := FindUserByID(id)
+	user, err := FindUserByLogin(User.Login)
 	if err != nil {
 		//	err = token.ErrInvalidPasswordOrLogin
 		return
@@ -162,7 +162,7 @@ func (receiver *Usersvc) ChangeUser(id string, User User, newPass string) (err e
 
 	//Обновляем пароль
 	postgresDb := db.GetPostgresDb()
-
+	User.Password = user.Password
 	user = User
 	err = postgresDb.Model(&user).Update(user).Error
 	if err != nil {

@@ -2,3 +2,5 @@
 *.log
 *.zip
 *.exe
+settings-dev.json
+pro.json

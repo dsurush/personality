@@ -1373,19 +1373,19 @@ func (server *MainServer) GetHamosyaConfigsHandler(writer http.ResponseWriter, r
 		rowsInt = 100
 	}
 	var newHamsoyaConfig hamsoyamodels.HamsoyaConfig
-	id, err := strconv.Atoi(request.URL.Query().Get(`id`))
+	id, err := strconv.Atoi(request.URL.Query().Get(`Id`))
 	if err == nil {
 		newHamsoyaConfig.Id = int64(id)
 	}
-	code := request.URL.Query().Get(`code`)
+	code := request.URL.Query().Get(`Code`)
 	newHamsoyaConfig.Code = code
 
-	value, err := strconv.Atoi(request.URL.Query().Get(`value`))
+	value, err := strconv.Atoi(request.URL.Query().Get(`Value`))
 	if err == nil {
 		newHamsoyaConfig.Value = int64(value)
 	}
 
-	valueStr := request.URL.Query().Get(`valuestr`)
+	valueStr := request.URL.Query().Get(`Valuestr`)
 	newHamsoyaConfig.ValueStr = valueStr
 
 	HamsoyaConfig := hamsoyamodels.GetHamsoyaConfig(newHamsoyaConfig, int64(rowsInt), int64(pageInt))
@@ -2686,36 +2686,34 @@ func (server *MainServer) RemoveUserHandler(writer http.ResponseWriter, request 
 	}
 	return
 }
-//
-//func (server *MainServer) EditHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-//	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
-//	//	fmt.Println("id = ", id)
-//	type id struct {
-//		ID string `json:"id"`
-//	}
-//	var requestBody id
-//
-//	err := json.NewDecoder(request.Body).Decode(&requestBody)
-//	fmt.Println(requestBody)
-//
-//	if err != nil {
-//		log.Println(err)
-//		writer.WriteHeader(http.StatusBadRequest)
-//		err := json.NewEncoder(writer).Encode("err.json_invalid")
-//		log.Println(err)
-//		return
-//	}
-//	err = server.userSvc.RemoveUser(requestBody.ID)
-//	if err != nil {
-//		writer.WriteHeader(http.StatusBadRequest)
-//		log.Println(err)
-//		return
-//	}
-//	err = json.NewEncoder(writer).Encode("success")
-//	if err != nil {
-//		writer.WriteHeader(http.StatusBadRequest)
-//		log.Println(err)
-//		return
-//	}
-//	return
-//}
+
+func (server *MainServer) EditUserHandler(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	//	fmt.Println("id = ", id)
+
+	var requestBody models.User
+
+	err := json.NewDecoder(request.Body).Decode(&requestBody)
+	fmt.Println(requestBody)
+
+	if err != nil {
+		log.Println(err)
+		writer.WriteHeader(http.StatusBadRequest)
+		err := json.NewEncoder(writer).Encode("err.json_invalid")
+		log.Println(err)
+		return
+	}
+	err = server.userSvc.ChangeUser(requestBody)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		log.Println(err)
+		return
+	}
+	err = json.NewEncoder(writer).Encode("success")
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		log.Println(err)
+		return
+	}
+	return
+}
